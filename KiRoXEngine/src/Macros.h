@@ -1,0 +1,3 @@
+#define PROPERTY()
+
+#define CLASS()
