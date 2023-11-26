@@ -30,7 +30,14 @@ void Console::Write(std::string message)
 
 	std::string time = oss.str();
 
-	GetInstance()->messages.push_back("[" + time + "] " + message);
+	Console* console = GetInstance();
+
+	console->messages.push_back("[" + time + "] " + message);
+
+	if (console->messages.size() > console->capacity) {
+		int overflow = console->messages.size() - console->capacity;
+		console->messages.erase(console->messages.begin(), console->messages.begin() + overflow);
+	}
 }
 
 void Console::Draw()
@@ -46,21 +53,35 @@ void Console::Draw()
 	ImGui::PopStyleColor();
 
 	ImGui::SameLine();
-
 	ImGui::Text("%i logs...", messages.size());
 
-	ImGui::EndChild();
+	ImGui::SameLine();
+	ImGui::Checkbox("Scroll to bottom", &scrollToBottom);
 
+	ImGui::SameLine();
+	if (ImGui::Button("Debug Text")) {
+		Write("Hello, this is a debug text!");
+	}
+
+	ImGui::EndChild();
 
 	ImGui::BeginChild("ScrollRegion");
 	for (int i = 0; i < messages.size(); i++)
 	{
+		ImGui::Text("[%i] - ", i+1);
+		ImGui::SameLine();
+
 		if (i % 2 == 0)
 			ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.8f, 1.0f), messages[i].c_str());
 		else {
 			ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), messages[i].c_str());
 		}
 	}
+
+	if (scrollToBottom) {
+		ImGui::SetScrollHereY(0.999f);
+	}
+
 	ImGui::EndChild();
 
 	ImGui::End();

@@ -12,6 +12,9 @@
 class Shader {
 public:
 	unsigned int ID;
+	// TODO: Use Hashing to store the uniform locations
+	// TODO: Convert this into an asset
+	
 	// constructor generates the shader on the fly
 	// ------------------------------------------------------------------------
 	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
@@ -183,6 +186,10 @@ public:
 	void setInt(int location, int value) const
 	{
 		glUniform1i(location, value);
+	}
+
+	void setMat4(int location, const glm::mat4& value) const {
+		glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
 	}
 	
 

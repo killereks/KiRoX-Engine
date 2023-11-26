@@ -11,6 +11,17 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Engine.h"
+#include "Tools/Input.h"
+
+#define call(x) x;\
+	if (error) __debugbreak();
+
+bool error = false;
+
+void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void* userParam) {
+	error = true;
+	std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;
+}
 
 void SetupImGuiStyle();
 
@@ -20,7 +31,11 @@ int main(int argc, char* argv[]) {
 	if (!glfwInit())
 		return -1;
 
-	window = glfwCreateWindow(1920, 1080, "KiRoXEngine", NULL, NULL);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	window = glfwCreateWindow(1920, 1080, "KiRoX Engine", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -28,6 +43,29 @@ int main(int argc, char* argv[]) {
 	}
 
 	glfwMakeContextCurrent(window);
+
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (err != GLEW_OK) {
+		std::cout << "Failed to initialize GLEW" << std::endl;
+		std::cout << glewGetErrorString(err) << std::endl;
+		return -1;
+	}
+
+	if (!GLEW_VERSION_3_3){
+		std::cout << "OpenGL 3.3 not supported" << std::endl;
+		return -1;
+	}
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	//glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, GL_DONT_CARE, 0, NULL, GL_TRUE);
+
+	//glEnable(GL_DEBUG_OUTPUT);
+	//glDebugMessageCallback(MessageCallback, 0);
+
+	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -53,10 +91,26 @@ int main(int argc, char* argv[]) {
 
 	engine.Start();
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glfwSwapInterval(0);
+
+	Input::GetInstance()->SetWindow(window);
+
+	float lastFrame = glfwGetTime();
+
 	while (!glfwWindowShouldClose(window))
 	{
+		float currentFrame = glfwGetTime();
+		float deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		Engine::deltaTime = deltaTime;
+
 		// poll events
 		glfwPollEvents();
+		Input::GetInstance()->Update();
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -67,17 +121,19 @@ int main(int argc, char* argv[]) {
 		// enable docking
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
-		// clear screen
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		engine.Render();
+		engine.Update();
+		engine.SceneControls();
+		engine.RenderEditorUI();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		// swap buffers
 		glfwSwapBuffers(window);
 	}
+
+	glfwTerminate();
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
@@ -102,7 +158,7 @@ void SetupImGuiStyle()
 	style.PopupRounding = 0.0f;
 	style.PopupBorderSize = 1.0f;
 	style.FramePadding = ImVec2(20.0f, 3.400000095367432f);
-	style.FrameRounding = 11.89999961853027f;
+	style.FrameRounding = 5.0f;
 	style.FrameBorderSize = 0.0f;
 	style.ItemSpacing = ImVec2(4.300000190734863f, 5.5f);
 	style.ItemInnerSpacing = ImVec2(7.099999904632568f, 1.799999952316284f);
