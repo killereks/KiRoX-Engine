@@ -5,10 +5,17 @@
 #include <vector>
 #include <string>
 
+#include <memory>
+
 #include "uuid/uuid_v4.h"
+
+#include <yaml-cpp/yaml.h>
+#include <rttr/registration.h>
 
 class Entity
 {
+	friend class rttr::registration;
+
 	std::vector<Component*> components;
 
 	TransformComponent transformComponent;
@@ -50,7 +57,7 @@ public:
 	template<typename T>
 	T* AddComponent() {
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
-		T* component = new T();
+		auto component = new T();
 		component->SetOwner(this);
 		components.push_back(component);
 		return component;

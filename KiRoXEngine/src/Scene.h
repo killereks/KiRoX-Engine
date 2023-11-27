@@ -28,5 +28,8 @@ public:
 	void DrawInspector();
 
 	Entity* CreateEntity(std::string name);
+
+	void SaveScene(std::string path);
+	void LoadScene(std::string path);
 };
 

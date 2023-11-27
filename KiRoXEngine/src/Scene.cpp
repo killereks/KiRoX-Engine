@@ -22,6 +22,8 @@ Scene::Scene()
 	groundQuad->GetTransform().SetLocalScale(glm::vec3(20));
 
 	ent2->SetParent(ent1);
+
+	SaveScene("test.scene");
 }
 
 Scene::~Scene()
@@ -238,4 +240,26 @@ Entity* Scene::CreateEntity(std::string name)
 	entity->SetParent(rootEntity);
 
 	return entity;
+}
+
+void Scene::SaveScene(std::string path)
+{
+	YAML::Emitter out;
+	out << YAML::BeginMap;
+	out << YAML::Key << "Scene" << YAML::Value << "Test Scene";
+	out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+
+	// TO DO
+
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+
+	std::ofstream fout(path);
+	fout << out.c_str();
+
+	std::cout << "Saved to " << path << std::endl;
+}
+
+void Scene::LoadScene(std::string path)
+{
 }
