@@ -14,7 +14,7 @@ public:
 	std::string m_TestString = "hello";
 };
 
-#include <rttr/registration.h>
+/*#include <rttr/registration.h>
 
 RTTR_REGISTRATION
 {
@@ -22,4 +22,4 @@ RTTR_REGISTRATION
 		.property("m_TestInt", &TestClass::m_TestInt)
 		.property("m_TestFloat", &TestClass::m_TestFloat)
 		.property("m_TestString", &TestClass::m_TestString);
-}
+}*/

@@ -242,6 +242,9 @@
     <ClInclude Include="src\Tools\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\rttr\lib\rttr_core_d.lib" />
@@ -252,5 +255,18 @@
     <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="Dependencies\rttr\bin\rttr_core_d.pdb" />
     <None Include="Dependencies\rttr\bin\rttr_core_d.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="KiRoXEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\b08374be-102f-4958-b0f9-c6996ae27155.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -44,7 +44,6 @@ void Engine::Update()
 
 void Engine::RenderScene(CameraComponent* cameraComponent, Shader* shader)
 {
-	//Stopwatch sw("Engine::RenderScene");
 	std::vector<MeshComponent*> meshComponents;
 
 	for (auto& entity : scene.get()->GetEntities()) {
