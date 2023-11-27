@@ -71,51 +71,56 @@ void TransformComponent::LookAt(glm::vec3 position)
 void TransformComponent::Translate(glm::vec3 deltaPos)
 {
 	position += deltaPos;
+
+	for (Entity* ent : owner->GetChildren())
+	{
+		ent->GetTransform().Translate(deltaPos);
+	}
 }
 
 glm::vec3 TransformComponent::GetWorldPosition()
 {
-	glm::vec3 position = GetLocalPosition();
+	glm::vec3 positionOut = GetLocalPosition();
 
-	const Entity* parent = owner->GetParent();
+	Entity* parent = owner->GetParent();
 
 	while (parent != nullptr)
 	{
-		position += parent->GetTransform()->GetWorldPosition();
+		positionOut += parent->GetTransform().GetLocalPosition();
 		parent = parent->GetParent();
 	}
 
-	return position;
+	return positionOut;
 }
 
 glm::quat TransformComponent::GetWorldRotation()
 {
-	glm::quat rotation = GetLocalRotation();
+	glm::quat rotationOut = GetLocalRotation();
 
-	const Entity* parent = owner->GetParent();
+	Entity* parent = owner->GetParent();
 
 	while (parent != nullptr)
 	{
-		rotation *= parent->GetTransform()->GetLocalRotation();
+		rotationOut *= parent->GetTransform().GetLocalRotation();
 		parent = parent->GetParent();
 	}
 
-	return rotation;
+	return rotationOut;
 }
 
 glm::vec3 TransformComponent::GetWorldScale()
 {
-	glm::vec3 scale = GetLocalScale();
+	glm::vec3 scaleOut = GetLocalScale();
 
-	const Entity* parent = owner->GetParent();
+	Entity* parent = owner->GetParent();
 
 	while (parent != nullptr)
 	{
-		scale *= parent->GetTransform()->GetLocalScale();
+		scaleOut *= parent->GetTransform().GetLocalScale();
 		parent = parent->GetParent();
 	}
 
-	return scale;
+	return scaleOut;
 }
 
 glm::vec3 TransformComponent::GetLocalPosition()

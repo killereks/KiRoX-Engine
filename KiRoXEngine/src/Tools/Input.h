@@ -31,8 +31,8 @@ private:
 	}
 
 public:
-	void SetWindow(GLFWwindow* window) {
-		this->window = window;
+	void SetWindow(GLFWwindow* _window) {
+		window = _window;
 	}
 
 	static Input* GetInstance() {

@@ -8,8 +8,10 @@
 
 class Entity;
 
+
 class TransformComponent : public Component
 {
+
 	glm::vec3 position;
 	glm::quat rotation;
 	glm::vec3 scale;
@@ -21,7 +23,7 @@ public:
 	void DrawInspector() override;
 
 	// TODO: Cache
-	glm::mat4 GetModelMatrix() const {
+	glm::mat4 GetModelMatrix() {
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 		//modelMatrix = glm::scale(modelMatrix, scale) * glm::toMat4(rotation) * glm::translate(modelMatrix, position);
@@ -29,9 +31,9 @@ public:
 		// SCALE -> ROTATE -> TRANSLATE
 		// TRS
 
-		glm::mat4 matrixT = glm::translate(modelMatrix, position);
-		glm::mat4 matrixR = glm::toMat4(rotation);
-		glm::mat4 matrixS = glm::scale(modelMatrix, scale);
+		glm::mat4 matrixT = glm::translate(modelMatrix, GetWorldPosition());
+		glm::mat4 matrixR = glm::toMat4(GetWorldRotation());
+		glm::mat4 matrixS = glm::scale(modelMatrix, GetWorldScale());
 
 		return matrixT * matrixR * matrixS;
 	}

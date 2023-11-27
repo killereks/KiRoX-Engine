@@ -5,9 +5,14 @@
 
 #include "Scene.h"
 #include "Components/CameraComponent.h"
+#include "Tools/FolderWatcher.h"
+
+#include "gizmos/ImGuizmo.h"
 
 class Engine
 {
+	ImGuizmo::OPERATION currentOperation;
+
 public:
 	Engine();
 	~Engine();
@@ -35,4 +40,6 @@ public:
 	void RenderGameWindow();
 
 	void RenderToolbar();
+
+	void EditTransform(Entity* ent);
 };

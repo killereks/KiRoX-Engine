@@ -91,7 +91,7 @@ void MeshComponent::Draw(CameraComponent* cameraComponent, Shader* shader)
 		projectionMatrixLocation = glGetUniformLocation(shader->ID, "perspectiveMatrix");
 	}
 
-	shader->setMat4(modelMatrixLocation, owner->GetTransform()->GetModelMatrix());
+	shader->setMat4(modelMatrixLocation, owner->GetTransform().GetModelMatrix());
 	shader->setMat4(viewMatrixLocation, cameraComponent->GetViewMatrix());
 	shader->setMat4(projectionMatrixLocation, cameraComponent->GetProjectionMatrix());
 

@@ -5,30 +5,41 @@
 #include <vector>
 #include <string>
 
+#include "uuid/uuid_v4.h"
+
 class Entity
 {
 	std::vector<Component*> components;
 
-	TransformComponent* transformComponent;
+	TransformComponent transformComponent;
 
 	std::string name;
 
 	Entity* parent;
 	std::vector<Entity*> children;
 
+	UUIDv4::UUID uuid;
+
 public:
 	Entity(std::string name);
 	~Entity();
 
-	const std::string GetName() const { return name; }
+	const std::string &GetName() const { return name; }
 
-	const std::vector<Entity*> GetChildren() const { return children; }
-	const Entity* GetParent() const { return parent; }
+	const std::vector<Entity*> &GetChildren() const { return children; }
+	Entity* GetParent() const { return parent; }
 
-	TransformComponent* GetTransform() const { return transformComponent; }
+	TransformComponent& GetTransform() { return transformComponent; }
 
-	std::vector<Component*> GetAllComponents() const {
+	const std::vector<Component*>& GetAllComponents() const {
+
 		return components;
+	}
+
+	const UUIDv4::UUID GetUUID () const { return uuid; }
+	void SetUUID(UUIDv4::UUID& uuid)
+	{
+		this->uuid = uuid;
 	}
 
 	void SetParent(Entity* parent);
@@ -58,15 +69,12 @@ public:
 		return nullptr;
 	}
 
-	template<typename T>
-	void RemoveComponent() {
-		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+	void RemoveComponent(Component* componentToDelete) {
 		for (auto component : components) {
-			T* castedComponent = dynamic_cast<T*>(component);
-			if (castedComponent != nullptr)
+			if (component == componentToDelete)
 			{
-				components.erase(std::remove(components.begin(), components.end(), castedComponent), components.end());
-				delete castedComponent;
+				components.erase(std::remove(components.begin(), components.end(), componentToDelete), components.end());
+				delete componentToDelete;
 				return;
 			}
 		}

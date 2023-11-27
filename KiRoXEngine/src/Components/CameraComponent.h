@@ -37,16 +37,16 @@ public:
 
 	void DrawInspector() override;
 
-	void SetNearClipPlane(float nearClipPlane) { this->nearClipPlane = nearClipPlane; }
-	void SetFarClipPlane(float farClipPlane) { this->farClipPlane = farClipPlane; }
-	void SetFieldOfView(float fieldOfView) { this->fieldOfView = fieldOfView; }
+	void SetNearClipPlane(float _nearClipPlane) { nearClipPlane = _nearClipPlane; }
+	void SetFarClipPlane(float _farClipPlane) { farClipPlane = _farClipPlane; }
+	void SetFieldOfView(float _fieldOfView) { fieldOfView = _fieldOfView; }
 
 	const float GetNearClipPlane() const { return nearClipPlane; }
 	const float GetFarClipPlane() const { return farClipPlane; }
 	const float GetFieldOfView() const { return fieldOfView; }
 
 	glm::mat4 GetViewMatrix() {
-		return owner->GetTransform()->GetViewMatrix();
+		return owner->GetTransform().GetViewMatrix();
 	}
 	glm::mat4 GetProjectionMatrix() {
 		if (cameraType == CameraType::Perspective) {
@@ -56,6 +56,6 @@ public:
 			return glm::ortho(left, right, bottom, top, orthoNear, orthoFar);
 		}
 
-		static_assert(true, "Unsuported camera type");
+		static_assert(true, "Unsupported camera type");
 	}
 };

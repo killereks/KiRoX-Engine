@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -108,11 +108,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -124,13 +124,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp" />
+    <ClCompile Include="src\Editor\Gizmos.cpp" />
     <ClCompile Include="src\Tools\Input.cpp" />
     <ClCompile Include="src\Components\MeshComponent.cpp" />
     <ClCompile Include="src\Components\CameraComponent.cpp" />
@@ -166,6 +168,11 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
+    <ClInclude Include="Dependencies\uuid\endianness.h" />
+    <ClInclude Include="Dependencies\uuid\uuid_v4.h" />
+    <ClInclude Include="src\Tools\FolderWatcher.h" />
+    <ClInclude Include="src\Editor\Gizmos.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Tools\Input.h" />
     <ClInclude Include="src\Components\MeshComponent.h" />

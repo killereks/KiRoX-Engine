@@ -13,6 +13,8 @@
 #include "Engine.h"
 #include "Tools/Input.h"
 
+#include "gizmos/ImGuizmo.h"
+
 #define call(x) x;\
 	if (error) __debugbreak();
 
@@ -31,8 +33,8 @@ int main(int argc, char* argv[]) {
 	if (!glfwInit())
 		return -1;
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	window = glfwCreateWindow(1920, 1080, "KiRoX Engine", NULL, NULL);
@@ -52,7 +54,7 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 
-	if (!GLEW_VERSION_3_3){
+	if (!GLEW_VERSION_4_6){
 		std::cout << "OpenGL 3.3 not supported" << std::endl;
 		return -1;
 	}
@@ -80,7 +82,7 @@ int main(int argc, char* argv[]) {
 	std::string fontPath = std::string(argv[0]);
 	fontPath = fontPath.substr(0, fontPath.find_last_of("\\/"));
 	fontPath += "/Ubuntu.ttf";
-	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 18.0f);
+	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 20.0f);
 
 	// enable docking
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -98,12 +100,12 @@ int main(int argc, char* argv[]) {
 
 	Input::GetInstance()->SetWindow(window);
 
-	float lastFrame = glfwGetTime();
+	double lastFrame = glfwGetTime();
 
 	while (!glfwWindowShouldClose(window))
 	{
-		float currentFrame = glfwGetTime();
-		float deltaTime = currentFrame - lastFrame;
+		double currentFrame = glfwGetTime();
+		double deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 		Engine::deltaTime = deltaTime;
@@ -115,6 +117,7 @@ int main(int argc, char* argv[]) {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 
 		glClearColor(0.1, 0.2, 0.3, 1.0);
 
@@ -124,8 +127,6 @@ int main(int argc, char* argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		engine.Update();
-		engine.SceneControls();
-		engine.RenderEditorUI();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -197,9 +198,9 @@ void SetupImGuiStyle()
 	style.Colors[ImGuiCol_CheckMark] = ImVec4(0.9725490212440491f, 1.0f, 0.4980392158031464f, 1.0f);
 	style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.9725490212440491f, 1.0f, 0.4980392158031464f, 1.0f);
 	style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(1.0f, 0.7960784435272217f, 0.4980392158031464f, 1.0f);
-	style.Colors[ImGuiCol_Button] = ImVec4(0.1176470592617989f, 0.1333333402872086f, 0.1490196138620377f, 1.0f);
-	style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.1803921610116959f, 0.1882352977991104f, 0.196078434586525f, 1.0f);
-	style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.1529411822557449f, 0.1529411822557449f, 0.1529411822557449f, 1.0f);
+	style.Colors[ImGuiCol_Button] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+	style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.2503921610116959f, 0.2582352977991104f, 0.256078434586525f, 1.0f);
+	style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.3329411822557449f, 0.3329411822557449f, 0.3329411822557449f, 1.0f);
 	style.Colors[ImGuiCol_Header] = ImVec4(0.1411764770746231f, 0.1647058874368668f, 0.2078431397676468f, 1.0f);
 	style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.105882354080677f, 0.105882354080677f, 0.105882354080677f, 1.0f);
 	style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.0784313753247261f, 0.08627451211214066f, 0.1019607856869698f, 1.0f);

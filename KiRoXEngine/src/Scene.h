@@ -18,6 +18,8 @@ public:
 	Scene();
 	~Scene();
 
+	Entity* GetSelectedEntity() { return selectedEntity; }
+
 	void DrawHierarchy();
 	void DrawEntity(Entity* entity);
 

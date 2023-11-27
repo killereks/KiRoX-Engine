@@ -22,4 +22,8 @@ RTTR_REGISTRATION
 		.property("m_TestInt", &TestClass::m_TestInt)
 		.property("m_TestFloat", &TestClass::m_TestFloat)
 		.property("m_TestString", &TestClass::m_TestString);
-}*/
+}
+
+.set_value("m_TestInt", testClass, 10);
+.get_value("m_TestInt", TestClass);
+.get_props()*/

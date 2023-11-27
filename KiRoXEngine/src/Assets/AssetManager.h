@@ -1,7 +1,13 @@
 #pragma once
+
 #include <map>
 #include <string>
 #include <filesystem>
+#include <functional>
+
+#include <future>
+
+#include "../Tools/FolderWatcher.h"
 
 #include "Asset.h"
 #include "Texture.h"
@@ -16,11 +22,20 @@ private:
 
     std::string projectPath;
 
+    FolderWatcher folderWatcher;
+
 public:
-    AssetManager(std::string path) {
-        projectPath = path;
+    AssetManager(std::filesystem::path path) {
+        projectPath = path.string();
 
         LoadAllAssets();
+
+		folderWatcher.watchFolder(path.c_str());
+        //folderWatcher.OnFileChanged = OnFileChanged;
+        folderWatcher.OnFileChanged = [&](std::wstring_view filename, FolderWatcher::Action action)
+        {
+            OnFileChanged(filename, action);
+        };
     }
 
     ~AssetManager() {
@@ -28,6 +43,16 @@ public:
 			delete asset.second;
 		}
 	}
+
+	void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
+	{
+
+	}
+
+    void Update()
+    {
+        folderWatcher.update();
+    }
 
     void DrawInspector() {
         ImGui::Begin("Assets");
@@ -51,9 +76,7 @@ public:
                 ImGui::Image((void*)texture->GetTextureID(), ImVec2(size, size));
             }
             else {
-                ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 0, 0, 255)); // Red button
-                ImGui::Button("Loading...");
-                ImGui::PopStyleColor();
+                ImGui::Button("Missing Icon", ImVec2(size, size));
             }
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + size);
             ImGui::TextWrapped(asset.first.c_str());
@@ -81,7 +104,7 @@ public:
 public:
     template <typename T>
     void Load(const std::string& name, const std::string& filePath) {
-        Console::Write("Loaded asset: " + name);
+        Console::Write("Loaded asset: "+name, ImVec4(0.278, 0.722, 1.0, 1.0));
 
         if (assets.find(name) != assets.end()) {
             delete assets[name];
@@ -96,7 +119,7 @@ public:
     }
 
     void LoadAllAssets() {
-        Console::Write("Loading all assets at: " + projectPath);
+        Console::Write("Loading all assets at: "+projectPath);
 
         const std::filesystem::path assetsPath = projectPath;
 
@@ -106,6 +129,10 @@ public:
 
             if (extension == ".png" || extension == ".jpeg" || extension == ".jpg") {
                 Load<Texture>(path.filename().string(), path.string());
+            }
+            else if (extension == ".shader")
+            {
+                Load<Shader>(path.filename().string(), path.string());
             }
         }
     }

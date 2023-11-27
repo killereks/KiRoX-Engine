@@ -1,10 +1,15 @@
 #include "Entity.h"
 
+#include "uuid/uuid_v4.h"
+
 Entity::Entity(std::string name)
 {
 	this->name = name;
 
-	transformComponent = AddComponent<TransformComponent>();
+	transformComponent.SetOwner(this);
+
+	UUIDv4::UUIDGenerator<std::mt19937_64> uuidGenerator;
+	uuid = uuidGenerator.getUUID();
 }
 
 Entity::~Entity()
@@ -16,19 +21,17 @@ Entity::~Entity()
 	for (auto child : children){
 		delete child;
 	}
-
-	delete transformComponent;
 }
 
-void Entity::SetParent(Entity* parent)
+void Entity::SetParent(Entity* _parent)
 {
-	if (this->parent != nullptr) {
-		this->parent->RemoveChild(this);
+	if (parent != nullptr) {
+		parent->RemoveChild(this);
 	}
 	
-	parent->AddChild(this);
+	_parent->AddChild(this);
 
-	this->parent = parent;
+	parent = _parent;
 }
 
 void Entity::AddChild(Entity* child)

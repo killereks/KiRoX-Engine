@@ -1,4 +1,5 @@
-#version 330 core
+@vs
+#version 460 core
 
 layout (location = 0) in vec3 aPos;
 
@@ -13,3 +14,17 @@ void main(){
 
     vertexPos = aPos;
 }
+
+@end
+
+@fs
+#version 460 core
+
+in vec3 vertexPos;
+
+out vec4 FragColor;
+
+void main(){
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+@end

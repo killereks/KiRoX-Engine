@@ -1,4 +1,4 @@
-#include "Scene.h"
+﻿#include "Scene.h"
 #include <imgui.h>
 #include "Editor/Console.h"
 
@@ -16,29 +16,10 @@ Scene::Scene()
 	Entity* ent2 = CreateEntity("Entity 2");
 	Entity* ent3 = CreateEntity("Entity 3");
 
-	Entity* quad = CreateEntity("Quad");
-	MeshComponent* meshComponent = quad->AddComponent<MeshComponent>();
-
 	Entity* groundQuad = CreateEntity("Ground");
 	MeshComponent* groundMeshComponent = groundQuad->AddComponent<MeshComponent>();
-	groundQuad->GetTransform()->SetLocalRotation(glm::vec3(90, 0, 0));
-	groundQuad->GetTransform()->SetLocalScale(glm::vec3(20));
-
-	for (int i = 0; i < 5; i++) {
-		Entity* newEnt = CreateEntity("Entity " + std::to_string(i));
-
-		int random = rand() % 3;
-
-		if (random == 0) {
-			newEnt->SetParent(ent1);
-		}
-		else if (random == 1) {
-			newEnt->SetParent(ent2);
-		}
-		else {
-			newEnt->SetParent(ent3);
-		}
-	}
+	groundQuad->GetTransform().SetLocalRotation(glm::vec3(90, 0, 0));
+	groundQuad->GetTransform().SetLocalScale(glm::vec3(20));
 
 	ent2->SetParent(ent1);
 }
@@ -97,19 +78,70 @@ void Scene::DrawEntity(Entity* entity)
 {
 	bool hasChildren = entity->GetChildren().size() > 0;
 
-	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen;
+	// COLLAPSE BUTTON
+	ImGuiStorage* storage = ImGui::GetStateStorage();
+	ImGuiID id = ImGui::GetID("CollapseButton");
+	bool isCollapsed = storage->GetBool(id);
 
-	if (!hasChildren) {
-		flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5, 0.5));
+
+	if (hasChildren)
+	{
+		if (isCollapsed)
+		{
+			ImGui::Text(">");
+			if (ImGui::IsItemClicked())
+			{
+				storage->SetBool(id, false);
+			}
+		}
+		else
+		{
+			ImGui::Text("\\/");
+			if (ImGui::IsItemClicked())
+			{
+				storage->SetBool(id, true);
+			}
+		}
+		ImGui::SameLine();
 	}
 
-	if (ImGui::CollapsingHeader(entity->GetName().c_str(), flags)) {
+	ImGui::PopStyleVar();
 
-		if (ImGui::IsItemClicked()) {
-			selectedEntity = entity;
+	// DRAW ENTITY
+	if (selectedEntity == entity)
+	{
+		ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 1.0), ("-> "+entity->GetName()).c_str(), ImVec2(-1, 0));
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.7, 0.7, 0.7, 1.0), entity->GetName().c_str(), ImVec2(-1, 0));
+	}
+	if (ImGui::IsItemClicked())
+	{
+		selectedEntity = entity;
+	}
+
+	bool isFirst = true;
+	// DRAW COMPONENTS
+	for (auto component : entity->GetAllComponents())
+	{
+		if (isFirst)
+		{
+			ImGui::SameLine(300);
 		}
+		else
+		{
+			ImGui::SameLine();
+		}
+		ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1.0), component->GetName(), ImVec2(-1, 0));
+		isFirst = false;
+	}
 
-		for (auto entity : entity->GetChildren()) {
+	if (!isCollapsed)
+	{
+		for (auto entity : entity->GetChildren())
+		{
 			ImGui::PushID(entity->GetName().c_str());
 			ImGui::Indent();
 			DrawEntity(entity);
@@ -130,14 +162,24 @@ void Scene::DrawInspector()
 	}
 
 	ImGui::Text(selectedEntity->GetName().c_str());
+	ImGui::Text(selectedEntity->GetUUID().str().c_str());
 
 	ImGui::Separator();
+
+	if (ImGui::CollapsingHeader(selectedEntity->GetTransform().GetName(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		selectedEntity->GetTransform().DrawInspector();
+	}
 
 	int index = 0;
 	for (Component* component : selectedEntity->GetAllComponents()) {
 		ImGui::PushID(++index);
-		if (ImGui::CollapsingHeader("Component")) {
+		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
 			component->DrawInspector();
+		}
+		if (ImGui::Button("X"))
+		{
+			selectedEntity->RemoveComponent(component);
 		}
 		ImGui::PopID();
 		ImGui::Separator();
@@ -194,8 +236,6 @@ Entity* Scene::CreateEntity(std::string name)
 	entities.push_back(entity);
 
 	entity->SetParent(rootEntity);
-
-	Console::Write("Created a new entity: " + name);
 
 	return entity;
 }

@@ -7,12 +7,11 @@ Component::Component()
 
 Component::~Component()
 {
-
 }
 
-void Component::SetOwner(Entity* owner)
+void Component::SetOwner(Entity* _owner)
 {
-	this->owner = owner;
+	owner = _owner;
 }
 
 void Component::DrawInspector()
