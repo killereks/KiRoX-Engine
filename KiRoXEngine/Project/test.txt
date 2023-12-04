@@ -1,0 +1,43 @@
+Scene: Test Scene
+Entities:
+  - Entity: Root
+    UUID: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Cube
+    UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 3.47611856, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: suzanne.fbx
+  - Entity: Mesh
+    UUID: a2d89002-ee51-4c95-b3c0-128441a7887b
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0.100000001, 0]
+      rotation: [0.707106769, 0, 0, 0.707106769]
+      scale: [20, 20, 0.999918044]
+    Mesh:
+      meshName: ""
+  - Entity: Camera
+    UUID: a9b0ae8d-1453-484e-9208-dd76eff6d935
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 3.05999994, 9.60000038]
+      rotation: [-0.202787265, -0, 0, 0.979222834]
+      scale: [1, 1, 1]
+    Camera:
+      nearClipPlane: 0.300000012
+      farClipPlane: 1000
+      fieldOfView: 60
+      top: 10
+      bottom: -10
+      left: -10
+      right: 10
+      orthoNear: 1
+      orthoFar: 100

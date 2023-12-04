@@ -3,6 +3,9 @@
 #include <typeinfo>
 #include <string_view>
 
+#include <yaml-cpp/yaml.h>
+#include "../Tools/Serialization.h"
+
 class Entity;
 
 class Component
@@ -18,11 +21,16 @@ public:
 	virtual ~Component();
 
 	void SetOwner(Entity* owner);
+	Entity* GetOwner() { return owner; }
 
 	virtual void Init() {}
 	virtual void Update() {}
 
 	virtual void DrawInspector() = 0;
+
+	virtual std::string GetIcon() = 0;
+
+	virtual void Serialize(YAML::Emitter& out) = 0;
 
 	virtual const char* GetName() {
 		if (!name.empty())

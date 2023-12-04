@@ -5,6 +5,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../Entity.h"
+#include "../Macros.h"
+#include "MeshComponent.h"
+#include "../Assets/Shader.h"
+#include <vector>
+#include "../Tools/RenderTexture.h"
 
 enum class CameraType
 {
@@ -27,15 +32,25 @@ class CameraComponent : public Component
 	float orthoNear;
 	float orthoFar;
 
+	float aspect;
+	int width;
+	int height;
+
 	CameraType cameraType;
 
-	// TODO: Add a render texture
+	RenderTexture* renderTexture = nullptr;
 
 public:
 	CameraComponent();
 	~CameraComponent();
 
 	void DrawInspector() override;
+	void Serialize(YAML::Emitter& out) override;
+
+	std::string GetIcon() override
+	{
+		return " " ICON_FA_CAMERA;
+	}
 
 	void SetNearClipPlane(float _nearClipPlane) { nearClipPlane = _nearClipPlane; }
 	void SetFarClipPlane(float _farClipPlane) { farClipPlane = _farClipPlane; }
@@ -45,12 +60,31 @@ public:
 	const float GetFarClipPlane() const { return farClipPlane; }
 	const float GetFieldOfView() const { return fieldOfView; }
 
+	void CreateRenderTexture(int width, int height);
+
+	unsigned int GetRenderTextureID()
+	{
+		if (renderTexture == nullptr) return 0;
+
+		return renderTexture->GetTextureID();
+	}
+
+	unsigned int GetRenderTextureDepthID()
+	{
+		if (renderTexture == nullptr) return 0;
+
+		return renderTexture->GetDepthTextureID();
+	}
+
+	void Render(std::vector<MeshComponent*> meshes, Shader* shader);
+	void Resize(int width, int height);
+
 	glm::mat4 GetViewMatrix() {
 		return owner->GetTransform().GetViewMatrix();
 	}
 	glm::mat4 GetProjectionMatrix() {
 		if (cameraType == CameraType::Perspective) {
-			return glm::perspective(glm::radians(fieldOfView), 1920.0f / 1080.0f, nearClipPlane, farClipPlane);
+			return glm::perspective(glm::radians(fieldOfView), aspect, nearClipPlane, farClipPlane);
 		}
 		else if (cameraType == CameraType::Orthographic) {
 			return glm::ortho(left, right, bottom, top, orthoNear, orthoFar);

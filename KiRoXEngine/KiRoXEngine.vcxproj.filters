@@ -1,520 +1,194 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <Natvis Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui_impl_glfw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Assets\Asset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Assets\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\Console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\Component.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\TransformComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\CameraComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\MeshComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tools\Stopwatch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tools\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\Gizmos.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\contrib\graphbuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\contrib\graphbuilderadapter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\binary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\convert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\depthguard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\directives.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\emit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\emitfromevents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\emitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\emitterstate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\emitterutils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\exceptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\exp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\memory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\node_data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\nodebuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\nodeevents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\null.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\ostream_wrapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\parse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\regex_yaml.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\scanner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\scanscalar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\scantag.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\scantoken.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\simplekey.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\singledocparser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\stream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\yaml\src\tag.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\binary.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\contrib\graphbuilder.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\contrib\graphbuilderadapter.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\convert.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\depthguard.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\directives.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\emit.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\emitfromevents.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\emitter.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\emitterstate.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\emitterutils.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\exceptions.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\exp.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\memory.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\node.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\nodebuilder.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\nodeevents.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\node_data.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\null.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\ostream_wrapper.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\parse.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\parser.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\regex_yaml.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\scanner.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\scanscalar.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\scantag.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\scantoken.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\simplekey.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\singledocparser.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\stream.cpp" />
+    <ClCompile Include="Dependencies\yaml\src\tag.cpp" />
+    <ClCompile Include="src\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\Tools\RenderTexture.cpp" />
+    <ClCompile Include="src\Editor\Gizmos.cpp" />
+    <ClCompile Include="src\Tools\Input.cpp" />
+    <ClCompile Include="src\Components\MeshComponent.cpp" />
+    <ClCompile Include="src\Components\CameraComponent.cpp" />
+    <ClCompile Include="src\Components\Component.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\Editor\Console.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\Assets\Asset.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Tools\Stopwatch.cpp" />
+    <ClCompile Include="src\Assets\Texture.cpp" />
+    <ClCompile Include="src\Components\TransformComponent.cpp" />
+    <ClCompile Include="Dependencies\fbx\ufbx.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Macros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\access_levels.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\argument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\array_range.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\associative_mapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\constructor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\destructor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\enum_flags.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\enumeration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\filter_item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\instance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\library.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\method.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\parameter_info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\policy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\property.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\registration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\registration_friend.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_cast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_enable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\sequential_mapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\string_view.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\type.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\type_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant_associative_view.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant_sequential_view.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\rttr\include\rttr\visitor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Assets\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Assets\AssetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Assets\Asset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Assets\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\image_load\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\Console.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\Component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\TransformComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\CameraComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Components\MeshComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\Stopwatch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\uuid\uuid_v4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\uuid\endianness.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\Gizmos.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\FolderWatcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\gizmos\ImGuizmo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\contrib\anchordict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\contrib\graphbuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\anchor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\binary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\depthguard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\dll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitfromevents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitterdef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emittermanip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitterstyle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\eventhandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\exceptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\mark.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\noexcept.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\null.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\ostream_wrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\parser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\stlemitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\traits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\yaml.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\contrib\graphbuilderadapter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\collectionstack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\directives.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\emitterstate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\emitterutils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\exp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\indentation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\nodebuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\nodeevents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\ptr_vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\regex_yaml.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\regeximpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\scanner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\scanscalar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\scantag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\setting.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\singledocparser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\stream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\streamcharsource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\stringsource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\tag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\yaml\src\token.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
+    <ClInclude Include="Dependencies\icons\IconsFontAwesome6.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_stdlib.h" />
+    <ClInclude Include="Dependencies\uuid\endianness.h" />
+    <ClInclude Include="Dependencies\uuid\uuid_v4.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\anchor.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\binary.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\contrib\anchordict.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\contrib\graphbuilder.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\depthguard.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\dll.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitter.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitterdef.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emittermanip.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\emitterstyle.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\eventhandler.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\exceptions.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\mark.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\noexcept.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\null.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\parser.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\stlemitter.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\traits.h" />
+    <ClInclude Include="Dependencies\yaml\include\yaml-cpp\yaml.h" />
+    <ClInclude Include="Dependencies\yaml\src\collectionstack.h" />
+    <ClInclude Include="Dependencies\yaml\src\contrib\graphbuilderadapter.h" />
+    <ClInclude Include="Dependencies\yaml\src\directives.h" />
+    <ClInclude Include="Dependencies\yaml\src\emitterstate.h" />
+    <ClInclude Include="Dependencies\yaml\src\emitterutils.h" />
+    <ClInclude Include="Dependencies\yaml\src\exp.h" />
+    <ClInclude Include="Dependencies\yaml\src\indentation.h" />
+    <ClInclude Include="Dependencies\yaml\src\nodebuilder.h" />
+    <ClInclude Include="Dependencies\yaml\src\nodeevents.h" />
+    <ClInclude Include="Dependencies\yaml\src\ptr_vector.h" />
+    <ClInclude Include="Dependencies\yaml\src\regeximpl.h" />
+    <ClInclude Include="Dependencies\yaml\src\regex_yaml.h" />
+    <ClInclude Include="Dependencies\yaml\src\scanner.h" />
+    <ClInclude Include="Dependencies\yaml\src\scanscalar.h" />
+    <ClInclude Include="Dependencies\yaml\src\scantag.h" />
+    <ClInclude Include="Dependencies\yaml\src\setting.h" />
+    <ClInclude Include="Dependencies\yaml\src\singledocparser.h" />
+    <ClInclude Include="Dependencies\yaml\src\stream.h" />
+    <ClInclude Include="Dependencies\yaml\src\streamcharsource.h" />
+    <ClInclude Include="Dependencies\yaml\src\stringsource.h" />
+    <ClInclude Include="Dependencies\yaml\src\tag.h" />
+    <ClInclude Include="Dependencies\yaml\src\token.h" />
+    <ClInclude Include="src\Assets\MeshFilter.h" />
+    <ClInclude Include="src\Tools\RenderTexture.h" />
+    <ClInclude Include="src\Tools\FolderWatcher.h" />
+    <ClInclude Include="src\Editor\Gizmos.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Tools\Input.h" />
+    <ClInclude Include="src\Components\MeshComponent.h" />
+    <ClInclude Include="src\Components\CameraComponent.h" />
+    <ClInclude Include="src\Components\Component.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Editor\Console.h" />
+    <ClInclude Include="Dependencies\image_load\stb_image.h" />
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\Assets\Asset.h" />
+    <ClInclude Include="src\Assets\AssetManager.h" />
+    <ClInclude Include="Dependencies\imgui\imconfig.h" />
+    <ClInclude Include="Dependencies\imgui\imgui.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\access_levels.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\argument.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\array_range.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\associative_mapper.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\constructor.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\destructor.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\enumeration.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\enum_flags.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\filter_item.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\instance.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\library.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\method.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\parameter_info.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\policy.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\property.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\registration.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\registration_friend.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_cast.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_enable.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\sequential_mapper.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\string_view.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\type.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\type_list.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\variant.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\variant_associative_view.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\variant_sequential_view.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\visitor.h" />
+    <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
+    <ClInclude Include="src\Assets\Shader.h" />
+    <ClInclude Include="src\Macros.h" />
+    <ClInclude Include="src\Tools\Serialization.h" />
+    <ClInclude Include="src\Tools\Stopwatch.h" />
+    <ClInclude Include="src\Assets\Texture.h" />
+    <ClInclude Include="src\Components\TransformComponent.h" />
+    <ClInclude Include="Dependencies\fbx\ufbx.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\rttr\lib\rttr_core_d.lib" />
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="KiRoXEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\b08374be-102f-4958-b0f9-c6996ae27155.ico" />
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dependencies\rttr\bin\rttr_core_d.dll" />
+    <None Include="Dependencies\rttr\bin\rttr_core_d.pdb" />
     <None Include="Dependencies\rttr\include\rttr\registration" />
     <None Include="Dependencies\rttr\include\rttr\registration_friend" />
     <None Include="Dependencies\rttr\include\rttr\type" />
-    <None Include="Dependencies\rttr\bin\rttr_core_d.pdb" />
-    <None Include="Dependencies\rttr\bin\rttr_core_d.dll" />
     <None Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="KiRoXEngine.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="icon1.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\..\..\Downloads\b08374be-102f-4958-b0f9-c6996ae27155.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis" />
   </ItemGroup>
 </Project>

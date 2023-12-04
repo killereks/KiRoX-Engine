@@ -4,8 +4,10 @@
 
 #include <vector>
 #include <glm/glm.hpp>
-#include "CameraComponent.h"
 #include "../Assets/Shader.h"
+#include "../Macros.h"
+#include "../Entity.h"
+#include "icons/IconsFontAwesome6.h"
 
 class MeshComponent : public Component
 {
@@ -32,16 +34,26 @@ class MeshComponent : public Component
 	std::vector<glm::vec3> vertices;
 	std::vector<unsigned int> indices;
 
+	std::string meshName;
+
 	public:
 		MeshComponent();
 		~MeshComponent();
 
 		void DrawInspector() override;
+		void Serialize(YAML::Emitter& out) override;
+
+		void SetMeshFilter(std::string name);
+
+		std::string GetIcon() override
+		{
+			return " " ICON_FA_CUBE;
+		}
 
 		void SetQuad();
 
 		void UpdateBuffers();
 
-		void Draw(CameraComponent* cameraComponent, Shader* shader);
+		void SimpleDraw(Shader* shader);
 };
 

@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "gtx/quaternion.hpp"
+#include "../Macros.h"
+#include "icons/IconsFontAwesome6.h"
 
 class Entity;
 
@@ -20,7 +22,15 @@ public:
 	TransformComponent();
 	~TransformComponent();
 
+	float gravityY;
+
 	void DrawInspector() override;
+	void Serialize(YAML::Emitter& out) override;
+
+	std::string GetIcon() override
+	{
+		return " " ICON_FA_UP_DOWN_LEFT_RIGHT;
+	}
 
 	// TODO: Cache
 	glm::mat4 GetModelMatrix() {
@@ -47,8 +57,19 @@ public:
 		return glm::inverse(matrixT * matrixR);
 	}
 
+	glm::vec3 LocalToWorldDirection(glm::vec3 localDir)
+	{
+		return rotation * localDir;
+	}
+
+	glm::vec3 WorldToLocalDirection(glm::vec3 worldDir)
+	{
+		return glm::inverse(rotation) * worldDir;
+	}
+
 	void SetLocalPosition(glm::vec3 pos);
 	void SetLocalRotation(glm::vec3 euler);
+	void SetLocalRotation(glm::quat quat);
 	void SetLocalScale(glm::vec3 scale);
 
 	void LookAt(glm::vec3 position);

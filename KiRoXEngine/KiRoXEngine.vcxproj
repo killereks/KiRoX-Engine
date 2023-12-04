@@ -108,7 +108,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -124,7 +124,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -143,7 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dependencies\fbx\ufbx.c" />
     <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Dependencies\yaml\src\binary.cpp" />
     <ClCompile Include="Dependencies\yaml\src\contrib\graphbuilder.cpp" />
     <ClCompile Include="Dependencies\yaml\src\contrib\graphbuilderadapter.cpp" />
@@ -175,6 +177,8 @@
     <ClCompile Include="Dependencies\yaml\src\singledocparser.cpp" />
     <ClCompile Include="Dependencies\yaml\src\stream.cpp" />
     <ClCompile Include="Dependencies\yaml\src\tag.cpp" />
+    <ClCompile Include="src\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\Tools\RenderTexture.cpp" />
     <ClCompile Include="src\Editor\Gizmos.cpp" />
     <ClCompile Include="src\Tools\Input.cpp" />
     <ClCompile Include="src\Components\MeshComponent.cpp" />
@@ -194,12 +198,14 @@
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Tools\Stopwatch.cpp" />
-    <ClCompile Include="TestClass.cpp" />
     <ClCompile Include="src\Assets\Texture.cpp" />
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\fbx\ufbx.h" />
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
+    <ClInclude Include="Dependencies\icons\IconsFontAwesome6.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_stdlib.h" />
     <ClInclude Include="Dependencies\uuid\endianness.h" />
     <ClInclude Include="Dependencies\uuid\uuid_v4.h" />
     <ClInclude Include="Dependencies\yaml\include\yaml-cpp\anchor.h" />
@@ -245,6 +251,8 @@
     <ClInclude Include="Dependencies\yaml\src\stringsource.h" />
     <ClInclude Include="Dependencies\yaml\src\tag.h" />
     <ClInclude Include="Dependencies\yaml\src\token.h" />
+    <ClInclude Include="src\Assets\MeshFilter.h" />
+    <ClInclude Include="src\Tools\RenderTexture.h" />
     <ClInclude Include="src\Tools\FolderWatcher.h" />
     <ClInclude Include="src\Editor\Gizmos.h" />
     <ClInclude Include="resource.h" />
@@ -298,8 +306,8 @@
     <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
     <ClInclude Include="src\Assets\Shader.h" />
     <ClInclude Include="src\Macros.h" />
+    <ClInclude Include="src\Tools\Serialization.h" />
     <ClInclude Include="src\Tools\Stopwatch.h" />
-    <ClInclude Include="TestClass.h" />
     <ClInclude Include="src\Assets\Texture.h" />
     <ClInclude Include="src\Components\TransformComponent.h" />
   </ItemGroup>

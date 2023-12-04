@@ -5,26 +5,33 @@
 #include <filesystem>
 #include <functional>
 
-#include <future>
-
 #include "../Tools/FolderWatcher.h"
 
 #include "Asset.h"
 #include "Texture.h"
 #include "Shader.h"
-#include "Editor/Console.h"
+#include "MeshFilter.h"
+
+#include "../Editor/Console.h"
 
 #include <imgui.h>
 
 class AssetManager {
 private:
-    std::map<std::string, Asset*> assets;
+    std::unordered_map<std::string, Asset*> assets;
 
     std::string projectPath;
 
     FolderWatcher folderWatcher;
 
+    static AssetManager* instance;
+
 public:
+	static AssetManager* GetInstance()
+	{
+		return instance;
+	}
+
     AssetManager(std::filesystem::path path) {
         projectPath = path.string();
 
@@ -32,21 +39,25 @@ public:
 
 		folderWatcher.watchFolder(path.c_str());
         //folderWatcher.OnFileChanged = OnFileChanged;
-        folderWatcher.OnFileChanged = [&](std::wstring_view filename, FolderWatcher::Action action)
+        folderWatcher.OnFileChanged = [this](std::wstring_view filename, FolderWatcher::Action action)
         {
             OnFileChanged(filename, action);
         };
+
+        instance = this;
     }
 
     ~AssetManager() {
         for (auto& asset : assets) {
 			delete asset.second;
 		}
+
+        delete instance;
 	}
 
 	void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
 	{
-
+        //std::cout << filename << " has changed... " << action << "\n";
 	}
 
     void Update()
@@ -98,21 +109,23 @@ public:
         ImGui::PopStyleVar();
 
         ImGui::End();
-    }
+	}
 
+	template <typename T>
+	void Load(const std::string& name, const std::string& filePath)
+	{
+        std::cout << "Loading " << name << "\n";
 
-public:
-    template <typename T>
-    void Load(const std::string& name, const std::string& filePath) {
-        Console::Write("Loaded asset: "+name, ImVec4(0.278, 0.722, 1.0, 1.0));
-
-        if (assets.find(name) != assets.end()) {
-            delete assets[name];
-        }
+		if (assets.find(name) != assets.end())
+		{
+			delete assets[name];
+		}
 
         assets[name] = new T(filePath);
-    }
+		Console::Write("Loaded asset: " + name, ImVec4(0.278f, 0.722f, 1.0f, 1.0f));
+	}
 
+public:
     template <typename T>
     T* Get(const std::string& name) {
         return dynamic_cast<T*>(assets[name]);
@@ -127,15 +140,18 @@ public:
             const auto& path = entry.path();
             const auto& extension = path.extension();
 
-            if (extension == ".png" || extension == ".jpeg" || extension == ".jpg") {
-                Load<Texture>(path.filename().string(), path.string());
-            }
-            else if (extension == ".shader")
+			if (extension == ".png" || extension == ".jpeg" || extension == ".jpg")
+			{
+				Load<Texture>(path.filename().string(), path.string());
+			}
+			else if (extension == ".shader")
+			{
+			    Load<Shader>(path.filename().string(), path.string());
+			}
+            else if (extension == ".fbx")
             {
-                Load<Shader>(path.filename().string(), path.string());
+                Load<MeshFilter>(path.filename().string(), path.string());
             }
         }
     }
 };
-
-

@@ -25,6 +25,11 @@ Entity::~Entity()
 
 void Entity::SetParent(Entity* _parent)
 {
+	if (_parent == nullptr)
+	{
+		return;
+	}
+
 	if (parent != nullptr) {
 		parent->RemoveChild(this);
 	}

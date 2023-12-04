@@ -22,20 +22,20 @@ void TransformComponent::DrawInspector()
 	ImGui::DragFloat3("##Position", &position[0], 0.1f);
 	ImGui::SameLine();
 	if (ImGui::Button("R##Position")) {
-		position = glm::vec3(0.0);
+		SetLocalPosition(glm::vec3(0.0));
 	}
 
-	glm::vec3 euler = glm::eulerAngles(rotation) * 180.0f / glm::pi<float>();
+	glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
 
 	ImGui::Text("Rotation");
 	ImGui::Separator();
 	ImGui::DragFloat3("##Rotation", &euler[0], 0.1f);
 	ImGui::SameLine();
 	if (ImGui::Button("R##Euler")) {
-		euler = glm::vec3(0.0);
+		SetLocalRotation(glm::quat());
 	}
 
-	rotation = glm::quat(euler * glm::pi<float>() / 180.0f);
+	rotation = glm::quat(glm::radians(euler));
 
 	ImGui::Text("Scale");
 	ImGui::Separator();
@@ -43,23 +43,68 @@ void TransformComponent::DrawInspector()
 
 	ImGui::SameLine();
 	if (ImGui::Button("R##Scale")) {
-		scale = glm::vec3(1.0);
+		SetLocalScale(glm::vec3(1.0));
 	}
+}
+
+void TransformComponent::Serialize(YAML::Emitter& out)
+{
+	SERIALIZE_VALUE(position);
+	SERIALIZE_VALUE(rotation);
+	SERIALIZE_VALUE(scale);
 }
 
 void TransformComponent::SetLocalPosition(glm::vec3 pos)
 {
 	position = pos;
+	//if (owner->GetParent() == nullptr)
+	//{
+	//	position = pos;
+	//}
+	//else
+	//{
+	//	position = owner->GetParent()->GetTransform().GetWorldPosition() + pos;
+	//}
 }
 
 void TransformComponent::SetLocalRotation(glm::vec3 euler)
 {
-	rotation = glm::quat(glm::vec3(euler * glm::pi<float>() / 180.0f));
+	rotation = glm::quat(glm::vec3(euler) * glm::pi<float>() / 180.0f);
+	//glm::quat quatRotation = glm::quat(euler * glm::pi<float>() / 180.0f);
+	//if (owner->GetParent() == nullptr)
+	//{
+	//	rotation = quatRotation;
+	//}
+	//else
+	//{
+	//	rotation = owner->GetParent()->GetTransform().GetWorldRotation() * quatRotation;
+	//}
+}
+
+void TransformComponent::SetLocalRotation(glm::quat quat)
+{
+	rotation = quat;
+	//if (owner->GetParent() == nullptr)
+	//{
+	//	rotation = quat;
+	//}
+	//else
+	//{
+	//	rotation = owner->GetParent()->GetTransform().GetWorldPosition() * quat;
+	//}
 }
 
 void TransformComponent::SetLocalScale(glm::vec3 scale)
 {
-	this->scale = scale;
+	//this->scale = scale;
+	if (owner->GetParent() == nullptr)
+	{
+		this->scale = scale;
+	}
+	else
+	{
+		this->scale = owner->GetParent()->GetTransform().GetWorldScale() * scale;
+	}
 }
 
 void TransformComponent::LookAt(glm::vec3 position)
@@ -80,62 +125,47 @@ void TransformComponent::Translate(glm::vec3 deltaPos)
 
 glm::vec3 TransformComponent::GetWorldPosition()
 {
-	glm::vec3 positionOut = GetLocalPosition();
-
-	Entity* parent = owner->GetParent();
-
-	while (parent != nullptr)
-	{
-		positionOut += parent->GetTransform().GetLocalPosition();
-		parent = parent->GetParent();
-	}
-
-	return positionOut;
+	return position;
 }
 
 glm::quat TransformComponent::GetWorldRotation()
 {
-	glm::quat rotationOut = GetLocalRotation();
-
-	Entity* parent = owner->GetParent();
-
-	while (parent != nullptr)
-	{
-		rotationOut *= parent->GetTransform().GetLocalRotation();
-		parent = parent->GetParent();
-	}
-
-	return rotationOut;
+	return rotation;
 }
 
 glm::vec3 TransformComponent::GetWorldScale()
 {
-	glm::vec3 scaleOut = GetLocalScale();
-
-	Entity* parent = owner->GetParent();
-
-	while (parent != nullptr)
-	{
-		scaleOut *= parent->GetTransform().GetLocalScale();
-		parent = parent->GetParent();
-	}
-
-	return scaleOut;
+	return scale;
 }
 
 glm::vec3 TransformComponent::GetLocalPosition()
 {
-	return position;
+	if (owner->GetParent() == nullptr)
+	{
+		return position;
+	}
+
+	return owner->GetParent()->GetTransform().GetWorldPosition() - position;
 }
 
 glm::quat TransformComponent::GetLocalRotation()
 {
-	return rotation;
+	if (owner->GetParent() == nullptr)
+	{
+		return rotation;
+	}
+
+	return glm::inverse(owner->GetParent()->GetTransform().GetWorldRotation()) * rotation;
 }
 
 glm::vec3 TransformComponent::GetLocalScale()
 {
-	return scale;
+	if (owner->GetParent() == nullptr)
+	{
+		return scale;
+	}
+
+	return owner->GetParent()->GetTransform().GetWorldScale() - scale;
 }
 
 glm::vec3 TransformComponent::GetForward()
@@ -154,11 +184,11 @@ glm::vec3 TransformComponent::GetRight()
 }
 
 void TransformComponent::Rotate(glm::vec3 axis, float angleDegrees)
-{
+{	
+	rotation *= glm::angleAxis(glm::radians(angleDegrees), axis);
 
-}
-
-void TransformComponent::RotateLocal(glm::vec3 axis, float angleDegrees)
-{
-
+	for (Entity* ent : owner->GetChildren())
+	{
+		ent->GetTransform().Rotate(axis, angleDegrees);
+	}
 }

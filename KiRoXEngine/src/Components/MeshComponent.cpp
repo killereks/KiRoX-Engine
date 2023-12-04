@@ -3,6 +3,11 @@
 #include <GL/glew.h>
 #include "imgui.h"
 
+#include "imgui_stdlib.h"
+
+#include "../Assets/AssetManager.h"
+#include "../Assets/MeshFilter.h"
+
 MeshComponent::MeshComponent()
 {
 	glGenBuffers(1, &VBO);
@@ -36,6 +41,34 @@ void MeshComponent::DrawInspector()
 	ImGui::Text("%d", indices.size());
 
 	ImGui::EndTable();
+	
+	ImGui::InputText("Mesh Name", &meshName);
+
+	if (ImGui::Button("Apply"))
+	{
+		SetMeshFilter(meshName);
+	}
+}
+
+void MeshComponent::Serialize(YAML::Emitter& out)
+{
+	std::cout << meshName << "\n";
+	SERIALIZE_VALUE(meshName);
+}
+
+void MeshComponent::SetMeshFilter(std::string name)
+{
+	meshName = name;
+
+	MeshFilter* meshFilter = AssetManager::GetInstance()->Get<MeshFilter>(name);
+
+	if (meshFilter != nullptr)
+	{
+		vertices = meshFilter->GetVertices();
+		indices = meshFilter->GetIndices();
+
+		UpdateBuffers();
+	}
 }
 
 void MeshComponent::SetQuad()
@@ -57,6 +90,8 @@ void MeshComponent::SetQuad()
 
 void MeshComponent::UpdateBuffers()
 {
+	// TODO: add uvs and normals
+
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -75,25 +110,9 @@ void MeshComponent::UpdateBuffers()
 	glDisableVertexAttribArray(0);
 }
 
-void MeshComponent::Draw(CameraComponent* cameraComponent, Shader* shader)
+void MeshComponent::SimpleDraw(Shader* shader)
 {
-	shader->use();
-
-	if (modelMatrixLocation == -1) {
-		modelMatrixLocation = glGetUniformLocation(shader->ID, "modelMatrix");
-	}
-
-	if (viewMatrixLocation == -1) {
-		viewMatrixLocation = glGetUniformLocation(shader->ID, "viewMatrix");
-	}
-
-	if (projectionMatrixLocation == -1) {
-		projectionMatrixLocation = glGetUniformLocation(shader->ID, "perspectiveMatrix");
-	}
-
-	shader->setMat4(modelMatrixLocation, owner->GetTransform().GetModelMatrix());
-	shader->setMat4(viewMatrixLocation, cameraComponent->GetViewMatrix());
-	shader->setMat4(projectionMatrixLocation, cameraComponent->GetProjectionMatrix());
+	shader->setMat4("modelMatrix", owner->GetTransform().GetModelMatrix());
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);

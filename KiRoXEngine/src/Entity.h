@@ -10,12 +10,9 @@
 #include "uuid/uuid_v4.h"
 
 #include <yaml-cpp/yaml.h>
-#include <rttr/registration.h>
 
 class Entity
 {
-	friend class rttr::registration;
-
 	std::vector<Component*> components;
 
 	TransformComponent transformComponent;
@@ -31,7 +28,8 @@ public:
 	Entity(std::string name);
 	~Entity();
 
-	const std::string &GetName() const { return name; }
+	const std::string& GetName() const { return name; }
+	void SetName(std::string newName) { name = newName; }
 
 	const std::vector<Entity*> &GetChildren() const { return children; }
 	Entity* GetParent() const { return parent; }

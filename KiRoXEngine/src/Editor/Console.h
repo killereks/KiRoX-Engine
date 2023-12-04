@@ -32,7 +32,7 @@ private:
 
 	static void Write(std::string message)
 	{
-		Write(message, ImVec4(0.8, 0.8, 0.8, 1.0));
+		Write(message, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
 	}
 
 	static void Write(std::string message, ImVec4 color)
@@ -54,7 +54,7 @@ private:
 
 		if (console->messages.size() > console->capacity)
 		{
-			int overflow = console->messages.size() - console->capacity;
+			int overflow = (int)console->messages.size() - console->capacity;
 			console->messages.erase(console->messages.begin(), console->messages.begin() + overflow);
 			console->colors.erase(console->colors.begin(), console->colors.begin() + overflow);
 		}

@@ -12,6 +12,8 @@
 #include "gizmos/ImGuizmo.h"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "icons/IconsFontAwesome6.h"
+
 Engine::Engine()
 {
 }
@@ -19,7 +21,6 @@ Engine::Engine()
 Engine::~Engine()
 {
 	delete sceneCamera;
-	delete shader;
 }
 
 void Engine::Start()
@@ -27,12 +28,16 @@ void Engine::Start()
 	std::filesystem::path path = std::filesystem::current_path();
 	path /= "Project";
 
+	projectPath = path.string();
+
 	assetManager = std::make_shared<AssetManager>(path);
 
 	scene = std::make_shared<Scene>();
 
 	sceneCamera = new Entity("Scene Camera");
-	sceneCamera->AddComponent<CameraComponent>();
+	CameraComponent* cameraComp = sceneCamera->AddComponent<CameraComponent>();
+	cameraComp->SetNearClipPlane(0.1f);
+	//cameraComp->CreateRenderTexture(1920, 1080);
 
 	sceneCamera->GetTransform().SetLocalPosition(glm::vec3(0.0f, 5.0f, -5.0f));
 	yaw = 180.0f;
@@ -41,6 +46,11 @@ void Engine::Start()
 	shader = assetManager->Get<Shader>("TestShader.shader");
 
 	Gizmos::GetInstance()->Init(shader);
+
+	scene->LoadScene(path.string()+"/test.txt");
+
+	activeScene = std::make_shared<Scene>();
+	activeScene->LoadScene(path.string() + "/test.txt");
 }
 
 void Engine::Update()
@@ -51,26 +61,51 @@ void Engine::Update()
 
 	SceneControls();
 	RenderEditorUI();
-	RenderScene(sceneCamera->GetComponent<CameraComponent>(), shader);
+	RenderScene(shader);
 
-	Gizmos::GetInstance()->Draw();
+	if (currentSceneState == SceneState::Playing)
+	{
+		// simulate physics
+		for (Entity* ent : activeScene->GetAllEntities())
+		{
+			if (ent->HasComponent<MeshComponent>())
+			{
+				std::cout << "Applying physics on " << ent->GetName() << "\n";
+				ent->GetTransform().gravityY += -9.81f * deltaTime;
+
+				ent->GetTransform().Translate(glm::vec3(0.0, ent->GetTransform().gravityY, 0.0f) * deltaTime);
+
+				float y = ent->GetTransform().GetWorldPosition().y;
+				if (y <= 0.0f)
+				{
+					ent->GetTransform().gravityY *= -0.9f;
+					y = 0.0f;
+				}
+			}
+		}
+	}
+
+	//Gizmos::DrawLine(glm::vec3(0, 1, 0), glm::vec3(2, 2, 0), glm::vec3(1.0, 0.0, 0.0));
+
+	//Gizmos::GetInstance()->Draw(sceneCamera->GetComponent<CameraComponent>());
 }
 
-void Engine::RenderScene(CameraComponent* cameraComponent, Shader* shader)
+void Engine::RenderScene(Shader* shader)
 {
 	std::vector<MeshComponent*> meshComponents;
 
-	for (auto& entity : scene.get()->GetEntities()) {
+	for (auto& entity : activeScene.get()->GetEntities()) {
 		if (entity->HasComponent<MeshComponent>()) {
 			meshComponents.push_back(entity->GetComponent<MeshComponent>());
 		}
 	}
 
-	for (MeshComponent* meshComp : meshComponents) {
-		if (meshComp == nullptr) {
-			std::cout << "Mesh component is null" << std::endl;
-		}
-		meshComp->Draw(cameraComponent, shader);
+	GetSceneCamera()->Render(meshComponents, shader);
+
+	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
+	if (gameCamera != nullptr)
+	{
+		gameCamera->Render(meshComponents, shader);
 	}
 }
 
@@ -79,18 +114,13 @@ void Engine::RenderEditorUI()
 	assetManager.get()->DrawInspector();
 	Console::GetInstance()->Draw();
 
-	scene.get()->DrawHierarchy();
-	scene.get()->DrawInspector();
+	activeScene.get()->DrawHierarchy();
+	activeScene.get()->DrawInspector();
 
 	RenderSceneWindow();
 	RenderGameWindow();
 
 	RenderToolbar();
-
-	if (scene->GetSelectedEntity() != nullptr)
-	{
-		EditTransform(scene->GetSelectedEntity());
-	}
 }
 
 void Engine::SceneControls()
@@ -108,8 +138,6 @@ void Engine::SceneControls()
 
 		pitch += mouseDelta.y * mouseSens;
 		yaw += mouseDelta.x * mouseSens;
-
-		pitch = glm::clamp(pitch, -89.0f, 89.0f);
 	}
 
 	if (Input::GetMouseButtonUp(GLFW_MOUSE_BUTTON_RIGHT)) {
@@ -188,48 +216,118 @@ void Engine::SceneControls()
 
 void Engine::RenderSceneWindow()
 {
+	unsigned int texID = GetSceneCamera()->GetRenderTextureID();
+
 	ImGui::Begin("Scene");
+	ImVec2 contentAvail = ImGui::GetContentRegionAvail();
+	GetSceneCamera()->Resize(contentAvail.x, contentAvail.y);
+	ImGui::Image((void*)texID, contentAvail, ImVec2(0, 1), ImVec2(1, 0));
+
+	if (activeScene->GetSelectedEntity() != nullptr)
+	{
+		EditTransform(activeScene->GetSelectedEntity());
+	}
 
 	ImGui::End();
 }
 
 void Engine::RenderGameWindow()
 {
-	ImGui::Begin("Game");
+	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 
+	ImGui::Begin("Game");
+	ImVec2 size = ImGui::GetContentRegionAvail();
+	if (gameCamera == nullptr)
+	{
+		ImGui::Button("No active camera in the scene!", size);
+	}
+	else
+	{
+		if (gameCamera != nullptr)
+		{
+			gameCamera->Resize(size.x, size.y);
+		}
+
+		unsigned int texID = gameCamera->GetRenderTextureID();
+		ImGui::Image((void*)texID, size, ImVec2(0, 1), ImVec2(1, 0));
+	}
 	ImGui::End();
 }
 
 void Engine::RenderToolbar()
 {
-	ImGui::Begin("##Toolbar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGuiWindowFlags window_flags = 0
+		//| ImGuiWindowFlags_NoDocking
+		| ImGuiWindowFlags_NoTitleBar
+		| ImGuiWindowFlags_NoResize
+		//| ImGuiWindowFlags_NoMove
+		| ImGuiWindowFlags_NoScrollbar;
+		//| ImGuiWindowFlags_NoSavedSettings;
 
-	if (ImGui::Button("Play")) {
-		Console::Write("Playing!");
-	}
+	ImGui::Begin("##Toolbar", nullptr, window_flags);
 
-	ImGui::SameLine();
+	float size = ImGui::GetContentRegionAvail().x * 0.5f;
 
-	if (ImGui::Button("Stop")) {
-		Console::Write("Stopping!");
-	}
-	ImGui::SameLine();
+	ImGui::SetCursorPosX(size);
 
-	if (ImGui::Button("Position"))
+	if (currentSceneState == SceneState::Editor)
 	{
-		currentOperation = ImGuizmo::OPERATION::TRANSLATE;
+		if (ImGui::Button(" " ICON_FA_PLAY))
+		{
+			SetSceneState(SceneState::Playing);
+		}
 	}
-	ImGui::SameLine();
-
-	if (ImGui::Button("Rotation"))
+	else
 	{
-		currentOperation = ImGuizmo::OPERATION::ROTATE;
+		if (currentSceneState == SceneState::Playing)
+		{
+			if (ImGui::Button(" " ICON_FA_STOP))
+			{
+				SetSceneState(SceneState::Editor);
+			}
+		}
 	}
-	ImGui::SameLine();
 
-	if (ImGui::Button("Scale"))
+	if (ImGui::BeginMainMenuBar())
 	{
-		currentOperation = ImGuizmo::OPERATION::SCALE;
+		if (ImGui::BeginMenu("File"))
+		{
+			if (currentSceneState == SceneState::Editor)
+			{
+				if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "CTRL+S"))
+				{
+					activeScene->SaveScene(projectPath + "/test.txt");
+				}
+				if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Load", "CTRL+O"))
+				{
+					activeScene->LoadScene(projectPath + "/test.txt");
+				}
+			}
+			else
+			{
+				ImGui::Text("Cannot save when in play mode...");
+			}
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+
+	// GIZMOS
+	ImGui::SameLine();
+	if (currentMode == ImGuizmo::MODE::WORLD)
+	{
+		if (ImGui::Button(ICON_FA_EARTH_EUROPE " World"))
+		{
+			currentMode = ImGuizmo::MODE::LOCAL;
+		}
+	}
+	else
+	{
+		if (ImGui::Button(ICON_FA_VECTOR_SQUARE " Local"))
+		{
+			currentMode = ImGuizmo::MODE::WORLD;
+		}
 	}
 
 	ImGui::End();
@@ -237,24 +335,52 @@ void Engine::RenderToolbar()
 
 void Engine::EditTransform(Entity* ent)
 {
-	ImGuiIO& io = ImGui::GetIO();
+	bool useSnap = false;
+	glm::vec3 snap;
 
-	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	if (Input::GetKey(GLFW_KEY_LEFT_CONTROL))
+	{
+		useSnap = true;
+		if (currentOperation == ImGuizmo::OPERATION::ROTATE)
+		{
+			snap = glm::vec3(45);
+		}
+		else
+		{
+			snap = glm::vec3(0.5);
+		}
+	}
+
+	ImVec2 vMin = ImGui::GetWindowContentRegionMin();
+	ImVec2 vMax = ImGui::GetWindowContentRegionMax();
+
+	vMin.x += ImGui::GetWindowPos().x;
+	vMin.y += ImGui::GetWindowPos().y;
+	vMax.x += ImGui::GetWindowPos().x;
+	vMax.y += ImGui::GetWindowPos().y;
+
+	glm::vec4 sceneViewportWindowSize = glm::vec4(vMin.x, vMin.y, vMax.x, vMax.y);
+
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::SetRect(sceneViewportWindowSize.x, sceneViewportWindowSize.y, sceneViewportWindowSize.z - sceneViewportWindowSize.x, sceneViewportWindowSize.w - sceneViewportWindowSize.y);
 
 	glm::mat4 viewMatrix = sceneCamera->GetTransform().GetViewMatrix();
-	glm::mat4 projection = sceneCamera->GetComponent<CameraComponent>()->GetProjectionMatrix();
+	glm::mat4 projection = GetSceneCamera()->GetProjectionMatrix();
 	glm::mat4 matrix = ent->GetTransform().GetModelMatrix();
 
 	float* matrixPtr = glm::value_ptr(matrix);
 	float* viewMatrixPtr = glm::value_ptr(viewMatrix);
 	float* projectionMatrixPtr = glm::value_ptr(projection);
 
-	ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, ImGuizmo::WORLD, matrixPtr);
+	ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, currentMode, matrixPtr, nullptr, &snap[0]);
 
-	glm::vec3 translation, rotation, scale;
-	ImGuizmo::DecomposeMatrixToComponents(matrixPtr, &translation.x, &rotation.x, &scale.x);
+	if (ImGuizmo::IsUsing())
+	{
+		glm::vec3 translation, rotation, scale;
+		ImGuizmo::DecomposeMatrixToComponents(matrixPtr, &translation.x, &rotation.x, &scale.x);
 
-	ent->GetTransform().SetLocalPosition(translation);
-	ent->GetTransform().SetLocalRotation(rotation);
-	ent->GetTransform().SetLocalScale(scale);
+		ent->GetTransform().SetLocalPosition(translation);
+		ent->GetTransform().SetLocalRotation(rotation);
+		ent->GetTransform().SetLocalScale(scale);
+	}
 }

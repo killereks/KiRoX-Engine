@@ -5,33 +5,39 @@
 #include "ext.hpp"
 #include "Components/CameraComponent.h"
 #include "Components/MeshComponent.h"
+#include <unordered_map>
+#include "imgui_stdlib.h"
+#include "icons/IconsFontAwesome6.h"
+
+#include "Tools/Stopwatch.h"
+#include "Macros.h"
 
 Scene::Scene()
 {
-	rootEntity = new Entity("Root");
-	entities.push_back(rootEntity);
-
-	// create some default entities
-	Entity* ent1 = CreateEntity("Entity 1");
-	Entity* ent2 = CreateEntity("Entity 2");
-	Entity* ent3 = CreateEntity("Entity 3");
-
-	Entity* groundQuad = CreateEntity("Ground");
-	MeshComponent* groundMeshComponent = groundQuad->AddComponent<MeshComponent>();
-	groundQuad->GetTransform().SetLocalRotation(glm::vec3(90, 0, 0));
-	groundQuad->GetTransform().SetLocalScale(glm::vec3(20));
-
-	ent2->SetParent(ent1);
-
-	SaveScene("test.scene");
+	//rootEntity = new Entity("Root");
+	//entities.push_back(rootEntity);
+	//
+	//// create some default entities
+	//Entity* ent1 = CreateEntity("Entity 1");
+	//Entity* ent2 = CreateEntity("Entity 2");
+	//Entity* ent3 = CreateEntity("Entity 3");
+	//
+	//Entity* groundQuad = CreateEntity("Ground");
+	//MeshComponent* groundMeshComponent = groundQuad->AddComponent<MeshComponent>();
+	//groundQuad->GetTransform().SetLocalRotation(glm::vec3(90, 0, 0));
+	//groundQuad->GetTransform().SetLocalScale(glm::vec3(30));
+	//
+	//Entity* cameraEntity = CreateEntity("Camera");
+	//cameraEntity->AddComponent<CameraComponent>();
+	//cameraEntity->GetTransform().SetLocalPosition(glm::vec3(0, 5, -10));
+	//cameraEntity->GetTransform().LookAt(glm::vec3(0.0));
+	//
+	//ent2->SetParent(ent1);
 }
 
 Scene::~Scene()
 {
-	for (auto entity : entities)
-	{
-		delete entity;
-	}
+	delete rootEntity;
 }
 
 void Scene::DrawHierarchy()
@@ -47,6 +53,12 @@ void Scene::DrawHierarchy()
 
 		if (ImGui::MenuItem("Empty")) {
 			CreateEntity("Empty");
+		}
+
+		if (ImGui::MenuItem("Camera"))
+		{
+			Entity* ent = CreateEntity("Camera");
+			ent->AddComponent<CameraComponent>();
 		}
 
 		if (ImGui::BeginMenu("3D Object")) {
@@ -67,7 +79,10 @@ void Scene::DrawHierarchy()
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.f));
 
-	DrawEntity(rootEntity);
+	if (rootEntity != nullptr)
+	{
+		DrawEntity(rootEntity);
+	}
 
 	ImGui::PopStyleColor();
 
@@ -91,7 +106,7 @@ void Scene::DrawEntity(Entity* entity)
 	{
 		if (isCollapsed)
 		{
-			ImGui::Text(">");
+			ImGui::Text(" " ICON_FA_CARET_RIGHT);
 			if (ImGui::IsItemClicked())
 			{
 				storage->SetBool(id, false);
@@ -99,7 +114,7 @@ void Scene::DrawEntity(Entity* entity)
 		}
 		else
 		{
-			ImGui::Text("\\/");
+			ImGui::Text(" " ICON_FA_CARET_DOWN);
 			if (ImGui::IsItemClicked())
 			{
 				storage->SetBool(id, true);
@@ -109,11 +124,10 @@ void Scene::DrawEntity(Entity* entity)
 	}
 
 	ImGui::PopStyleVar();
-
 	// DRAW ENTITY
 	if (selectedEntity == entity)
 	{
-		ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 1.0), ("-> "+entity->GetName()).c_str(), ImVec2(-1, 0));
+		ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 1.0), entity->GetName().c_str(), ImVec2(-1, 0));
 	}
 	else
 	{
@@ -123,6 +137,30 @@ void Scene::DrawEntity(Entity* entity)
 	{
 		selectedEntity = entity;
 	}
+
+	//if (ImGui::BeginDragDropSource())
+	//{
+	//	const char* payload = entity->GetUUID().str().c_str();
+	//	ImGui::SetDragDropPayload("DragEntity", payload, sizeof(payload));
+	//	ImGui::EndDragDropSource();
+	//}
+	//if (ImGui::BeginDragDropTarget())
+	//{
+	//	const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DragEntity");
+	//	if (payload != nullptr)
+	//	{
+	//		const char* uuid = (const char*)payload->Data;
+	//
+	//		UUIDv4::UUID draggedUUID = UUIDv4::UUID::fromStrFactory(uuid);
+	//
+	//		Entity* ent = GetEntityByUUID(draggedUUID);
+	//		if (ent != nullptr)
+	//		{
+	//			ent->SetParent(entity);
+	//		}
+	//	}
+	//	ImGui::EndDragDropTarget();
+	//}
 
 	bool isFirst = true;
 	// DRAW COMPONENTS
@@ -136,7 +174,7 @@ void Scene::DrawEntity(Entity* entity)
 		{
 			ImGui::SameLine();
 		}
-		ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1.0), component->GetName(), ImVec2(-1, 0));
+		ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1.0), component->GetIcon().c_str(), ImVec2(-1, 0));
 		isFirst = false;
 	}
 
@@ -146,7 +184,9 @@ void Scene::DrawEntity(Entity* entity)
 		{
 			ImGui::PushID(entity->GetName().c_str());
 			ImGui::Indent();
+			ImGui::Indent();
 			DrawEntity(entity);
+			ImGui::Unindent();
 			ImGui::Unindent();
 			ImGui::PopID();
 		}
@@ -163,12 +203,19 @@ void Scene::DrawInspector()
 		return;
 	}
 
-	ImGui::Text(selectedEntity->GetName().c_str());
-	ImGui::Text(selectedEntity->GetUUID().str().c_str());
+	std::string name = selectedEntity->GetName();
+	ImGui::PushItemWidth(-1);
+	ImGui::InputText("##Name", &name);
+	ImGui::PopItemWidth();
+	selectedEntity->SetName(name);
+
+	ImGui::Button(selectedEntity->GetUUID().str().c_str(), ImVec2(-1, 0));
 
 	ImGui::Separator();
 
-	if (ImGui::CollapsingHeader(selectedEntity->GetTransform().GetName(), ImGuiTreeNodeFlags_DefaultOpen))
+	std::string displayName = selectedEntity->GetTransform().GetIcon() + " " + selectedEntity->GetTransform().GetName();
+
+	if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		selectedEntity->GetTransform().DrawInspector();
 	}
@@ -176,7 +223,8 @@ void Scene::DrawInspector()
 	int index = 0;
 	for (Component* component : selectedEntity->GetAllComponents()) {
 		ImGui::PushID(++index);
-		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
+		std::string displayName = component->GetIcon() + " " + component->GetName();
+		if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
 			component->DrawInspector();
 		}
 		if (ImGui::Button("X"))
@@ -190,7 +238,7 @@ void Scene::DrawInspector()
 	ImGui::Separator();
 
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.f));
-	if (ImGui::Button("Add Component", ImVec2(-1, 0))) {
+	if (ImGui::Button(ICON_FA_PLUS " Add Component", ImVec2(-1, 0))) {
 		ImGui::OpenPopup("AddComponentPopup");
 	}
 	ImGui::PopStyleColor();
@@ -198,7 +246,7 @@ void Scene::DrawInspector()
 	if (ImGui::BeginPopup("AddComponentPopup", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
 		ImGui::SeparatorText("General");
 
-		ImGui::InputText("##componentName", componentName, IM_ARRAYSIZE(componentName));
+		//ImGui::InputText("##componentName", componentName, IM_ARRAYSIZE(componentName));
 
 		if (ImGui::MenuItem("Camera")) {
 			selectedEntity->AddComponent<CameraComponent>();
@@ -207,24 +255,23 @@ void Scene::DrawInspector()
 		if (ImGui::MenuItem("Mesh Renderer")) {
 			selectedEntity->AddComponent<MeshComponent>();
 		}
+
 		ImGui::MenuItem("Light");
+		ImGui::Separator();
 		ImGui::MenuItem("Rigidbody");
 		ImGui::MenuItem("Box Collider");
 		ImGui::MenuItem("Sphere Collider");
 		ImGui::MenuItem("Capsule Collider");
 		ImGui::MenuItem("Mesh Collider");
-		ImGui::MenuItem("Character Controller");
+		ImGui::Separator();
 		ImGui::MenuItem("Audio Source");
 		ImGui::MenuItem("Audio Listener");
+		ImGui::Separator();
 		ImGui::MenuItem("Particle System");
+		ImGui::Separator();
 		ImGui::MenuItem("Animation");
 		ImGui::MenuItem("Animator");
-		ImGui::MenuItem("Nav Mesh Agent");
-		ImGui::MenuItem("Nav Mesh Obstacle");
-		ImGui::MenuItem("Network Transform");
-		ImGui::MenuItem("Network Identity");
-		ImGui::MenuItem("Network Animator");
-		ImGui::MenuItem("Network Rigid Body");
+
 
 		ImGui::EndPopup();
 	}
@@ -242,14 +289,46 @@ Entity* Scene::CreateEntity(std::string name)
 	return entity;
 }
 
+void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
+{
+	out << YAML::BeginMap;
+
+	out << YAML::Key << "Entity" << YAML::Value << ent->GetName();
+	out << YAML::Key << "UUID" << YAML::Value << ent->GetUUID().str();
+	if (ent->GetParent() != nullptr)
+	{
+		out << YAML::Key << "Parent" << YAML::Value << ent->GetParent()->GetUUID().str();
+	}
+
+	out << YAML::Key << "Transform";
+	out << YAML::BeginMap;
+	ent->GetTransform().Serialize(out);
+	out << YAML::EndMap;
+
+	for (Component* comp : ent->GetAllComponents())
+	{
+		out << YAML::Key << comp->GetName();
+		out << YAML::BeginMap;
+		comp->Serialize(out);
+		out << YAML::EndMap;
+	}
+
+	out << YAML::EndMap;
+}
+
 void Scene::SaveScene(std::string path)
 {
 	YAML::Emitter out;
 	out << YAML::BeginMap;
 	out << YAML::Key << "Scene" << YAML::Value << "Test Scene";
-	out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
-	// TO DO
+	out << YAML::Key << "Entities" << YAML::Value;
+	out << YAML::BeginSeq;
+
+	for (Entity* ent : entities)
+	{
+		SerializeEntity(out, ent);
+	}
 
 	out << YAML::EndSeq;
 	out << YAML::EndMap;
@@ -262,4 +341,86 @@ void Scene::SaveScene(std::string path)
 
 void Scene::LoadScene(std::string path)
 {
+	PROFILE_FUNCTION();
+
+	std::ifstream stream(path);
+	std::stringstream strStream;
+	strStream << stream.rdbuf();
+
+	YAML::Node data = YAML::Load(strStream.str());
+
+	if (!data["Entities"])
+	{
+		Console::Write("Invalid scene file!");
+		return;
+	}
+
+	delete rootEntity;
+	entities.clear();
+
+	selectedEntity = nullptr;
+	rootEntity = nullptr;
+
+	std::string sceneName = data["Scene"].as<std::string>();
+
+	YAML::Node entitiesData = data["Entities"];
+
+	std::unordered_map<std::string, Entity*> uuidToEntity;
+
+	for (auto entityData : entitiesData)
+	{
+		//std::cout << "Loading new entity\n";
+
+		std::string name = entityData["Entity"].as<std::string>();
+		std::string uuid = entityData["UUID"].as<std::string>();
+
+		bool isFirstEntity = entityData == entitiesData[0];
+		Entity* newEntity = CreateEntity(name);
+
+		// SET UUID
+		UUIDv4::UUID newUUID = UUIDv4::UUID::fromStrFactory(uuid);
+		newEntity->SetUUID(newUUID);
+
+		uuidToEntity.emplace(uuid, newEntity);
+
+		if (isFirstEntity)
+		{
+			rootEntity = newEntity;
+			continue;
+		}
+
+		YAML::Node parent = entityData["Parent"];
+
+		if (parent)
+		{
+			Entity* parentEntity = uuidToEntity[parent.as<std::string>()];
+			newEntity->SetParent(parentEntity);
+		}
+
+		YAML::Node transform = entityData["Transform"];
+		if (transform)
+		{
+			newEntity->GetTransform().SetLocalPosition(transform["position"].as<glm::vec3>());
+			newEntity->GetTransform().SetLocalRotation(transform["rotation"].as<glm::quat>());
+			newEntity->GetTransform().SetLocalScale(transform["scale"].as<glm::vec3>());
+		}
+
+		YAML::Node camera = entityData["Camera"];
+		if (camera)
+		{
+			CameraComponent* cam = newEntity->AddComponent<CameraComponent>();
+			// TODO: load
+		}
+
+		YAML::Node mesh = entityData["Mesh"];
+		if (mesh)
+		{
+			MeshComponent* meshComp = newEntity->AddComponent<MeshComponent>();
+
+			if (mesh["meshName"])
+			{
+				meshComp->SetMeshFilter(mesh["meshName"].as<std::string>());
+			}
+		}
+	}
 }

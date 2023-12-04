@@ -1,6 +1,8 @@
 #include "CameraComponent.h"
 
 #include "imgui.h"
+#include "../Macros.h"
+#include "../Tools/Stopwatch.h"
 
 CameraComponent::CameraComponent()
 {
@@ -16,18 +18,22 @@ CameraComponent::CameraComponent()
 	bottom = -10.0f;
 	orthoNear = 1.0f;
 	orthoFar = 100.0f;
+
+	renderTexture = new RenderTexture(640, 480);
+	aspect = (float)640 / (float)480;
 }
 
 CameraComponent::~CameraComponent()
 {
+	delete renderTexture;
 }
 
 void CameraComponent::DrawInspector()
 {
 	if (cameraType == CameraType::Perspective) {
 		ImGui::Text("Perspective Camera");
-		ImGui::SliderFloat("Near Clip Plane", &nearClipPlane, 0.1f, 100.0f);
-		ImGui::SliderFloat("Far Clip Plane", &farClipPlane, 0.1f, 100.0f);
+		ImGui::DragFloat("Near Clip Plane", &nearClipPlane, 0.1f, 100.0f);
+		ImGui::DragFloat("Far Clip Plane", &farClipPlane, 0.1f, 100.0f);
 
 		ImGui::SliderFloat("Field Of View", &fieldOfView, 1.0f, 179.0f, "%.0f");
 
@@ -49,4 +55,62 @@ void CameraComponent::DrawInspector()
 			cameraType = CameraType::Perspective;
 		}
 	}
+}
+
+void CameraComponent::Serialize(YAML::Emitter& out)
+{
+	SERIALIZE_VALUE(nearClipPlane);
+	SERIALIZE_VALUE(farClipPlane);
+	SERIALIZE_VALUE(fieldOfView);
+
+	SERIALIZE_VALUE(top);
+	SERIALIZE_VALUE(bottom);
+	SERIALIZE_VALUE(left);
+	SERIALIZE_VALUE(right);
+	SERIALIZE_VALUE(orthoNear);
+	SERIALIZE_VALUE(orthoFar);
+}
+
+void CameraComponent::CreateRenderTexture(int width, int height)
+{
+	if (renderTexture != nullptr)
+	{
+		delete renderTexture;
+	}
+
+	renderTexture = new RenderTexture(width, height);
+}
+
+void CameraComponent::Render(std::vector<MeshComponent*> meshes, Shader* shader)
+{
+	glViewport(0, 0, width, height);
+	if (renderTexture != nullptr)
+	{
+		renderTexture->Bind();
+	}
+
+	shader->use();
+
+	shader->setMat4("perspectiveMatrix", GetProjectionMatrix());
+	shader->setMat4("viewMatrix", GetViewMatrix());
+
+	// render
+	for (MeshComponent* meshComp : meshes)
+	{
+		shader->setMat4("modelMatrix", meshComp->GetOwner()->GetTransform().GetModelMatrix());
+		meshComp->SimpleDraw(shader);
+	}
+
+	if (renderTexture != nullptr)
+	{
+		renderTexture->Unbind();
+	}
+}
+
+void CameraComponent::Resize(int width, int height)
+{
+	this->width = width;
+	this->height = height;
+	aspect = (float)width / (float)height;
+	renderTexture->Resize(width, height);
 }

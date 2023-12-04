@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "../TestClass.h"
 #include <rttr/registration.h>
 
 #include "GL/glew.h"
@@ -14,6 +13,8 @@
 #include "Tools/Input.h"
 
 #include "gizmos/ImGuizmo.h"
+
+#include "icons/IconsFontAwesome6.h"
 
 #define call(x) x;\
 	if (error) __debugbreak();
@@ -62,10 +63,10 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	//glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, GL_DONT_CARE, 0, NULL, GL_TRUE);
-
-	//glEnable(GL_DEBUG_OUTPUT);
-	//glDebugMessageCallback(MessageCallback, 0);
+	glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, GL_DONT_CARE, 0, NULL, GL_TRUE);
+	
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
@@ -83,6 +84,20 @@ int main(int argc, char* argv[]) {
 	fontPath = fontPath.substr(0, fontPath.find_last_of("\\/"));
 	fontPath += "/Ubuntu.ttf";
 	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 20.0f);
+
+	// SETUP ICONS
+	std::string iconPath = std::string(argv[0]);
+	iconPath = iconPath.substr(0, iconPath.find_last_of("\\/"));
+	iconPath += "/fontawesome-webfont.ttf";
+
+	static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+	ImFontConfig icons_config;
+	icons_config.MergeMode = true;
+	icons_config.PixelSnapH = true;
+	float baseFontSize = 30.0f;
+	float iconFontSize = baseFontSize * 2.0 / 3.0f;
+	icons_config.GlyphMinAdvanceX = iconFontSize;
+	io.Fonts->AddFontFromFileTTF(iconPath.c_str(), iconFontSize, &icons_config, icon_ranges);
 
 	// enable docking
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;

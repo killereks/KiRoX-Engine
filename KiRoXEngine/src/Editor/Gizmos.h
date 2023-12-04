@@ -5,6 +5,7 @@
 
 #include "GL/glew.h"
 #include "../Assets/Shader.h"
+#include "../Components/CameraComponent.h"
 
 class Gizmos
 {
@@ -52,11 +53,15 @@ public:
 		glDeleteBuffers(1, &CBO);
 	}
 
-	void Draw()
+	void Draw(CameraComponent* cameraComponent)
 	{
 		if (vertices.size() == 0) return;
 
 		shader->use();
+
+		shader->setMat4("modelMatrix", glm::identity<glm::mat4>());
+		shader->setMat4("viewMatrix", cameraComponent->GetViewMatrix());
+		shader->setMat4("perspectiveMatrix", cameraComponent->GetProjectionMatrix());
 
 		// draw
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
