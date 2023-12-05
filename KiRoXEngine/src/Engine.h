@@ -38,6 +38,7 @@ public:
 	float pitch, yaw;
 
 	Shader* shader;
+	Shader* gizmosShader;
 
 	CameraComponent* sceneCamCache = nullptr;
 	inline CameraComponent* GetSceneCamera ()

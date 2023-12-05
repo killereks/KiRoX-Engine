@@ -24,6 +24,9 @@ class MeshComponent : public Component
 	unsigned int VBO; // vertices
 	unsigned int IBO; // indices
 
+	unsigned int NBO; // normals
+	unsigned int TBO; // texture coords
+
 	unsigned int VAO; // vertex array object
 
 	// cached shader uniforms
@@ -34,7 +37,13 @@ class MeshComponent : public Component
 	std::vector<glm::vec3> vertices;
 	std::vector<unsigned int> indices;
 
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+
 	std::string meshName;
+
+	size_t bufferUploadOffset = 0;
+	size_t chunkSize = 1024;
 
 	public:
 		MeshComponent();
@@ -44,6 +53,9 @@ class MeshComponent : public Component
 		void Serialize(YAML::Emitter& out) override;
 
 		void SetMeshFilter(std::string name);
+		void OnLoaded();
+
+		void AsyncUpload();
 
 		std::string GetIcon() override
 		{

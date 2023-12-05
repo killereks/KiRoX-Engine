@@ -141,6 +141,9 @@ int main(int argc, char* argv[]) {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		std::string title = "Frame Time: " + std::to_string(deltaTime) + " FPS: "+std::to_string(1.0 / deltaTime);
+		glfwSetWindowTitle(window, title.c_str());
+
 		engine.Update();
 
 		ImGui::Render();

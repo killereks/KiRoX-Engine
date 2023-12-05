@@ -6,30 +6,21 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Cube
+  - Entity: Soldier
     UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
     Transform:
-      position: [0, 3.47611856, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
+      position: [-2.68330669, 1.05172038, -35.5652618]
+      rotation: [0.0877443254, 0.667296171, -0.70319432, 0.229204088]
+      scale: [1.02987945, 1.02998984, 1.02980423]
     Mesh:
-      meshName: suzanne.fbx
-  - Entity: Mesh
-    UUID: a2d89002-ee51-4c95-b3c0-128441a7887b
-    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
-    Transform:
-      position: [0, 0.100000001, 0]
-      rotation: [0.707106769, 0, 0, 0.707106769]
-      scale: [20, 20, 0.999918044]
-    Mesh:
-      meshName: ""
+      meshName: soldier.fbx
   - Entity: Camera
     UUID: a9b0ae8d-1453-484e-9208-dd76eff6d935
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
     Transform:
-      position: [0, 3.05999994, 9.60000038]
-      rotation: [-0.202787265, -0, 0, 0.979222834]
+      position: [0, 4.86000013, 9.60000038]
+      rotation: [-1.65955178e-20, 1.2634338e-13, 1.31352493e-07, 1]
       scale: [1, 1, 1]
     Camera:
       nearClipPlane: 0.300000012
@@ -41,3 +32,12 @@ Entities:
       right: 10
       orthoNear: 1
       orthoFar: 100
+  - Entity: Castle
+    UUID: 6472cdd6-6fbc-49c2-a1d2-00760cad0452
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 114.526024, 0]
+      rotation: [-0.701527417, 0.0886371732, 0.0886352733, 0.701531589]
+      scale: [46.1916771, 46.1866684, 46.1857224]
+    Mesh:
+      meshName: Bretesche.obj

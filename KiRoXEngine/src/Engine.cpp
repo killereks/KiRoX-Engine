@@ -44,8 +44,9 @@ void Engine::Start()
 	pitch = -45.0f;
 
 	shader = assetManager->Get<Shader>("TestShader.shader");
+	gizmosShader = assetManager->Get<Shader>("Gizmos.shader");
 
-	Gizmos::GetInstance()->Init(shader);
+	Gizmos::GetInstance()->Init(gizmosShader);
 
 	scene->LoadScene(path.string()+"/test.txt");
 
@@ -56,7 +57,6 @@ void Engine::Start()
 void Engine::Update()
 {
 	//PROFILE_FUNCTION()
-
 	assetManager->Update();
 
 	SceneControls();
@@ -87,7 +87,11 @@ void Engine::Update()
 
 	//Gizmos::DrawLine(glm::vec3(0, 1, 0), glm::vec3(2, 2, 0), glm::vec3(1.0, 0.0, 0.0));
 
+	//GetSceneCamera()->Bind();
+	//GetSceneCamera()->Clear();
 	//Gizmos::GetInstance()->Draw(sceneCamera->GetComponent<CameraComponent>());
+	//GetSceneCamera()->Unbind();
+	//Gizmos::GetInstance()->Clear();
 }
 
 void Engine::RenderScene(Shader* shader)
@@ -99,6 +103,8 @@ void Engine::RenderScene(Shader* shader)
 			meshComponents.push_back(entity->GetComponent<MeshComponent>());
 		}
 	}
+
+	shader->use();
 
 	GetSceneCamera()->Render(meshComponents, shader);
 

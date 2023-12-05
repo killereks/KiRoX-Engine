@@ -32,7 +32,7 @@ void TransformComponent::DrawInspector()
 	ImGui::DragFloat3("##Rotation", &euler[0], 0.1f);
 	ImGui::SameLine();
 	if (ImGui::Button("R##Euler")) {
-		SetLocalRotation(glm::quat());
+		rotation = glm::quat(glm::vec3(0.0));
 	}
 
 	rotation = glm::quat(glm::radians(euler));

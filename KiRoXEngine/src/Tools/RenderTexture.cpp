@@ -33,8 +33,6 @@ void RenderTexture::Bind()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, colorTexture);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-	Clear();
 }
 
 void RenderTexture::Unbind()

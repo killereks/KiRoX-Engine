@@ -52,15 +52,25 @@ public:
 		return outCode;
 	}
 
-	Shader(const std::string& filePath)
+	virtual co::Coro BeginLoading() override
 	{
-		Console::Write("Reading shaders from path "+filePath, ImVec4(0.322f, 0.761f, 0.831f, 1.0f));
+		LoadShader();
+		return {};
+	}
+
+	Shader()
+	{
+	}
+
+	void LoadShader()
+	{
+		Console::Write("Reading shaders from path " + filePath, ImVec4(0.322f, 0.761f, 0.831f, 1.0f));
 
 		std::string vertexCode = GetSrc(filePath, "@vs");
 		std::string fragmentCode = GetSrc(filePath, "@fs");
 
-		std::cout << "Vertex\n" << vertexCode;
-		std::cout << "\nFragment\n" << fragmentCode;
+		//std::cout << "Vertex\n" << vertexCode;
+		//std::cout << "\nFragment\n" << fragmentCode;
 
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();
@@ -190,7 +200,8 @@ private:
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				Console::Write("ERROR::SHADER_COMPILATION_ERROR of type: "+type, ImVec4(1.0, 0.0, 0.0, 1.0));
+				Console::Write("ERROR::SHADER_COMPILATION_ERROR of type: " + type, ImVec4(1.0, 0.0, 0.0, 1.0));
+				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << " " << infoLog << "\n";
 			}
 		}
 		else
@@ -200,6 +211,7 @@ private:
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
 				Console::Write("ERROR::PROGRAM_LINKING_ERROR of type: "+type, ImVec4(1.0, 0.0, 0.0, 1.0));
+				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << " " << infoLog << "\n";
 			}
 		}
 	}

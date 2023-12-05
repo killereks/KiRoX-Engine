@@ -47,6 +47,11 @@ public:
 	void DrawInspector() override;
 	void Serialize(YAML::Emitter& out) override;
 
+	void Bind();
+	void Unbind();
+
+	void Clear();
+
 	std::string GetIcon() override
 	{
 		return " " ICON_FA_CAMERA;
@@ -76,7 +81,7 @@ public:
 		return renderTexture->GetDepthTextureID();
 	}
 
-	void Render(std::vector<MeshComponent*> meshes, Shader* shader);
+	void Render(std::vector<MeshComponent*>& meshes, Shader* shader);
 	void Resize(int width, int height);
 
 	glm::mat4 GetViewMatrix() {

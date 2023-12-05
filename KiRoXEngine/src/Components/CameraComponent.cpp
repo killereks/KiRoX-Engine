@@ -71,6 +71,30 @@ void CameraComponent::Serialize(YAML::Emitter& out)
 	SERIALIZE_VALUE(orthoFar);
 }
 
+void CameraComponent::Bind()
+{
+	if (renderTexture != nullptr)
+	{
+		renderTexture->Bind();
+	}
+}
+
+void CameraComponent::Unbind()
+{
+	if (renderTexture != nullptr)
+	{
+		renderTexture->Unbind();
+	}
+}
+
+void CameraComponent::Clear()
+{
+	if (renderTexture != nullptr)
+	{
+		renderTexture->Clear();
+	}
+}
+
 void CameraComponent::CreateRenderTexture(int width, int height)
 {
 	if (renderTexture != nullptr)
@@ -81,15 +105,11 @@ void CameraComponent::CreateRenderTexture(int width, int height)
 	renderTexture = new RenderTexture(width, height);
 }
 
-void CameraComponent::Render(std::vector<MeshComponent*> meshes, Shader* shader)
+void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader)
 {
+	Bind();
+	Clear();
 	glViewport(0, 0, width, height);
-	if (renderTexture != nullptr)
-	{
-		renderTexture->Bind();
-	}
-
-	shader->use();
 
 	shader->setMat4("perspectiveMatrix", GetProjectionMatrix());
 	shader->setMat4("viewMatrix", GetViewMatrix());
@@ -97,14 +117,10 @@ void CameraComponent::Render(std::vector<MeshComponent*> meshes, Shader* shader)
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{
-		shader->setMat4("modelMatrix", meshComp->GetOwner()->GetTransform().GetModelMatrix());
 		meshComp->SimpleDraw(shader);
 	}
 
-	if (renderTexture != nullptr)
-	{
-		renderTexture->Unbind();
-	}
+	Unbind();
 }
 
 void CameraComponent::Resize(int width, int height)

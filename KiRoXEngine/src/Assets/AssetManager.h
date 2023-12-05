@@ -6,6 +6,8 @@
 #include <functional>
 
 #include "../Tools/FolderWatcher.h"
+#include "../Macros.h"
+#include "../Tools/Stopwatch.h"
 
 #include "Asset.h"
 #include "Texture.h"
@@ -14,15 +16,22 @@
 
 #include "../Editor/Console.h"
 
+#include "coroutines/CoroExtensions.h"
+
 #include <imgui.h>
 
-class AssetManager {
+class AssetManager
+{
 private:
     std::unordered_map<std::string, Asset*> assets;
+
+    std::vector<co::Coro> loadingCoroutines;
 
     std::string projectPath;
 
     FolderWatcher folderWatcher;
+
+    std::unordered_map<std::string, std::vector<std::function<void()>>> onLoadedCallbacks;
 
     static AssetManager* instance;
 
@@ -31,6 +40,27 @@ public:
 	{
 		return instance;
 	}
+
+    void AddCallback_OnLoaded(std::string assetName, std::function<void()> callback)
+    {
+        if (assets.find(assetName) != assets.end())
+        {
+            if (assets[assetName]->IsLoaded())
+            {
+                callback();
+            }
+            else
+            {
+                onLoadedCallbacks[assetName].push_back(callback);
+            }
+        }
+        else
+        {
+            onLoadedCallbacks[assetName].push_back(callback);
+        }
+    }
+
+    int NumberOfAssetsLoading() { return loadingCoroutines.size(); }
 
     AssetManager(std::filesystem::path path) {
         projectPath = path.string();
@@ -51,8 +81,6 @@ public:
         for (auto& asset : assets) {
 			delete asset.second;
 		}
-
-        delete instance;
 	}
 
 	void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
@@ -63,13 +91,16 @@ public:
     void Update()
     {
         folderWatcher.update();
+        AsyncUpdate();
     }
 
     void DrawInspector() {
         ImGui::Begin("Assets");
 
+        ImGui::Text("Loading %i assets...", NumberOfAssetsLoading());
+
         // draw as a square
-        const float size = 150.0f;
+        const float size = 125.0f;
         const float padding = 10.0f;
         const float windowWidth = ImGui::GetWindowWidth();
         const int columnCount = (int)(windowWidth / (size + padding));
@@ -82,12 +113,21 @@ public:
             ImGui::PushID(index++);
 
             ImGui::BeginGroup();
-            Texture* texture = dynamic_cast<Texture*>(asset.second);
-            if (texture && texture->IsLoaded()) {
-                ImGui::Image((void*)texture->GetTextureID(), ImVec2(size, size));
-            }
-            else {
-                ImGui::Button("Missing Icon", ImVec2(size, size));
+			if (asset.second && !asset.second->IsLoaded())
+			{
+				ImGui::Text("Loading...");
+			}
+            else
+            {
+                Texture* texture = dynamic_cast<Texture*>(asset.second);
+                if (texture && texture->IsLoaded())
+                {
+                    ImGui::Image((void*)texture->GetTextureID(), ImVec2(size, size));
+                }
+                else
+                {
+                    ImGui::Button("Missing Icon", ImVec2(size, size));
+                }
             }
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + size);
             ImGui::TextWrapped(asset.first.c_str());
@@ -121,9 +161,31 @@ public:
 			delete assets[name];
 		}
 
-        assets[name] = new T(filePath);
-		Console::Write("Loaded asset: " + name, ImVec4(0.278f, 0.722f, 1.0f, 1.0f));
+        T* asset = new T();
+
+        asset->filePath = filePath;
+        asset->fileName = name;
+
+        assets[name] = asset;
+
+        co::Coro coroutine = asset->BeginLoading();
+        if (coroutine.isValid())
+        {
+			loadingCoroutines.emplace_back(std::move(coroutine));
+        }
+
+		Console::Write("Loading asset: " + name, ImVec4(0.278f, 0.722f, 1.0f, 1.0f));
 	}
+
+    void InvokeLoadedCallbacks(std::string& assetName)
+    {
+        std::vector<std::function<void()>> callbacks = onLoadedCallbacks[assetName];
+
+        for (std::function<void()>& callback : callbacks)
+        {
+            callback();
+        }
+    }
 
 public:
     template <typename T>
@@ -131,7 +193,29 @@ public:
         return dynamic_cast<T*>(assets[name]);
     }
 
+    void AsyncUpdate()
+    {
+        for (size_t i = 0; i < loadingCoroutines.size(); ++i)
+        {
+            loadingCoroutines[i].resume();
+			if (loadingCoroutines[i].status() == co::Dead)
+			{
+                Asset* asset = (Asset*)loadingCoroutines[i].getUserData();
+                std::cout << asset->filePath << " has loaded\n";
+
+                std::swap(loadingCoroutines[i], loadingCoroutines.back());
+                loadingCoroutines.pop_back();
+				--i;
+
+				asset->loaded = true;
+				InvokeLoadedCallbacks(asset->fileName);
+			}
+        }
+    }
+
     void LoadAllAssets() {
+        PROFILE_FUNCTION()
+
         Console::Write("Loading all assets at: "+projectPath);
 
         const std::filesystem::path assetsPath = projectPath;
@@ -148,7 +232,7 @@ public:
 			{
 			    Load<Shader>(path.filename().string(), path.string());
 			}
-            else if (extension == ".fbx")
+            else if (extension == ".fbx" || extension == ".obj")
             {
                 Load<MeshFilter>(path.filename().string(), path.string());
             }

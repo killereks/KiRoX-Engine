@@ -256,23 +256,6 @@ void Scene::DrawInspector()
 			selectedEntity->AddComponent<MeshComponent>();
 		}
 
-		ImGui::MenuItem("Light");
-		ImGui::Separator();
-		ImGui::MenuItem("Rigidbody");
-		ImGui::MenuItem("Box Collider");
-		ImGui::MenuItem("Sphere Collider");
-		ImGui::MenuItem("Capsule Collider");
-		ImGui::MenuItem("Mesh Collider");
-		ImGui::Separator();
-		ImGui::MenuItem("Audio Source");
-		ImGui::MenuItem("Audio Listener");
-		ImGui::Separator();
-		ImGui::MenuItem("Particle System");
-		ImGui::Separator();
-		ImGui::MenuItem("Animation");
-		ImGui::MenuItem("Animator");
-
-
 		ImGui::EndPopup();
 	}
 

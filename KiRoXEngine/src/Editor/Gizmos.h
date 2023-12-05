@@ -53,6 +53,12 @@ public:
 		glDeleteBuffers(1, &CBO);
 	}
 
+	void Clear()
+	{
+		vertices.clear();
+		indices.clear();
+	}
+
 	void Draw(CameraComponent* cameraComponent)
 	{
 		if (vertices.size() == 0) return;
@@ -87,8 +93,6 @@ public:
 
 		glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, 0);
 
-		vertices.clear();
-		indices.clear();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
