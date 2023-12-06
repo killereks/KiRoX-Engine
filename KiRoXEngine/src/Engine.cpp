@@ -13,6 +13,8 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "icons/IconsFontAwesome6.h"
+#include "Tools/StatsCounter.h"
+#include "Tools/Mathf.h"
 
 Engine::Engine()
 {
@@ -52,6 +54,17 @@ void Engine::Start()
 
 	activeScene = std::make_shared<Scene>();
 	activeScene->LoadScene(path.string() + "/test.txt");
+
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	for (int j = 0; j < 10; j++)
+	//	{
+	//		Entity* ent = activeScene->CreateEntity("Soldier" + std::to_string(i) + " " + std::to_string(j));
+	//		ent->AddComponent<MeshComponent>()->SetMeshFilter("soldier.fbx");
+	//		ent->GetTransform().SetLocalPosition(glm::vec3(i * 50, 0.0, j * 50));
+	//		ent->GetTransform().SetLocalRotation(glm::vec3(-84.0f, 25.4f, -166.8f));
+	//	}
+	//}
 }
 
 void Engine::Update()
@@ -85,13 +98,21 @@ void Engine::Update()
 		}
 	}
 
-	//Gizmos::DrawLine(glm::vec3(0, 1, 0), glm::vec3(2, 2, 0), glm::vec3(1.0, 0.0, 0.0));
+	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0));
+	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, 1.0));
 
-	//GetSceneCamera()->Bind();
-	//GetSceneCamera()->Clear();
-	//Gizmos::GetInstance()->Draw(sceneCamera->GetComponent<CameraComponent>());
-	//GetSceneCamera()->Unbind();
-	//Gizmos::GetInstance()->Clear();
+	//for (int i = -20; i <= 20; i++)
+	//{
+	//	for (int j = -20; j <= 20; j++)
+	//	{
+	//		Gizmos::DrawWireCube(glm::vec3(i, 0.0f, j), glm::vec3(0.9), glm::vec3(1.0));
+	//	}
+	//}
+
+	//Gizmos::DrawWireCube(glm::vec3(0.0), glm::vec3(1.0), glm::vec3(1.0));
+
+	//Gizmos::DrawWireSphere(glm::vec3(0.0), 5.0f, glm::vec3(1.0));
 }
 
 void Engine::RenderScene(Shader* shader)
@@ -104,15 +125,22 @@ void Engine::RenderScene(Shader* shader)
 		}
 	}
 
-	shader->use();
+	//shader->use();
 
+	GetSceneCamera()->PreRender();
 	GetSceneCamera()->Render(meshComponents, shader);
+	GetSceneCamera()->DrawGizmos();
+	GetSceneCamera()->PostRender();
 
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)
 	{
+		gameCamera->PreRender();
 		gameCamera->Render(meshComponents, shader);
+		gameCamera->PostRender();
 	}
+
+	Gizmos::GetInstance()->Clear();
 }
 
 void Engine::RenderEditorUI()
@@ -234,6 +262,8 @@ void Engine::RenderSceneWindow()
 		EditTransform(activeScene->GetSelectedEntity());
 	}
 
+	RenderStatistics();
+
 	ImGui::End();
 }
 
@@ -257,6 +287,7 @@ void Engine::RenderGameWindow()
 		unsigned int texID = gameCamera->GetRenderTextureID();
 		ImGui::Image((void*)texID, size, ImVec2(0, 1), ImVec2(1, 0));
 	}
+
 	ImGui::End();
 }
 
@@ -337,6 +368,40 @@ void Engine::RenderToolbar()
 	}
 
 	ImGui::End();
+}
+
+void Engine::RenderStatistics()
+{
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration |
+		ImGuiWindowFlags_NoDocking |
+		ImGuiWindowFlags_AlwaysAutoResize |
+		ImGuiWindowFlags_NoSavedSettings |
+		ImGuiWindowFlags_NoFocusOnAppearing |
+		ImGuiWindowFlags_NoNav |
+		ImGuiWindowFlags_NoMove;
+
+	const float padding = 15.0f;
+
+	ImVec2 windowPos = ImGui::GetWindowPos();
+	windowPos.x += padding;
+	windowPos.y += ImGui::GetWindowHeight() - padding;
+
+	ImGui::SetNextWindowPos(windowPos, ImGuiCond_Always, ImVec2(0,1));
+
+	ImGui::SetNextWindowBgAlpha(0.8f);
+
+	StatsCounter* counter = StatsCounter::GetInstance();
+
+	ImGui::Begin("Statistics", nullptr, window_flags);
+	ImGui::TextColored(ImVec4(0.204f, 0.596f, 0.859f, 1.0), "Statistics");
+	ImGui::Separator();
+	ImGui::Text("Frame time: %.5f ms", Engine::deltaTime);
+	ImGui::Text("Estimated FPS: %.2f", 1.0f / Engine::deltaTime);
+	ImGui::Text("Draw Calls: %s", Mathf::FormatWithCommas(counter->GetCounter("drawCalls")).c_str());
+	ImGui::Text("Vertices: %s", Mathf::FormatWithCommas(counter->GetCounter("vertices")).c_str());
+	ImGui::End();
+
+	counter->Reset();
 }
 
 void Engine::EditTransform(Entity* ent)

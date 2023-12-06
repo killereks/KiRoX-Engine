@@ -7,43 +7,20 @@
 #include "../Assets/Shader.h"
 #include "../Macros.h"
 #include "../Entity.h"
+#include "../Assets/MeshFilter.h"
+#include "../Tools/Bounds.h"
 #include "icons/IconsFontAwesome6.h"
 
 class MeshComponent : public Component
 {
-	// BASICS:
-	// Vertices
-	// Indices
-	// Normals
-	// UVs
-	
-	// LATER:
-	// tangents
-	// bitangents
-
-	unsigned int VBO; // vertices
-	unsigned int IBO; // indices
-
-	unsigned int NBO; // normals
-	unsigned int TBO; // texture coords
-
-	unsigned int VAO; // vertex array object
-
 	// cached shader uniforms
 	int modelMatrixLocation = -1;
 	int viewMatrixLocation = -1;
 	int projectionMatrixLocation = -1;
 
-	std::vector<glm::vec3> vertices;
-	std::vector<unsigned int> indices;
-
-	std::vector<glm::vec3> normals;
-	std::vector<glm::vec2> uvs;
-
 	std::string meshName;
 
-	size_t bufferUploadOffset = 0;
-	size_t chunkSize = 1024;
+	MeshFilter* meshFilter;
 
 	public:
 		MeshComponent();
@@ -53,18 +30,13 @@ class MeshComponent : public Component
 		void Serialize(YAML::Emitter& out) override;
 
 		void SetMeshFilter(std::string name);
-		void OnLoaded();
 
-		void AsyncUpload();
+		Bounds GetBounds();
 
 		std::string GetIcon() override
 		{
 			return " " ICON_FA_CUBE;
 		}
-
-		void SetQuad();
-
-		void UpdateBuffers();
 
 		void SimpleDraw(Shader* shader);
 };

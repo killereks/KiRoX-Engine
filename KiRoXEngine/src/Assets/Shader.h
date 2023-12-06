@@ -118,7 +118,8 @@ public:
 
 	unsigned int getLocation(const std::string& name)
 	{
-		if (locationCache.find(name) != locationCache.end())
+		return glGetUniformLocation(ID, name.c_str());
+		if (locationCache.find(name) == locationCache.end())
 		{
 			unsigned int location = glGetUniformLocation(ID, name.c_str());
 			locationCache[name] = location;

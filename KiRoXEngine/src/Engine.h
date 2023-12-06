@@ -93,5 +93,7 @@ public:
 
 	void RenderToolbar();
 
+	void RenderStatistics();
+
 	void EditTransform(Entity* ent);
 };

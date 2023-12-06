@@ -47,6 +47,11 @@ public:
 	void DrawInspector() override;
 	void Serialize(YAML::Emitter& out) override;
 
+	void DrawGizmos();
+
+	void PreRender();
+	void PostRender();
+
 	void Bind();
 	void Unbind();
 

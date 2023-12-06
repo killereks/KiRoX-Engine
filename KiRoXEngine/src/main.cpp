@@ -24,6 +24,7 @@ bool error = false;
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void* userParam) {
 	error = true;
 	std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;
+	if (error) __debugbreak();
 }
 
 void SetupImGuiStyle();
@@ -67,6 +68,8 @@ int main(int argc, char* argv[]) {
 	
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
+
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
@@ -115,15 +118,15 @@ int main(int argc, char* argv[]) {
 
 	Input::GetInstance()->SetWindow(window);
 
-	double lastFrame = glfwGetTime();
+	double previousTime = glfwGetTime();
+	double currentTime = 0.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
-		double currentFrame = glfwGetTime();
-		double deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
-		Engine::deltaTime = deltaTime;
+		currentTime = glfwGetTime();
+		double frameDiff = currentTime - previousTime;
+		Engine::deltaTime = frameDiff;
+		previousTime = currentTime;
 
 		// poll events
 		glfwPollEvents();
@@ -140,9 +143,6 @@ int main(int argc, char* argv[]) {
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		std::string title = "Frame Time: " + std::to_string(deltaTime) + " FPS: "+std::to_string(1.0 / deltaTime);
-		glfwSetWindowTitle(window, title.c_str());
 
 		engine.Update();
 

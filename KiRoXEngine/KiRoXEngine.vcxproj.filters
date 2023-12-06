@@ -62,6 +62,8 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
     <ClCompile Include="src\Tools\File.cpp" />
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
+    <ClCompile Include="src\Tools\Bounds.cpp" />
+    <ClCompile Include="src\Tools\StatsCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -263,6 +265,9 @@
     <ClInclude Include="src\Tools\File.h" />
     <ClInclude Include="Dependencies\coroutines\minicoro.h" />
     <ClInclude Include="Dependencies\coroutines\CoroExtensions.h" />
+    <ClInclude Include="src\Tools\Mathf.h" />
+    <ClInclude Include="src\Tools\Bounds.h" />
+    <ClInclude Include="src\Tools\StatsCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\rttr\lib\rttr_core_d.lib" />

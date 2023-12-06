@@ -1,0 +1,934 @@
+Scene: Test Scene
+Entities:
+  - Entity: Root
+    UUID: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Soldier
+    UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [-2.68330669, 1.05172038, -35.5652618]
+      rotation: [0.0877443254, 0.667296171, -0.70319432, 0.229204088]
+      scale: [1.02987945, 1.02998984, 1.02980423]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Camera
+    UUID: a9b0ae8d-1453-484e-9208-dd76eff6d935
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [-64.0317764, 52.9274483, -70.6600494]
+      rotation: [-5.76702703e-08, 0.914296567, -5.76702703e-08, -0.40504542]
+      scale: [0.999998391, 1, 0.999998391]
+    Camera:
+      nearClipPlane: 0.300000012
+      farClipPlane: 1000
+      fieldOfView: 60
+      top: 10
+      bottom: -10
+      left: -10
+      right: 10
+      orthoNear: 1
+      orthoFar: 100
+  - Entity: Soldier0 0
+    UUID: 5e2c0282-f27c-4e6f-bbbf-5e7af89bedcd
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 1
+    UUID: dd8a5594-3e03-4fff-872b-2bf916bb742a
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 2
+    UUID: 27865fdc-f185-4777-97fc-f3ff768f04d5
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 3
+    UUID: 11ff3cb0-c971-4536-adf4-c2611af35ca6
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 4
+    UUID: ec68e2b4-31f1-4b12-9b85-2068afd7839f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 5
+    UUID: 7012c7fd-1046-4096-8e83-7906122d6513
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 6
+    UUID: f6762911-1a99-467f-bd8f-d8a0f427b432
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 7
+    UUID: bc25ce43-c16a-4f07-9f7b-5c70ac190b59
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 8
+    UUID: 001c5e08-4b3f-466e-9f5a-90aa544db014
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier0 9
+    UUID: fae2adac-9345-4446-8465-abd6c4ce4ac9
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [0, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 0
+    UUID: 8c5d6f15-af8d-4a36-9c53-9c9e6738a48c
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 1
+    UUID: 268874b6-ea44-408b-b70e-3a531da1198d
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 2
+    UUID: 24ba9ddf-d450-4eb4-b615-b0da4da24dec
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 3
+    UUID: c71ae47e-c7aa-4785-bc0e-5701079f09e3
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 4
+    UUID: ca3c755a-8f4c-4690-9328-3cb70b25e018
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 5
+    UUID: e18f290e-8e2d-46af-9ee8-97c4967c18b0
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 6
+    UUID: 43805875-2495-4b03-987a-8994f414a4b8
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 7
+    UUID: a0e4fe04-d14e-436b-8a4d-89332a361408
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 8
+    UUID: e4e3f0db-4e70-485e-a0f4-d7e21719cfe6
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier1 9
+    UUID: 4f3b64b3-4844-436a-945e-144decdfb65f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [50, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 0
+    UUID: 871aba32-1d68-4707-92b1-280c62b0dc4e
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 1
+    UUID: 8c0068e6-6df6-4725-a095-129876a19ee5
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 2
+    UUID: e7e356a0-dce4-44c4-b6f8-01a1f938e950
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 3
+    UUID: 76311d4b-b81e-48c1-aad8-e557b913b83a
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 4
+    UUID: 68f01bba-c3ee-4d9b-a76f-98e5d7a28155
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 5
+    UUID: e1724eb5-d1c1-4c5e-98a6-766c91de3024
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 6
+    UUID: d18199cc-4512-45f5-8f6b-56f47c2b4735
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 7
+    UUID: b6e2dc8e-c13f-48a2-b7da-9868ee30b894
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 8
+    UUID: 3b0e5ed3-b6ff-450b-8e33-277cabf2fd7a
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier2 9
+    UUID: a82e52d8-e5b2-4766-80e8-c32e38d2a20e
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [100, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 0
+    UUID: 0b735ba3-f893-4a46-89a3-f98716cb4053
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 1
+    UUID: 924ac318-eb4b-495d-af38-d82421454976
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 2
+    UUID: 15809387-dd1b-4cc5-a20a-47d02d341665
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 3
+    UUID: 6a23dd4e-135b-4c52-a816-57414826378b
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 4
+    UUID: 4d03961c-2ab0-4bc1-84f8-d8f3db04eb79
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 5
+    UUID: 8ffb0a57-0423-46f5-aa78-8e8459e14115
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 6
+    UUID: 61585d29-dc13-495a-b97c-76968cffd41f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 7
+    UUID: c3f2f4eb-0126-4a97-bf43-c5c2da9164f6
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 8
+    UUID: a6a7f7f5-eb23-4178-84c3-2c09bbdcea97
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier3 9
+    UUID: 9176581c-6e8d-4d32-9b82-cbc17e4339ef
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [150, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 0
+    UUID: 5f5f204c-585b-41e4-b864-d361c5b3eaa3
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 1
+    UUID: 5121eb7a-61a6-42ba-8d6d-81522485040e
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 2
+    UUID: bd7d5e0b-f599-44b0-a0e9-5a026454902b
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 3
+    UUID: 210dec1c-a389-4ada-a6fe-25224551fa47
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 4
+    UUID: 1c51af70-126b-447a-a403-bf874ab96090
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 5
+    UUID: 76dc69e7-b1f5-4f80-9897-b094ba080a9d
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 6
+    UUID: 6e377d17-db83-4f49-8514-d53ac0b5a730
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 7
+    UUID: 36556e65-15df-4e93-ba23-1cbed28ec38a
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 8
+    UUID: d49c8f41-8a8a-4de3-b1bc-297bb3c762d9
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier4 9
+    UUID: 6f82eca1-ebdf-470c-88a7-151d9d5f5c39
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [200, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 0
+    UUID: 9ba8d6c3-c042-492a-aa4b-ec2465fbdcad
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 1
+    UUID: cb2d658b-55fb-4b7b-8c4c-9af0daf189ed
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 2
+    UUID: 79eae376-d8dc-4cae-8996-485de6b2bb97
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 3
+    UUID: f22d0525-842e-4d81-836d-23ab406b27b8
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 4
+    UUID: 757a66b7-93e9-4280-a914-dfca339971d1
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 5
+    UUID: 8efe6edd-90f7-471f-8e22-78b44efc17ff
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 6
+    UUID: 6fcbeb28-59c9-49f3-aab5-78361d515b77
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 7
+    UUID: 3e9a2b54-c9b1-4a90-8dc1-48489b9cddb4
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 8
+    UUID: c13ed41b-9901-4a9b-90be-7a09f46b6646
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier5 9
+    UUID: 4988ce49-8c70-4eee-a68c-c6ed2fa038ef
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [250, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 0
+    UUID: 64782432-fbbd-46bf-8988-07f883fae77e
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 1
+    UUID: d3bd304d-b48d-451e-985a-6121a680f564
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 2
+    UUID: f86381e2-a6fe-4072-9aa8-46ee9e85a9e2
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 3
+    UUID: 9fba1c47-2431-49f5-be98-f37389b7acee
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 4
+    UUID: 1d9451f4-0bdf-4c12-b46c-805f6320aa15
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 5
+    UUID: f014dc9e-6d23-4f3d-b177-181acba87ec4
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 6
+    UUID: c39156f5-713f-4d0a-900e-b0ed226a1398
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 7
+    UUID: b6296676-5e56-47e5-a73a-dd8d38288a3e
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 8
+    UUID: 7642c7f3-466e-4bbd-a608-b3eaab9f6ea1
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier6 9
+    UUID: e40b4982-5ba1-45b3-b42a-2c8bf7210965
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [300, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 0
+    UUID: cc54ad6b-a2d4-4963-807f-6f9bba38d13c
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 1
+    UUID: 7df989e1-2225-43c8-9e94-9b869f411ad9
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 2
+    UUID: df92ec0f-e3f9-4fa5-a4cf-a1f94fa1d938
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 3
+    UUID: 38748ca4-c1d8-4de4-a210-c709b8321e14
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 4
+    UUID: afe316a9-93d0-4ec2-8e4c-22364d3278a8
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 5
+    UUID: 5c6045f6-a696-40d0-97a6-247c6da8803f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 6
+    UUID: b510a607-5861-4644-b02d-be57001f447f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 7
+    UUID: 4f055941-6dc4-44f8-b164-97b7b0f5db7d
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 8
+    UUID: 968838b8-4efa-4275-a058-5081034f7a25
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier7 9
+    UUID: 5a4e12ef-0f21-4016-a729-36e2a326cd02
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [350, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 0
+    UUID: 3c281a2f-af8b-40e3-af3d-edc23679164b
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 1
+    UUID: 9d7e61a5-0a6e-4448-bce0-cf1d21684df8
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 2
+    UUID: 8de25591-7644-4679-af20-640bf4a81ce9
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 3
+    UUID: e067f0bf-69c7-4340-8238-4feb12e9078a
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 4
+    UUID: bb817a28-e8e8-4d76-afab-922b2790beff
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 5
+    UUID: 0c915afd-310d-4cdf-ad53-c092ef47a987
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 6
+    UUID: ce3b475c-a977-480a-85bd-a88634a45972
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 7
+    UUID: f0bae8e4-a6d5-4fe0-a637-a0b5598b4b23
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 8
+    UUID: 11b01363-e527-41d1-b60e-825372fcd923
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier8 9
+    UUID: d82f547a-d69c-41d1-ae02-7c7c575e73f5
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [400, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 0
+    UUID: e15dbcc1-1db2-4c7a-8ee1-97d12d140e34
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 0]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 1
+    UUID: 27e3bed7-ac73-459e-a774-5a434279201f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 50]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 2
+    UUID: 5279431f-d1ee-4426-b591-b8cfef9244c0
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 100]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 3
+    UUID: 93f74b7c-6cca-4c31-bb1a-819ab21c5d9f
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 150]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 4
+    UUID: 177442c6-8714-4f3c-9e47-c15ca01b366c
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 200]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 5
+    UUID: 4db15077-1703-41cf-94c0-77ded1df2ba0
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 250]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 6
+    UUID: af13301d-825a-40b8-bc93-b8d1b87e2227
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 300]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 7
+    UUID: 59851888-5b8c-49a4-9190-19784477fdb6
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 350]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 8
+    UUID: 92a2c8b0-4b7c-4b1b-b112-ee9b5d37af49
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 400]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx
+  - Entity: Soldier9 9
+    UUID: a1302f86-30a7-43b1-8839-0d3365174cbf
+    Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
+    Transform:
+      position: [450, 0, 450]
+      rotation: [0.087268509, 0.667212188, -0.703251004, 0.229456112]
+      scale: [1, 1, 1]
+    Mesh:
+      meshName: soldier.fbx

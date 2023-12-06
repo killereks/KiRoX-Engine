@@ -74,10 +74,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,10 +94,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,10 +113,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,10 +133,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
+    <ClCompile Include="src\Tools\Bounds.cpp" />
     <ClCompile Include="src\Tools\File.cpp" />
     <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_stdlib.cpp" />
@@ -201,10 +208,12 @@
     <ClCompile Include="src\Tools\Stopwatch.cpp" />
     <ClCompile Include="src\Assets\Texture.cpp" />
     <ClCompile Include="src\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Tools\StatsCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\coroutines\CoroExtensions.h" />
     <ClInclude Include="Dependencies\coroutines\minicoro.h" />
+    <ClInclude Include="src\Tools\Bounds.h" />
     <ClInclude Include="src\Tools\File.h" />
     <ClInclude Include="Dependencies\assimp\aabb.h" />
     <ClInclude Include="Dependencies\assimp\ai_assert.h" />
@@ -344,6 +353,7 @@
     <ClInclude Include="Dependencies\yaml\src\tag.h" />
     <ClInclude Include="Dependencies\yaml\src\token.h" />
     <ClInclude Include="src\Assets\MeshFilter.h" />
+    <ClInclude Include="src\Tools\Mathf.h" />
     <ClInclude Include="src\Tools\RenderTexture.h" />
     <ClInclude Include="src\Tools\FolderWatcher.h" />
     <ClInclude Include="src\Editor\Gizmos.h" />
@@ -402,6 +412,7 @@
     <ClInclude Include="src\Tools\Stopwatch.h" />
     <ClInclude Include="src\Assets\Texture.h" />
     <ClInclude Include="src\Components\TransformComponent.h" />
+    <ClInclude Include="src\Tools\StatsCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\assimp-vc143-mtd.lib" />

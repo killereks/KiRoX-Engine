@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "../Macros.h"
 #include "../Tools/Stopwatch.h"
+#include "../Editor/Gizmos.h"
 
 CameraComponent::CameraComponent()
 {
@@ -71,6 +72,23 @@ void CameraComponent::Serialize(YAML::Emitter& out)
 	SERIALIZE_VALUE(orthoFar);
 }
 
+void CameraComponent::DrawGizmos()
+{
+	Gizmos::GetInstance()->Draw(this);
+}
+
+void CameraComponent::PreRender()
+{
+	Bind();
+	Clear();
+	glViewport(0, 0, width, height);
+}
+
+void CameraComponent::PostRender()
+{
+	Unbind();
+}
+
 void CameraComponent::Bind()
 {
 	if (renderTexture != nullptr)
@@ -107,9 +125,7 @@ void CameraComponent::CreateRenderTexture(int width, int height)
 
 void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader)
 {
-	Bind();
-	Clear();
-	glViewport(0, 0, width, height);
+	shader->use();
 
 	shader->setMat4("perspectiveMatrix", GetProjectionMatrix());
 	shader->setMat4("viewMatrix", GetViewMatrix());
@@ -119,8 +135,6 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 	{
 		meshComp->SimpleDraw(shader);
 	}
-
-	Unbind();
 }
 
 void CameraComponent::Resize(int width, int height)
