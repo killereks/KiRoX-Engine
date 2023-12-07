@@ -213,6 +213,9 @@
   <ItemGroup>
     <ClInclude Include="Dependencies\coroutines\CoroExtensions.h" />
     <ClInclude Include="Dependencies\coroutines\minicoro.h" />
+    <ClInclude Include="src\Math\Frustum.h" />
+    <ClInclude Include="src\Math\ImGuiExtensions.h" />
+    <ClInclude Include="src\Math\Plane.h" />
     <ClInclude Include="src\Tools\Bounds.h" />
     <ClInclude Include="src\Tools\File.h" />
     <ClInclude Include="Dependencies\assimp\aabb.h" />
@@ -353,7 +356,7 @@
     <ClInclude Include="Dependencies\yaml\src\tag.h" />
     <ClInclude Include="Dependencies\yaml\src\token.h" />
     <ClInclude Include="src\Assets\MeshFilter.h" />
-    <ClInclude Include="src\Tools\Mathf.h" />
+    <ClInclude Include="src\Math\Mathf.h" />
     <ClInclude Include="src\Tools\RenderTexture.h" />
     <ClInclude Include="src\Tools\FolderWatcher.h" />
     <ClInclude Include="src\Editor\Gizmos.h" />

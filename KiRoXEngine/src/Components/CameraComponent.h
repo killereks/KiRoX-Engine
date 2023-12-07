@@ -10,6 +10,7 @@
 #include "../Assets/Shader.h"
 #include <vector>
 #include "../Tools/RenderTexture.h"
+#include "../Math/Plane.h"
 
 enum class CameraType
 {
@@ -56,6 +57,9 @@ public:
 	void Unbind();
 
 	void Clear();
+
+	bool IsOnOrForwardPlane(Plane& plane, Bounds& bounds);
+	bool IsInFrustum(Bounds& bounds);
 
 	std::string GetIcon() override
 	{

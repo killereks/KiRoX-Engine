@@ -23,8 +23,8 @@ bool error = false;
 
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void* userParam) {
 	error = true;
-	std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;
-	if (error) __debugbreak();
+	//std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;
+	//if (error) __debugbreak();
 }
 
 void SetupImGuiStyle();

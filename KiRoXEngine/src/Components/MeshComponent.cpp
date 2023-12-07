@@ -67,7 +67,7 @@ void MeshComponent::SetMeshFilter(std::string name)
 	meshFilter = AssetManager::GetInstance()->Get<MeshFilter>(name);
 }
 
-Bounds MeshComponent::GetBounds()
+Bounds& MeshComponent::GetBounds()
 {
 	Bounds& bounds = meshFilter->GetBounds();
 	TransformComponent& transformComponent = owner->GetTransform();
@@ -86,22 +86,16 @@ Bounds MeshComponent::GetBounds()
 
 		min = glm::min(min, transformed);
 		max = glm::max(max, transformed);
-		 
-		//min.x = std::min(min.x, transformed.x);
-		//min.y = std::min(min.y, transformed.y);
-		//min.z = std::min(min.z, transformed.z);
-		//
-		//max.x = std::max(max.x, transformed.x);
-		//max.y = std::max(max.y, transformed.y);
-		//max.z = std::max(max.z, transformed.z);
 	}
 
-	glm::vec3 pos = (max + min) * 0.5f + owner->GetTransform().GetWorldPosition();
+	glm::vec3 pos = (max + min) * 0.5f;
 	glm::vec3 size = (max - min) * 0.5f;
 
-	size *= owner->GetTransform().GetWorldScale();
+	delete boundsRotated;
 
-	return Bounds(pos, size);
+	boundsRotated = new Bounds(pos, size);
+
+	return *boundsRotated;
 }
 
 void MeshComponent::SimpleDraw(Shader* shader)
@@ -125,8 +119,8 @@ void MeshComponent::SimpleDraw(Shader* shader)
 	{
 		meshFilter->DrawCall();
 		
-		Bounds bounds = GetBounds();
-
-		Gizmos::DrawWireCube(bounds.GetCenter(), bounds.GetSize(), glm::vec3(1.0));
+		//Bounds bounds = GetBounds();
+		//
+		//Gizmos::DrawWireCube(bounds.GetCenter(), bounds.GetSize(), glm::vec3(1.0));
 	}
 }

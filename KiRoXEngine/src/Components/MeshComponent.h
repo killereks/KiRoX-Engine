@@ -22,6 +22,8 @@ class MeshComponent : public Component
 
 	MeshFilter* meshFilter;
 
+	Bounds* boundsRotated;
+
 	public:
 		MeshComponent();
 		~MeshComponent();
@@ -31,7 +33,15 @@ class MeshComponent : public Component
 
 		void SetMeshFilter(std::string name);
 
-		Bounds GetBounds();
+		Bounds& GetBounds();
+
+		const int GetVertexCount() const {
+			if (meshFilter != nullptr) {
+				return meshFilter->GetVertices().size();
+			}
+
+			return 0;
+		}
 
 		std::string GetIcon() override
 		{

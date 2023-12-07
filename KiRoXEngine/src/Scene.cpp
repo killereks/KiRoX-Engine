@@ -40,6 +40,12 @@ Scene::~Scene()
 	delete rootEntity;
 }
 
+co::Coro Scene::BeginLoading()
+{
+	this->loaded = true;
+	return {};
+}
+
 void Scene::DrawHierarchy()
 {
 	ImGui::Begin("Hierarchy");
@@ -224,13 +230,19 @@ void Scene::DrawInspector()
 	for (Component* component : selectedEntity->GetAllComponents()) {
 		ImGui::PushID(++index);
 		std::string displayName = component->GetIcon() + " " + component->GetName();
+
 		if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
 			component->DrawInspector();
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+			ImGui::Button("Delete Component (double click)", ImVec2(-1, 0));
+			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				selectedEntity->RemoveComponent(component);
+			}
+			ImGui::PopStyleColor();
 		}
-		if (ImGui::Button("X"))
-		{
-			selectedEntity->RemoveComponent(component);
-		}
+		
 		ImGui::PopID();
 		ImGui::Separator();
 	}
@@ -245,8 +257,6 @@ void Scene::DrawInspector()
 
 	if (ImGui::BeginPopup("AddComponentPopup", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
 		ImGui::SeparatorText("General");
-
-		//ImGui::InputText("##componentName", componentName, IM_ARRAYSIZE(componentName));
 
 		if (ImGui::MenuItem("Camera")) {
 			selectedEntity->AddComponent<CameraComponent>();
@@ -325,6 +335,13 @@ void Scene::SaveScene(std::string path)
 void Scene::LoadScene(std::string path)
 {
 	PROFILE_FUNCTION();
+
+	std::cout << "Loading scene from path: " << path << "\n";
+
+	filePath = path;
+	size_t lastSlash = path.rfind("\\");
+	if (lastSlash == std::string::npos) lastSlash = 0;
+	fileName = path.substr(lastSlash + 1);
 
 	std::ifstream stream(path);
 	std::stringstream strStream;

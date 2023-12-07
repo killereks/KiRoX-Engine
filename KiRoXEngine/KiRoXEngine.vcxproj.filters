@@ -265,9 +265,12 @@
     <ClInclude Include="src\Tools\File.h" />
     <ClInclude Include="Dependencies\coroutines\minicoro.h" />
     <ClInclude Include="Dependencies\coroutines\CoroExtensions.h" />
-    <ClInclude Include="src\Tools\Mathf.h" />
+    <ClInclude Include="src\Math\Mathf.h" />
     <ClInclude Include="src\Tools\Bounds.h" />
     <ClInclude Include="src\Tools\StatsCounter.h" />
+    <ClInclude Include="src\Math\Plane.h" />
+    <ClInclude Include="src\Math\Frustum.h" />
+    <ClInclude Include="src\Math\ImGuiExtensions.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\rttr\lib\rttr_core_d.lib" />

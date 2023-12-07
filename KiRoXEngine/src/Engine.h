@@ -53,19 +53,22 @@ public:
 
 	void SetSceneState(SceneState newSceneState)
 	{
-		std::filesystem::path path = std::filesystem::current_path();
-		path /= "Project";
+
 		switch (newSceneState)
 		{
 		case SceneState::Editor:
 			// Load Editor Scene
 			activeScene = std::make_shared<Scene>();
-			activeScene->LoadScene(path.string() + "/test.txt");
+			activeScene->LoadScene(scene.get()->filePath);
 			break;
 		case SceneState::Playing:
 			// Copy current scene and play it
+			std::cout << "Current active scene: " << activeScene.get()->filePath << "\n";
+			std::cout << "Playing scene from: " << scene.get()->filePath << "\n";
 			activeScene = std::make_shared<Scene>();
-			activeScene->LoadScene(path.string() + "/test.txt");
+			activeScene->LoadScene(scene.get()->filePath);
+
+			ImGui::SetWindowFocus("Game");
 			break;
 		case SceneState::Paused:
 			// Set delta time to 0
@@ -85,6 +88,8 @@ public:
 	void RenderScene(Shader* shader);
 
 	void RenderEditorUI();
+
+	void LoadScene(const std::string& path);
 
 	void SceneControls();
 

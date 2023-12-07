@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <gtc/constants.hpp>
-#include "../Tools/Mathf.h"
+#include "../Math/Mathf.h"
 #include "GLFW/glfw3.h"
 
 void Gizmos::DrawWireCube(glm::vec3 position, glm::vec3 size, glm::vec3 color)

@@ -9,12 +9,14 @@
 #include "Macros.h"
 #include "Editor/Gizmos.h"
 
+#include "imgui_internal.h"
+
 #include "gizmos/ImGuizmo.h"
 #include "glm/gtc/type_ptr.hpp"
 
 #include "icons/IconsFontAwesome6.h"
 #include "Tools/StatsCounter.h"
-#include "Tools/Mathf.h"
+#include "Math/Mathf.h"
 
 Engine::Engine()
 {
@@ -35,11 +37,12 @@ void Engine::Start()
 	assetManager = std::make_shared<AssetManager>(path);
 
 	scene = std::make_shared<Scene>();
+	activeScene = std::make_shared<Scene>();
 
 	sceneCamera = new Entity("Scene Camera");
 	CameraComponent* cameraComp = sceneCamera->AddComponent<CameraComponent>();
 	cameraComp->SetNearClipPlane(0.1f);
-	//cameraComp->CreateRenderTexture(1920, 1080);
+	cameraComp->SetFarClipPlane(2500.0f);
 
 	sceneCamera->GetTransform().SetLocalPosition(glm::vec3(0.0f, 5.0f, -5.0f));
 	yaw = 180.0f;
@@ -49,11 +52,6 @@ void Engine::Start()
 	gizmosShader = assetManager->Get<Shader>("Gizmos.shader");
 
 	Gizmos::GetInstance()->Init(gizmosShader);
-
-	scene->LoadScene(path.string()+"/test.txt");
-
-	activeScene = std::make_shared<Scene>();
-	activeScene->LoadScene(path.string() + "/test.txt");
 
 	//for (int i = 0; i < 10; i++)
 	//{
@@ -79,40 +77,11 @@ void Engine::Update()
 	if (currentSceneState == SceneState::Playing)
 	{
 		// simulate physics
-		for (Entity* ent : activeScene->GetAllEntities())
-		{
-			if (ent->HasComponent<MeshComponent>())
-			{
-				std::cout << "Applying physics on " << ent->GetName() << "\n";
-				ent->GetTransform().gravityY += -9.81f * deltaTime;
-
-				ent->GetTransform().Translate(glm::vec3(0.0, ent->GetTransform().gravityY, 0.0f) * deltaTime);
-
-				float y = ent->GetTransform().GetWorldPosition().y;
-				if (y <= 0.0f)
-				{
-					ent->GetTransform().gravityY *= -0.9f;
-					y = 0.0f;
-				}
-			}
-		}
 	}
 
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0));
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, 1.0));
-
-	//for (int i = -20; i <= 20; i++)
-	//{
-	//	for (int j = -20; j <= 20; j++)
-	//	{
-	//		Gizmos::DrawWireCube(glm::vec3(i, 0.0f, j), glm::vec3(0.9), glm::vec3(1.0));
-	//	}
-	//}
-
-	//Gizmos::DrawWireCube(glm::vec3(0.0), glm::vec3(1.0), glm::vec3(1.0));
-
-	//Gizmos::DrawWireSphere(glm::vec3(0.0), 5.0f, glm::vec3(1.0));
 }
 
 void Engine::RenderScene(Shader* shader)
@@ -127,10 +96,12 @@ void Engine::RenderScene(Shader* shader)
 
 	//shader->use();
 
-	GetSceneCamera()->PreRender();
-	GetSceneCamera()->Render(meshComponents, shader);
-	GetSceneCamera()->DrawGizmos();
-	GetSceneCamera()->PostRender();
+	if (currentSceneState != SceneState::Playing) {
+		GetSceneCamera()->PreRender();
+		GetSceneCamera()->Render(meshComponents, shader);
+		GetSceneCamera()->DrawGizmos();
+		GetSceneCamera()->PostRender();
+	}
 
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)
@@ -155,6 +126,14 @@ void Engine::RenderEditorUI()
 	RenderGameWindow();
 
 	RenderToolbar();
+}
+
+void Engine::LoadScene(const std::string& path)
+{
+	scene = std::make_shared<Scene>();
+	scene->LoadScene(path);
+	activeScene = std::make_shared<Scene>();
+	activeScene->LoadScene(path);
 }
 
 void Engine::SceneControls()
@@ -217,20 +196,6 @@ void Engine::SceneControls()
 		}
 	}
 
-	ImGui::Begin("Scene Camera Debug");
-
-	glm::vec3 rotation = glm::eulerAngles(transform.GetLocalRotation()) * (180.0f / glm::pi<float>());
-
-	ImGui::Text("Position: %f, %f, %f", transform.GetLocalPosition().x, transform.GetLocalPosition().y, transform.GetLocalPosition().z);
-	ImGui::Text("Rotation: %f, %f, %f", rotation.x, rotation.y, rotation.z);
-	ImGui::Text("Scale: %f, %f, %f", transform.GetLocalScale().x, transform.GetLocalScale().y, transform.GetLocalScale().z);
-	ImGui::Separator();
-	ImGui::Text("Forward: %f, %f, %f", transform.GetForward().x, transform.GetForward().y, transform.GetForward().z);
-	ImGui::Text("Right: %f, %f, %f", transform.GetRight().x, transform.GetRight().y, transform.GetRight().z);
-	ImGui::Text("Up: %f, %f, %f", transform.GetUp().x, transform.GetUp().y, transform.GetUp().z);
-
-	ImGui::End();
-
 	if (!Input::GetMouseButton(1))
 	{
 		if (Input::GetKeyDown(GLFW_KEY_W))
@@ -253,6 +218,21 @@ void Engine::RenderSceneWindow()
 	unsigned int texID = GetSceneCamera()->GetRenderTextureID();
 
 	ImGui::Begin("Scene");
+
+	ImVec2 pos = ImGui::GetCursorPos();
+	ImGui::Dummy(ImGui::GetContentRegionAvail());
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET")) {
+			Scene* scene = (Scene*) (*(Asset**)payload->Data);
+
+			if (scene != nullptr) {
+				LoadScene(scene->filePath);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+	ImGui::SetCursorPos(pos);
+
 	ImVec2 contentAvail = ImGui::GetContentRegionAvail();
 	GetSceneCamera()->Resize(contentAvail.x, contentAvail.y);
 	ImGui::Image((void*)texID, contentAvail, ImVec2(0, 1), ImVec2(1, 0));
@@ -395,10 +375,11 @@ void Engine::RenderStatistics()
 	ImGui::Begin("Statistics", nullptr, window_flags);
 	ImGui::TextColored(ImVec4(0.204f, 0.596f, 0.859f, 1.0), "Statistics");
 	ImGui::Separator();
-	ImGui::Text("Frame time: %.5f ms", Engine::deltaTime);
+	ImGui::Text("Frame time: %.5f ms", Engine::deltaTime * 1000.0f);
 	ImGui::Text("Estimated FPS: %.2f", 1.0f / Engine::deltaTime);
 	ImGui::Text("Draw Calls: %s", Mathf::FormatWithCommas(counter->GetCounter("drawCalls")).c_str());
 	ImGui::Text("Vertices: %s", Mathf::FormatWithCommas(counter->GetCounter("vertices")).c_str());
+	ImGui::Text("Vertices saved by culling: %s", Mathf::FormatWithCommas(counter->GetCounter("culledVertices")).c_str());
 	ImGui::End();
 
 	counter->Reset();

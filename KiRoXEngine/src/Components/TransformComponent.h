@@ -22,8 +22,6 @@ public:
 	TransformComponent();
 	~TransformComponent();
 
-	float gravityY;
-
 	void DrawInspector() override;
 	void Serialize(YAML::Emitter& out) override;
 

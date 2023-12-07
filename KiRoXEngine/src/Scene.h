@@ -4,8 +4,9 @@
 #include <string>
 #include "Entity.h"
 #include <stack>
+#include "Assets/Asset.h"
 
-class Scene {
+class Scene : public Asset {
 
 	std::vector<Entity*> entities;
 
@@ -13,13 +14,14 @@ class Scene {
 
 	// EDITOR STUFF
 	Entity* selectedEntity = nullptr;
-	char componentName[32] = "";
 
 public:
 	Scene();
 	~Scene();
 
 	Entity* GetSelectedEntity() { return selectedEntity; }
+
+	virtual co::Coro BeginLoading() override;
 
 	void DrawHierarchy();
 	void DrawEntity(Entity* entity);

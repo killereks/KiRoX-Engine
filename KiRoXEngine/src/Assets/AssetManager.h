@@ -4,6 +4,7 @@
 #include <string>
 #include <filesystem>
 #include <functional>
+#include <typeindex>
 
 #include "../Tools/FolderWatcher.h"
 #include "../Macros.h"
@@ -13,6 +14,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "MeshFilter.h"
+#include "../Scene.h"
 
 #include "../Editor/Console.h"
 
@@ -20,20 +22,27 @@
 
 #include <imgui.h>
 
+class Engine;
+
 class AssetManager
 {
 private:
     std::unordered_map<std::string, Asset*> assets;
+    std::unordered_map<std::string, std::string> textureTypeLookup;
 
     std::vector<co::Coro> loadingCoroutines;
 
     std::string projectPath;
+    std::vector<std::string> relativePath;
 
     FolderWatcher folderWatcher;
 
     std::unordered_map<std::string, std::vector<std::function<void()>>> onLoadedCallbacks;
 
     static AssetManager* instance;
+
+    float fileViewSize = 100.0f;
+    std::vector<std::filesystem::directory_entry> cachedPaths;
 
 public:
 	static AssetManager* GetInstance()
@@ -75,6 +84,12 @@ public:
         };
 
         instance = this;
+
+        textureTypeLookup = {
+            {"Scene", "scene.png"},
+            {"MeshFilter", "mesh.png"},
+            {"Shader", "layers.png"}
+        };
     }
 
     ~AssetManager() {
@@ -94,62 +109,7 @@ public:
         AsyncUpdate();
     }
 
-    void DrawInspector() {
-        ImGui::Begin("Assets");
-
-        ImGui::Text("Loading %i assets...", NumberOfAssetsLoading());
-
-        // draw as a square
-        const float size = 125.0f;
-        const float padding = 10.0f;
-        const float windowWidth = ImGui::GetWindowWidth();
-        const int columnCount = (int)(windowWidth / (size + padding));
-        const float itemWidth = (windowWidth / columnCount) - padding;
-
-        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(padding, padding));
-
-        int index = 0;
-        for (auto& asset : assets) {
-            ImGui::PushID(index++);
-
-            ImGui::BeginGroup();
-			if (asset.second && !asset.second->IsLoaded())
-			{
-				ImGui::Text("Loading...");
-			}
-            else
-            {
-                Texture* texture = dynamic_cast<Texture*>(asset.second);
-                if (texture && texture->IsLoaded())
-                {
-                    ImGui::Image((void*)texture->GetTextureID(), ImVec2(size, size));
-                }
-                else
-                {
-                    ImGui::Button("Missing Icon", ImVec2(size, size));
-                }
-            }
-            ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + size);
-            ImGui::TextWrapped(asset.first.c_str());
-            ImGui::PopTextWrapPos();
-            ImGui::EndGroup();
-
-            ImGui::PopID();
-
-            if (index % columnCount != 0) {
-                ImGui::SameLine();
-            }
-            else {
-                ImGui::Spacing();
-                ImGui::Separator();
-                ImGui::Spacing();
-            }
-        }
-
-        ImGui::PopStyleVar();
-
-        ImGui::End();
-	}
+    void DrawInspector();
 
 	template <typename T>
 	void Load(const std::string& name, const std::string& filePath)
@@ -235,6 +195,9 @@ public:
             else if (extension == ".fbx" || extension == ".obj")
             {
                 Load<MeshFilter>(path.filename().string(), path.string());
+            }
+            else if (extension == ".scene") {
+                Load<Scene>(path.filename().string(), path.string());
             }
         }
     }

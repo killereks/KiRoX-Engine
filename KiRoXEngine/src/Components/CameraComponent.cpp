@@ -5,6 +5,8 @@
 #include "../Tools/Stopwatch.h"
 #include "../Editor/Gizmos.h"
 
+#include "../Math/Frustum.h"
+
 CameraComponent::CameraComponent()
 {
 	nearClipPlane = 0.3f;
@@ -56,6 +58,52 @@ void CameraComponent::DrawInspector()
 			cameraType = CameraType::Perspective;
 		}
 	}
+
+	// draw the frustum
+	float halfFOV = glm::radians(fieldOfView) * 0.5f;
+	
+	float nearHeight = 2.0f * glm::tan(halfFOV) * nearClipPlane;
+	float nearWidth = nearHeight * aspect;
+
+	float farHeight = 2.0f * glm::tan(halfFOV) * farClipPlane;
+	float farWidth = farHeight * aspect;
+
+	TransformComponent& transform = owner->GetTransform();
+
+	glm::vec3 nearCenter = transform.GetWorldPosition() - transform.GetForward() * nearClipPlane;
+	glm::vec3 farCenter = transform.GetWorldPosition() - transform.GetForward() * farClipPlane;
+
+	// NEAR
+	glm::vec3 nearTopLeft =		nearCenter - transform.GetRight() * (nearWidth * 0.5f) + transform.GetUp() * (nearHeight * 0.5f);
+	glm::vec3 nearTopRight =	nearCenter + transform.GetRight() * (nearWidth * 0.5f) + transform.GetUp() * (nearHeight * 0.5f);
+
+	glm::vec3 nearBottomLeft =	nearCenter - transform.GetRight() * (nearWidth * 0.5f) - transform.GetUp() * (nearHeight * 0.5f);
+	glm::vec3 nearBottomRight = nearCenter + transform.GetRight() * (nearWidth * 0.5f) - transform.GetUp() * (nearHeight * 0.5f);
+
+	// FAR
+	glm::vec3 farTopLeft =		farCenter - transform.GetRight() * (farWidth * 0.5f) + transform.GetUp() * (farHeight * 0.5f);
+	glm::vec3 farTopRight =		farCenter + transform.GetRight() * (farWidth * 0.5f) + transform.GetUp() * (farHeight * 0.5f);
+
+	glm::vec3 farBottomLeft =	farCenter - transform.GetRight() * (farWidth * 0.5f) - transform.GetUp() * (farHeight * 0.5f);
+	glm::vec3 farBottomRight =	farCenter + transform.GetRight() * (farWidth * 0.5f) - transform.GetUp() * (farHeight * 0.5f);
+
+	// GIZMOS
+	Gizmos::DrawLine(nearTopLeft, nearTopRight, glm::vec3(1.0));
+	Gizmos::DrawLine(nearTopRight, nearBottomRight, glm::vec3(1.0));
+	Gizmos::DrawLine(nearBottomRight, nearBottomLeft, glm::vec3(1.0));
+	Gizmos::DrawLine(nearBottomLeft, nearTopLeft, glm::vec3(1.0));
+
+	Gizmos::DrawLine(farTopLeft, farTopRight, glm::vec3(1.0));
+	Gizmos::DrawLine(farTopRight, farBottomRight, glm::vec3(1.0));
+	Gizmos::DrawLine(farBottomRight, farBottomLeft, glm::vec3(1.0));
+	Gizmos::DrawLine(farBottomLeft, farTopLeft, glm::vec3(1.0));
+
+	Gizmos::DrawLine(nearTopLeft, farTopLeft, glm::vec3(1.0));
+	Gizmos::DrawLine(nearTopRight, farTopRight, glm::vec3(1.0));
+	Gizmos::DrawLine(nearBottomRight, farBottomRight, glm::vec3(1.0));
+	Gizmos::DrawLine(nearBottomLeft, farBottomLeft, glm::vec3(1.0));
+
+	Gizmos::DrawRay(transform.GetWorldPosition(), transform.GetForward(), glm::vec3(1.0, 1.0, 0.0));
 }
 
 void CameraComponent::Serialize(YAML::Emitter& out)
@@ -113,6 +161,42 @@ void CameraComponent::Clear()
 	}
 }
 
+bool CameraComponent::IsOnOrForwardPlane(Plane& plane, Bounds& bounds)
+{
+	glm::vec3 extents = bounds.GetSize();
+
+	const float r = extents.x * std::abs(plane.normal.x) + extents.y * std::abs(plane.normal.y) + extents.z * std::abs(plane.normal.z);
+
+	return -r <= plane.GetSignedDistanceToPlane(bounds.GetCenter());
+}
+
+bool CameraComponent::IsInFrustum(Bounds& bounds)
+{
+	Frustum frustum;
+
+	TransformComponent& transform = owner->GetTransform();
+	
+	const float halfVside = farClipPlane * glm::tan(glm::radians(fieldOfView * 0.5f));
+	const float halfHside = halfVside * aspect;
+	const glm::vec3 frontMultFar = farClipPlane * transform.GetForward();
+
+	frustum.nearFace = { transform.GetWorldPosition() + nearClipPlane * transform.GetForward(), transform.GetForward() };
+	frustum.farFace = { transform.GetWorldPosition() + frontMultFar, -transform.GetForward() };
+	
+	frustum.rightFace = { transform.GetWorldPosition(), glm::cross(frontMultFar - transform.GetRight() * halfHside, transform.GetUp()) };
+	frustum.leftFace = { transform.GetWorldPosition(), glm::cross(transform.GetUp(), frontMultFar + transform.GetRight() * halfHside) };
+
+	frustum.topFace = { transform.GetWorldPosition(), glm::cross(transform.GetRight(), frontMultFar - transform.GetUp() * halfVside) };
+	frustum.bottomFace = { transform.GetWorldPosition(), glm::cross(frontMultFar + transform.GetUp() * halfVside, transform.GetRight()) };
+
+	return  IsOnOrForwardPlane(frustum.leftFace, bounds) &&
+			IsOnOrForwardPlane(frustum.farFace, bounds) &&
+			IsOnOrForwardPlane(frustum.rightFace, bounds) &&
+			IsOnOrForwardPlane(frustum.leftFace, bounds) &&
+			IsOnOrForwardPlane(frustum.topFace, bounds) &&
+			IsOnOrForwardPlane(frustum.bottomFace, bounds);
+}
+
 void CameraComponent::CreateRenderTexture(int width, int height)
 {
 	if (renderTexture != nullptr)
@@ -133,6 +217,12 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{
+		Bounds bounds = meshComp->GetBounds();
+		if (!IsInFrustum(bounds)) {
+			StatsCounter::GetInstance()->IncreaseCounter("culledVertices", meshComp->GetVertexCount());
+			continue;
+		}
+
 		meshComp->SimpleDraw(shader);
 	}
 }
