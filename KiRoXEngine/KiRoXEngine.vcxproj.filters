@@ -139,34 +139,6 @@
     <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\access_levels.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\argument.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\array_range.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\associative_mapper.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\constructor.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\destructor.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\enumeration.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\enum_flags.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\filter_item.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\instance.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\library.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\method.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\parameter_info.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\policy.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\property.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\registration.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\registration_friend.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_cast.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_enable.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\sequential_mapper.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\string_view.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\type.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\type_list.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant_associative_view.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant_sequential_view.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\visitor.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
     <ClInclude Include="src\Assets\Shader.h" />
     <ClInclude Include="src\Macros.h" />
     <ClInclude Include="src\Tools\Serialization.h" />
@@ -273,7 +245,6 @@
     <ClInclude Include="src\Math\ImGuiExtensions.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Dependencies\rttr\lib\rttr_core_d.lib" />
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
     <Library Include="Dependencies\assimp\assimp-vc143-mtd.lib" />
   </ItemGroup>
@@ -285,11 +256,6 @@
     <Image Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dependencies\rttr\bin\rttr_core_d.dll" />
-    <None Include="Dependencies\rttr\bin\rttr_core_d.pdb" />
-    <None Include="Dependencies\rttr\include\rttr\registration" />
-    <None Include="Dependencies\rttr\include\rttr\registration_friend" />
-    <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis.md" />
     <None Include="Dependencies\assimp\color4.inl" />
     <None Include="Dependencies\assimp\config.h.in" />

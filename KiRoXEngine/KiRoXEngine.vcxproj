@@ -77,15 +77,15 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rttr_core_d.lib;glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,7 +97,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
@@ -105,8 +105,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rttr_core_d.lib;glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,15 +116,15 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rttr_core_d.lib;glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,7 +136,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
@@ -144,8 +144,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>rttr_core_d.lib;glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -381,34 +381,6 @@
     <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\access_levels.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\argument.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\array_range.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\associative_mapper.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\constructor.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\destructor.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\enumeration.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\enum_flags.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\filter_item.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\instance.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\library.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\method.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\parameter_info.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\policy.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\property.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\registration.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\registration_friend.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_cast.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\rttr_enable.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\sequential_mapper.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\string_view.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\type.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\type_list.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant_associative_view.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\variant_sequential_view.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\visitor.h" />
-    <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
     <ClInclude Include="src\Assets\Shader.h" />
     <ClInclude Include="src\Macros.h" />
     <ClInclude Include="src\Tools\Serialization.h" />
@@ -419,7 +391,6 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\assimp-vc143-mtd.lib" />
-    <Library Include="Dependencies\rttr\lib\rttr_core_d.lib" />
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
   </ItemGroup>
   <ItemGroup>
@@ -432,11 +403,6 @@
     <None Include="Dependencies\assimp\SmoothingGroups.inl" />
     <None Include="Dependencies\assimp\vector2.inl" />
     <None Include="Dependencies\assimp\vector3.inl" />
-    <None Include="Dependencies\rttr\bin\rttr_core_d.dll" />
-    <None Include="Dependencies\rttr\bin\rttr_core_d.pdb" />
-    <None Include="Dependencies\rttr\include\rttr\registration" />
-    <None Include="Dependencies\rttr\include\rttr\registration_friend" />
-    <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis.md" />
   </ItemGroup>
   <ItemGroup>

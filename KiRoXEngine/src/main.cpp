@@ -1,7 +1,5 @@
 #include <iostream>
 
-#include <rttr/registration.h>
-
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
