@@ -28,16 +28,26 @@ class MeshComponent : public Component
 		MeshComponent();
 		~MeshComponent();
 
+		void SetMeshName(std::string name);
+
 		void DrawInspector() override;
 		void Serialize(YAML::Emitter& out) override;
 
-		void SetMeshFilter(std::string name);
-
-		Bounds& GetBounds();
+		Bounds* GetBounds();
 
 		const int GetVertexCount() const {
 			if (meshFilter != nullptr) {
 				return meshFilter->GetVertices().size();
+			}
+
+			return 0;
+		}
+
+		const int GetTriangleCount() const
+		{
+			if (meshFilter != nullptr)
+			{
+				return meshFilter->GetIndices().size() / 3;
 			}
 
 			return 0;

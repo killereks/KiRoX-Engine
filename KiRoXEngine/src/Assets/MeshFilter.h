@@ -61,7 +61,9 @@ public:
 	size_t bufferUploadOffset = 0;
 	size_t chunkSize = 16384;
 
-	Bounds& GetBounds() const { return *bounds; }
+	Bounds* GetBounds() const { 
+		return bounds;
+	}
 
 	MeshFilter()
 	{
@@ -220,7 +222,7 @@ public:
 	void DrawCall()
 	{
 		size_t size = std::min(bufferUploadOffset, indices.size());
-		StatsCounter::GetInstance()->IncreaseCounter("vertices", size);
+		StatsCounter::GetInstance()->IncreaseCounter("triangles", size / 3);
 		StatsCounter::GetInstance()->IncreaseCounter("drawCalls");
 
 		glBindVertexArray(VAO);
@@ -246,8 +248,6 @@ public:
 			aiProcess_OptimizeGraph |
 			aiProcess_GenNormals;
 
-		steps = 0;
-
 		const aiScene* scene = importer.ReadFile(filePath, steps);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -260,12 +260,10 @@ public:
 
 		vertices.resize(mesh->mNumVertices);
 		indices.resize(mesh->mNumFaces * 3);
-		//normals.resize(mesh->mNumVertices);
-		//uvs.resize(mesh->mNumVertices);
 
 		bounds->Clear();
 
-		for (int i = 0; i < mesh->mNumVertices; i++)
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
 			glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 
@@ -283,7 +281,7 @@ public:
 			}
 		}
 
-		for (int i = 0; i < mesh->mNumFaces; i++)
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 		{
 			aiFace face = mesh->mFaces[i];
 			for (unsigned int j = 0; j < face.mNumIndices; j++)
@@ -291,6 +289,12 @@ public:
 				indices.push_back(face.mIndices[j]);
 			}
 		}
+
+		//int M = 10000;
+		//for (int i = indices.size() - 1; i >= 0; i -= M)
+		//{
+		//	indices.erase(indices.begin() + i);
+		//}
 	}
 
 };

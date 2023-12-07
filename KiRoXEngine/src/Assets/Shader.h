@@ -17,7 +17,6 @@
 class Shader : public Asset {
 public:
 	unsigned int ID;
-	// TODO: Use Hashing to store the uniform locations
 
 	std::unordered_map<std::string, unsigned int> locationCache;
 	

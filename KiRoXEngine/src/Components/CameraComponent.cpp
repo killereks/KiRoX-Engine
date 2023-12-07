@@ -5,8 +5,6 @@
 #include "../Tools/Stopwatch.h"
 #include "../Editor/Gizmos.h"
 
-#include "../Math/Frustum.h"
-
 CameraComponent::CameraComponent()
 {
 	nearClipPlane = 0.3f;
@@ -172,29 +170,32 @@ bool CameraComponent::IsOnOrForwardPlane(Plane& plane, Bounds& bounds)
 
 bool CameraComponent::IsInFrustum(Bounds& bounds)
 {
-	Frustum frustum;
-
-	TransformComponent& transform = owner->GetTransform();
+	UpdateFrustumCache();
 	
+	return  IsOnOrForwardPlane(frustumCache.leftFace,	bounds)	&&
+			IsOnOrForwardPlane(frustumCache.farFace,	bounds)	&&
+			IsOnOrForwardPlane(frustumCache.rightFace,	bounds)	&&
+			IsOnOrForwardPlane(frustumCache.leftFace,	bounds)	&&
+			IsOnOrForwardPlane(frustumCache.topFace,	bounds)	&&
+			IsOnOrForwardPlane(frustumCache.bottomFace, bounds);
+}
+
+void CameraComponent::UpdateFrustumCache()
+{
+	TransformComponent& transform = owner->GetTransform();
+
 	const float halfVside = farClipPlane * glm::tan(glm::radians(fieldOfView * 0.5f));
 	const float halfHside = halfVside * aspect;
 	const glm::vec3 frontMultFar = farClipPlane * transform.GetForward();
 
-	frustum.nearFace = { transform.GetWorldPosition() + nearClipPlane * transform.GetForward(), transform.GetForward() };
-	frustum.farFace = { transform.GetWorldPosition() + frontMultFar, -transform.GetForward() };
-	
-	frustum.rightFace = { transform.GetWorldPosition(), glm::cross(frontMultFar - transform.GetRight() * halfHside, transform.GetUp()) };
-	frustum.leftFace = { transform.GetWorldPosition(), glm::cross(transform.GetUp(), frontMultFar + transform.GetRight() * halfHside) };
+	frustumCache.nearFace = { transform.GetWorldPosition() + nearClipPlane * transform.GetForward(), transform.GetForward() };
+	frustumCache.farFace = { transform.GetWorldPosition() + frontMultFar, -transform.GetForward() };
 
-	frustum.topFace = { transform.GetWorldPosition(), glm::cross(transform.GetRight(), frontMultFar - transform.GetUp() * halfVside) };
-	frustum.bottomFace = { transform.GetWorldPosition(), glm::cross(frontMultFar + transform.GetUp() * halfVside, transform.GetRight()) };
+	frustumCache.rightFace = { transform.GetWorldPosition(), glm::cross(frontMultFar - transform.GetRight() * halfHside, transform.GetUp()) };
+	frustumCache.leftFace = { transform.GetWorldPosition(), glm::cross(transform.GetUp(), frontMultFar + transform.GetRight() * halfHside) };
 
-	return  IsOnOrForwardPlane(frustum.leftFace, bounds) &&
-			IsOnOrForwardPlane(frustum.farFace, bounds) &&
-			IsOnOrForwardPlane(frustum.rightFace, bounds) &&
-			IsOnOrForwardPlane(frustum.leftFace, bounds) &&
-			IsOnOrForwardPlane(frustum.topFace, bounds) &&
-			IsOnOrForwardPlane(frustum.bottomFace, bounds);
+	frustumCache.topFace = { transform.GetWorldPosition(), glm::cross(transform.GetRight(), frontMultFar - transform.GetUp() * halfVside) };
+	frustumCache.bottomFace = { transform.GetWorldPosition(), glm::cross(frontMultFar + transform.GetUp() * halfVside, transform.GetRight()) };
 }
 
 void CameraComponent::CreateRenderTexture(int width, int height)
@@ -217,9 +218,9 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{
-		Bounds bounds = meshComp->GetBounds();
-		if (!IsInFrustum(bounds)) {
-			StatsCounter::GetInstance()->IncreaseCounter("culledVertices", meshComp->GetVertexCount());
+		Bounds* bounds = meshComp->GetBounds();
+		if (bounds != nullptr && !IsInFrustum(*bounds)) {
+			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
 			continue;
 		}
 

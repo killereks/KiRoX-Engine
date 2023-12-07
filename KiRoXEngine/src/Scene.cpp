@@ -186,12 +186,12 @@ void Scene::DrawEntity(Entity* entity)
 
 	if (!isCollapsed)
 	{
-		for (auto entity : entity->GetChildren())
+		for (auto ent : entity->GetChildren())
 		{
-			ImGui::PushID(entity->GetName().c_str());
+			ImGui::PushID(ent->GetName().c_str());
 			ImGui::Indent();
 			ImGui::Indent();
-			DrawEntity(entity);
+			DrawEntity(ent);
 			ImGui::Unindent();
 			ImGui::Unindent();
 			ImGui::PopID();
@@ -235,8 +235,7 @@ void Scene::DrawInspector()
 			component->DrawInspector();
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-			ImGui::Button("Delete Component (double click)", ImVec2(-1, 0));
-			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
 			{
 				selectedEntity->RemoveComponent(component);
 			}
@@ -277,9 +276,34 @@ Entity* Scene::CreateEntity(std::string name)
 	Entity* entity = new Entity(name);
 	entities.push_back(entity);
 
+	if (rootEntity == nullptr)
+	{
+		rootEntity = new Entity("Root");
+	}
+
 	entity->SetParent(rootEntity);
 
 	return entity;
+}
+
+void Scene::DeleteEntity(Entity* ent)
+{
+	if (ent == rootEntity) return;
+
+	entities.erase(std::remove(entities.begin(), entities.end(), ent), entities.end());
+
+	Entity* parent = ent->GetParent();
+	if (parent != nullptr)
+	{
+		parent->RemoveChild(ent);
+	}
+
+	if (selectedEntity == ent)
+	{
+		selectedEntity = nullptr;
+	}
+
+	delete ent;
 }
 
 void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
@@ -419,7 +443,7 @@ void Scene::LoadScene(std::string path)
 
 			if (mesh["meshName"])
 			{
-				meshComp->SetMeshFilter(mesh["meshName"].as<std::string>());
+				meshComp->SetMeshName(mesh["meshName"].as<std::string>());
 			}
 		}
 	}

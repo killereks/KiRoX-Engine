@@ -18,7 +18,8 @@ void main(){
     gl_Position = perspectiveMatrix * viewMatrix * modelMatrix * vec4(aPos, 1.0);
 
     Vertex = aPos;
-	Normal = aNormal;
+	mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
+	Normal = normalize(normalMatrix * aNormal);
 	UV = aUV;
 	
 	FragPos = vec3(modelMatrix * vec4(aPos,1.0));
@@ -51,12 +52,13 @@ void main(){
     //    FragColor = vec4(0.8, 0.8, 0.8, 1.0);
     //}
 	
-	vec3 lightPos = vec3(10, 20, 10);
-	vec3 lightDir = normalize(lightPos - FragPos);
-	
-	float light = max(0.0, dot(lightDir, Normal));
-	
-	vec3 col = texture(albedo, UV).rgb * light;
+	//vec3 lightPos = vec3(10, 20, 10);
+	//vec3 lightDir = normalize(lightPos - FragPos);
+	//
+	//float light = max(0.0, dot(lightDir, Normal));
+	//
+	//vec3 col = texture(albedo, UV).rgb * light;
+	vec3 col = texture(albedo, UV).rgb;
 	
 	FragColor = vec4(col, 1.0);
 }

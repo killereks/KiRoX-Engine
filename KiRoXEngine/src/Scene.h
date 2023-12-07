@@ -31,6 +31,8 @@ public:
 	void DrawInspector();
 
 	Entity* CreateEntity(std::string name);
+	void DeleteEntity(Entity* ent);
+	
 	Entity* GetEntityByUUID(UUIDv4::UUID& uuid)
 	{
 		for (Entity* ent : GetAllEntities())

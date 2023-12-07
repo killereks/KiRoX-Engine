@@ -211,6 +211,15 @@ void Engine::SceneControls()
 			currentOperation = ImGuizmo::OPERATION::SCALE;
 		}
 	}
+
+	Entity* selectedEntity = activeScene->GetSelectedEntity();
+	if (selectedEntity != nullptr)
+	{
+		if (Input::GetKeyDown(GLFW_KEY_DELETE))
+		{
+			activeScene->DeleteEntity(selectedEntity);
+		}
+	}
 }
 
 void Engine::RenderSceneWindow()
@@ -223,7 +232,7 @@ void Engine::RenderSceneWindow()
 	ImGui::Dummy(ImGui::GetContentRegionAvail());
 	if (ImGui::BeginDragDropTarget()) {
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET")) {
-			Scene* scene = (Scene*) (*(Asset**)payload->Data);
+			Scene* scene = dynamic_cast<Scene*>(*(Asset**)payload->Data);
 
 			if (scene != nullptr) {
 				LoadScene(scene->filePath);
@@ -378,8 +387,8 @@ void Engine::RenderStatistics()
 	ImGui::Text("Frame time: %.5f ms", Engine::deltaTime * 1000.0f);
 	ImGui::Text("Estimated FPS: %.2f", 1.0f / Engine::deltaTime);
 	ImGui::Text("Draw Calls: %s", Mathf::FormatWithCommas(counter->GetCounter("drawCalls")).c_str());
-	ImGui::Text("Vertices: %s", Mathf::FormatWithCommas(counter->GetCounter("vertices")).c_str());
-	ImGui::Text("Vertices saved by culling: %s", Mathf::FormatWithCommas(counter->GetCounter("culledVertices")).c_str());
+	ImGui::Text("Triangles: %s", Mathf::FormatWithCommas(counter->GetCounter("triangles")).c_str());
+	ImGui::Text("Triangles culled: %s", Mathf::FormatWithCommas(counter->GetCounter("culledTriangles")).c_str());
 	ImGui::End();
 
 	counter->Reset();

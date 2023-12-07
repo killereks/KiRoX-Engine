@@ -11,6 +11,7 @@
 #include <vector>
 #include "../Tools/RenderTexture.h"
 #include "../Math/Plane.h"
+#include "../Math/Frustum.h"
 
 enum class CameraType
 {
@@ -39,6 +40,8 @@ class CameraComponent : public Component
 
 	CameraType cameraType;
 
+	Frustum frustumCache;
+
 	RenderTexture* renderTexture = nullptr;
 
 public:
@@ -60,6 +63,8 @@ public:
 
 	bool IsOnOrForwardPlane(Plane& plane, Bounds& bounds);
 	bool IsInFrustum(Bounds& bounds);
+
+	void UpdateFrustumCache();
 
 	std::string GetIcon() override
 	{
