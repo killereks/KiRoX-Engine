@@ -80,14 +80,16 @@ int main(int argc, char* argv[]) {
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 
+	std::string basePath = std::string(argv[0]);
+
 	// load a font
-	std::string fontPath = std::string(argv[0]);
+	std::string fontPath = basePath;
 	fontPath = fontPath.substr(0, fontPath.find_last_of("\\/"));
 	fontPath += "/Ubuntu.ttf";
 	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 20.0f);
 
 	// SETUP ICONS
-	std::string iconPath = std::string(argv[0]);
+	std::string iconPath = basePath;
 	iconPath = iconPath.substr(0, iconPath.find_last_of("\\/"));
 	iconPath += "/fontawesome-webfont.ttf";
 

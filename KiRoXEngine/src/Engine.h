@@ -9,6 +9,8 @@
 
 #include "gizmos/ImGuizmo.h"
 
+#include "refl.gen.h"
+
 enum class SceneState
 {
 	Editor, Playing, Paused, OneTick

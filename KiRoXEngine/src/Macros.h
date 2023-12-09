@@ -1,6 +1,14 @@
+#include <rttr/registration>
+
 #define PROPERTY()
 
 #define CLASS()
+
+#define REFLECT() \
+	RTTR_ENABLE() \
+	RTTR_REGISTRATION_FRIEND
+
+#define FUNCTION()
 
 #define PROFILE_FUNCTION() Stopwatch sw(__FUNCTION__);
 

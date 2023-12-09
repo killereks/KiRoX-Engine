@@ -53,6 +53,12 @@ void Engine::Start()
 
 	Gizmos::GetInstance()->Init(gizmosShader);
 
+	rttr::type t = rttr::type::get<TransformComponent>();
+	for (auto& prop : t.get_properties())
+	{
+		std::cout << prop.get_name() << std::endl;
+	}
+
 	//for (int i = 0; i < 10; i++)
 	//{
 	//	for (int j = 0; j < 10; j++)

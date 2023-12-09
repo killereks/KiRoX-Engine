@@ -87,6 +87,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;rttr_core_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)\KiRoXEngine\src\ReflectionProcessor.exe</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -108,6 +111,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;rttr_core_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)\KiRoXEngine\src\ReflectionProcessor.exe</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -126,6 +132,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;rttr_core_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)\KiRoXEngine\src\ReflectionProcessor.exe</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -147,10 +156,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;rttr_core_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>$(SolutionDir)\KiRoXEngine\src\ReflectionProcessor.exe</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
-    <ClCompile Include="src\Tools\Reflection.cpp" />
     <ClCompile Include="src\Tools\Bounds.cpp" />
     <ClCompile Include="src\Tools\File.cpp" />
     <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp" />
@@ -309,10 +320,10 @@
     <ClInclude Include="Dependencies\rttr\include\rttr\variant.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\variant_array_view.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
-    <ClInclude Include="src\Tools\Reflection.h" />
     <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="src\Math\ImGuiExtensions.h" />
     <ClInclude Include="src\Math\Plane.h" />
+    <ClInclude Include="src\refl.gen.h" />
     <ClInclude Include="src\Tools\Bounds.h" />
     <ClInclude Include="src\Tools\File.h" />
     <ClInclude Include="Dependencies\assimp\aabb.h" />
@@ -505,6 +516,7 @@
     <None Include="Dependencies\rttr\include\rttr\registration" />
     <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis.md" />
+    <None Include="src\ReflectionProcessor.exe" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="KiRoXEngine.rc" />

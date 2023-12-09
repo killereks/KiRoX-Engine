@@ -64,7 +64,6 @@
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
     <ClCompile Include="src\Tools\Bounds.cpp" />
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
-    <ClCompile Include="src\Tools\Reflection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -339,7 +338,7 @@
     <ClInclude Include="Dependencies\rttr\include\rttr\detail\variant\variant_data_converter.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\detail\variant\variant_data_policy.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\detail\variant\variant_impl.h" />
-    <ClInclude Include="src\Tools\Reflection.h" />
+    <ClInclude Include="src\refl.gen.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
@@ -367,5 +366,6 @@
     <None Include="Dependencies\assimp\vector3.inl" />
     <None Include="Dependencies\rttr\include\rttr\registration" />
     <None Include="Dependencies\rttr\include\rttr\type" />
+    <None Include="src\ReflectionProcessor.exe" />
   </ItemGroup>
 </Project>
