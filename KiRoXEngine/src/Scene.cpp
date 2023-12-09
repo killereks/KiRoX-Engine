@@ -226,13 +226,41 @@ void Scene::DrawInspector()
 		selectedEntity->GetTransform().DrawInspector();
 	}
 
-	int index = 0;
 	for (Component* component : selectedEntity->GetAllComponents()) {
-		ImGui::PushID(++index);
-		std::string displayName = component->GetIcon() + " " + component->GetName();
+		rttr::type type = rttr::type::get_by_name(component->GetName());
 
-		if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			component->DrawInspector();
+		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
+
+			for (auto& prop : type.get_properties()) {
+				rttr::type propType = prop.get_type();
+
+				if (propType == rttr::type::get<int>()) {
+					auto propValue = prop.get_value(component);
+					int value = propValue.to_int();
+					if (ImGui::InputInt(prop.get_name().c_str(), &value)) {
+						prop.set_value(component, value);
+					}
+				}
+				else if (propType == rttr::type::get<float>()) {
+					float value = prop.get_value(component).to_float();
+					if (ImGui::InputFloat(prop.get_name().c_str(), &value)) {
+						bool success = prop.set_value(component, value);
+						std::cout << "Set value success: " << success << std::endl;
+					}
+				}
+				else if (propType == rttr::type::get<bool>()) {
+					bool value = prop.get_value(component).to_bool();
+					ImGui::Checkbox(prop.get_name().c_str(), &value);
+					prop.set_value(component, value);
+				}
+				else if (propType == rttr::type::get<glm::vec3>()) {
+					rttr::variant var = prop.get_value(component);
+					glm::vec3 value = var.convert<glm::vec3>();
+
+					ImGui::InputFloat3(prop.get_name().c_str(), &value[0]);
+					prop.set_value(component, value);
+				}
+			}
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 			if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
@@ -241,10 +269,28 @@ void Scene::DrawInspector()
 			}
 			ImGui::PopStyleColor();
 		}
-		
-		ImGui::PopID();
-		ImGui::Separator();
+
 	}
+
+	//int index = 0;
+	//for (Component* component : selectedEntity->GetAllComponents()) {
+	//	ImGui::PushID(++index);
+	//	std::string displayName = component->GetIcon() + " " + component->GetName();
+	//
+	//	if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+	//		component->DrawInspector();
+	//
+	//		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
+	//		if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
+	//		{
+	//			selectedEntity->RemoveComponent(component);
+	//		}
+	//		ImGui::PopStyleColor();
+	//	}
+	//	
+	//	ImGui::PopID();
+	//	ImGui::Separator();
+	//}
 
 	ImGui::Separator();
 

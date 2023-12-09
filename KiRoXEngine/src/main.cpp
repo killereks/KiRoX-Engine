@@ -14,6 +14,8 @@
 
 #include "icons/IconsFontAwesome6.h"
 
+#include <rttr/registration>
+
 #define call(x) x;\
 	if (error) __debugbreak();
 

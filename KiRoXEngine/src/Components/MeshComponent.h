@@ -11,8 +11,14 @@
 #include "../Tools/Bounds.h"
 #include "icons/IconsFontAwesome6.h"
 
+CLASS()
 class MeshComponent : public Component
 {
+	REFLECT()
+
+	PROPERTY()
+	int myNumber;
+
 	// cached shader uniforms
 	int modelMatrixLocation = -1;
 	int viewMatrixLocation = -1;

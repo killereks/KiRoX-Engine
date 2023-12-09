@@ -45,14 +45,6 @@ void TransformComponent::DrawInspector()
 	if (ImGui::Button("R##Scale")) {
 		SetLocalScale(glm::vec3(1.0));
 	}
-
-	rttr::type t = rttr::type::get(*this);
-	// get functions
-	for (auto& meth : t.get_methods()) {
-		if (ImGui::Button(meth.get_name().c_str(), ImVec2(-1, 0))){
-			meth.invoke(*this);
-		}
-	}
 }
 
 void TransformComponent::Serialize(YAML::Emitter& out)

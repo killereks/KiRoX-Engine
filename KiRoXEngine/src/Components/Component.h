@@ -8,9 +8,7 @@
 
 class Entity;
 
-class Component
-{
-
+class Component {
 protected:
 	Entity* owner;
 
@@ -40,10 +38,10 @@ public:
 
 		std::string_view name_view = typeid(*this).name();
 		name_view.remove_prefix(name_view.find_first_of(' ') + 1);
-		if (name_view.ends_with("Component"))
-		{
-			name_view.remove_suffix(strlen("Component"));
-		}
+		//if (name_view.ends_with("Component"))
+		//{
+		//	name_view.remove_suffix(strlen("Component"));
+		//}
 
 		name = name_view;
 

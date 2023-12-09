@@ -2,7 +2,7 @@
 
 #define PROPERTY()
 
-#define CLASS()
+#define CLASS(...)
 
 #define REFLECT() \
 	RTTR_ENABLE() \
