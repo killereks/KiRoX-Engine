@@ -29,6 +29,8 @@ Engine::~Engine()
 
 void Engine::Start()
 {
+	RegisterTypes();
+
 	std::filesystem::path path = std::filesystem::current_path();
 	path /= "Project";
 

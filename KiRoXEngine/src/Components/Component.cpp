@@ -13,8 +13,3 @@ void Component::SetOwner(Entity* _owner)
 {
 	owner = _owner;
 }
-
-void Component::DrawInspector()
-{
-
-}

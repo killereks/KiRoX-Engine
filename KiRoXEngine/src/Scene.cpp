@@ -11,6 +11,7 @@
 
 #include "Tools/Stopwatch.h"
 #include "Macros.h"
+#include "refl.gen.h"
 
 Scene::Scene()
 {
@@ -227,38 +228,17 @@ void Scene::DrawInspector()
 	}
 
 	for (Component* component : selectedEntity->GetAllComponents()) {
-		rttr::type type = rttr::type::get_by_name(component->GetName());
-
 		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
+			const rttr::type& type = GetType(component->GetName());
 
-			for (auto& prop : type.get_properties()) {
-				rttr::type propType = prop.get_type();
+			rttr::variant var = component;
+			var.convert(type);
 
-				if (propType == rttr::type::get<int>()) {
-					auto propValue = prop.get_value(component);
-					int value = propValue.to_int();
-					if (ImGui::InputInt(prop.get_name().c_str(), &value)) {
-						prop.set_value(component, value);
-					}
-				}
-				else if (propType == rttr::type::get<float>()) {
-					float value = prop.get_value(component).to_float();
-					if (ImGui::InputFloat(prop.get_name().c_str(), &value)) {
-						bool success = prop.set_value(component, value);
-						std::cout << "Set value success: " << success << std::endl;
-					}
-				}
-				else if (propType == rttr::type::get<bool>()) {
-					bool value = prop.get_value(component).to_bool();
-					ImGui::Checkbox(prop.get_name().c_str(), &value);
-					prop.set_value(component, value);
-				}
-				else if (propType == rttr::type::get<glm::vec3>()) {
-					rttr::variant var = prop.get_value(component);
-					glm::vec3 value = var.convert<glm::vec3>();
-
-					ImGui::InputFloat3(prop.get_name().c_str(), &value[0]);
-					prop.set_value(component, value);
+			for (rttr::property& prop : type.get_properties()) {
+				if (prop.get_type() == rttr::type::get<int>()) {
+					int value = prop.get_value(var).to_int();
+					ImGui::InputInt(prop.get_name().c_str(), &value);
+					prop.set_value(var, value);
 				}
 			}
 
@@ -309,7 +289,7 @@ void Scene::DrawInspector()
 
 		if (ImGui::MenuItem("Mesh Renderer")) {
 			selectedEntity->AddComponent<MeshComponent>();
-		}
+		} 
 
 		ImGui::EndPopup();
 	}

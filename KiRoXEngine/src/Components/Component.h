@@ -5,6 +5,7 @@
 
 #include <yaml-cpp/yaml.h>
 #include "../Tools/Serialization.h"
+#include "../Macros.h"
 
 class Entity;
 
