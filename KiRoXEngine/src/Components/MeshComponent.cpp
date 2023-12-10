@@ -27,7 +27,7 @@ void MeshComponent::SetMeshName(std::string name)
 	meshFilter = AssetManager::GetInstance()->Get<MeshFilter>(name);
 }
 
-void MeshComponent::DrawInspector()
+/*void MeshComponent::DrawInspector()
 {
 	//ImGui::BeginTable("Mesh Information", 2);
 	//
@@ -76,7 +76,7 @@ void MeshComponent::DrawInspector()
 		}
 		ImGui::EndDragDropTarget();
 	}
-}
+}*/
 
 void MeshComponent::Serialize(YAML::Emitter& out)
 {

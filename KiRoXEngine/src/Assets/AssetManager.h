@@ -69,7 +69,7 @@ public:
         }
     }
 
-    int NumberOfAssetsLoading() { return loadingCoroutines.size(); }
+    size_t NumberOfAssetsLoading() { return loadingCoroutines.size(); }
 
     AssetManager(std::filesystem::path path) {
         projectPath = path.string();

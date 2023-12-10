@@ -101,7 +101,7 @@ void Engine::RenderScene(Shader* shader)
 	if (currentSceneState != SceneState::Playing) {
 		GetSceneCamera()->PreRender();
 		GetSceneCamera()->Render(meshComponents, shader);
-		GetSceneCamera()->DrawGizmos();
+		GetSceneCamera()->RenderGizmos();
 		GetSceneCamera()->PostRender();
 	}
 
@@ -140,6 +140,9 @@ void Engine::LoadScene(const std::string& path)
 
 void Engine::SceneControls()
 {
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.WantTextInput) return;
+
 	float mouseSens = -0.1f;
 
 	TransformComponent& transform = sceneCamera->GetTransform();

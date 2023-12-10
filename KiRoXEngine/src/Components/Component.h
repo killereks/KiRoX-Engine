@@ -22,10 +22,10 @@ public:
 	void SetOwner(Entity* owner);
 	Entity* GetOwner() { return owner; }
 
+	virtual void OnDrawGizmos() {}
+
 	virtual void Init() {}
 	virtual void Update() {}
-
-	virtual void DrawInspector() = 0;
 
 	virtual std::string GetIcon() = 0;
 

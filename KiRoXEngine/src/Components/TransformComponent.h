@@ -26,7 +26,6 @@ public:
 	TransformComponent();
 	~TransformComponent();
 
-	void DrawInspector() override;
 	void Serialize(YAML::Emitter& out) override;
 
 	std::string GetIcon() override

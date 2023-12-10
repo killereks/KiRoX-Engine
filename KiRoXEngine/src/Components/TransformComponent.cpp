@@ -15,7 +15,7 @@ TransformComponent::~TransformComponent()
 
 }
 
-void TransformComponent::DrawInspector()
+/*void TransformComponent::DrawInspector()
 {
 	ImGui::Text("Position");
 	ImGui::Separator();
@@ -45,7 +45,7 @@ void TransformComponent::DrawInspector()
 	if (ImGui::Button("R##Scale")) {
 		SetLocalScale(glm::vec3(1.0));
 	}
-}
+}*/
 
 void TransformComponent::Serialize(YAML::Emitter& out)
 {

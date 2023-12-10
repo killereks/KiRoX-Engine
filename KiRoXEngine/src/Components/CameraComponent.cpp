@@ -29,34 +29,8 @@ CameraComponent::~CameraComponent()
 	delete renderTexture;
 }
 
-void CameraComponent::DrawInspector()
+void CameraComponent::OnDrawGizmos()
 {
-	if (cameraType == CameraType::Perspective) {
-		ImGui::Text("Perspective Camera");
-		ImGui::DragFloat("Near Clip Plane", &nearClipPlane, 0.1f, 100.0f);
-		ImGui::DragFloat("Far Clip Plane", &farClipPlane, 0.1f, 100.0f);
-
-		ImGui::SliderFloat("Field Of View", &fieldOfView, 1.0f, 179.0f, "%.0f");
-
-		if (ImGui::Button("Change to Orthographic", ImVec2(-1, 0))) {
-			cameraType = CameraType::Orthographic;
-		}
-	}
-	else if (cameraType == CameraType::Orthographic) {
-		ImGui::Text("Orthographic Camera");
-
-		ImGui::DragFloat("Left", &left, -100.0f, 100.0f);
-		ImGui::DragFloat("Right", &right, -100.0f, 100.0f);
-		ImGui::DragFloat("Top", &top, -100.0f, 100.0f);
-		ImGui::DragFloat("Bottom", &bottom, -100.0f, 100.0f);
-		ImGui::DragFloat("Near", &orthoNear, -100.0f, 100.0f);
-		ImGui::DragFloat("Far", &orthoFar, -100.0f, 100.0f);
-
-		if (ImGui::Button("Change to Perspective", ImVec2(-1, 0))) {
-			cameraType = CameraType::Perspective;
-		}
-	}
-
 	// draw the frustum
 	float halfFOV = glm::radians(fieldOfView) * 0.5f;
 	
@@ -118,7 +92,7 @@ void CameraComponent::Serialize(YAML::Emitter& out)
 	SERIALIZE_VALUE(orthoFar);
 }
 
-void CameraComponent::DrawGizmos()
+void CameraComponent::RenderGizmos()
 {
 	Gizmos::GetInstance()->Draw(this);
 }

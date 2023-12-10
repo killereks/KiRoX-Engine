@@ -19,19 +19,31 @@ enum class CameraType
 	Orthographic
 };
 
+CLASS()
 class CameraComponent : public Component
 {
+	REFLECT()
+
 	// PERSPECTIVE
+	PROPERTY()
 	float nearClipPlane;
+	PROPERTY()
 	float farClipPlane;
+	PROPERTY()
 	float fieldOfView;
 
 	// ORTHOGRAPHIC
+	PROPERTY()
 	float left;
+	PROPERTY()
 	float right;
+	PROPERTY()
 	float top;
+	PROPERTY()
 	float bottom;
+	PROPERTY()
 	float orthoNear;
+	PROPERTY()
 	float orthoFar;
 
 	float aspect;
@@ -48,10 +60,11 @@ public:
 	CameraComponent();
 	~CameraComponent();
 
-	void DrawInspector() override;
 	void Serialize(YAML::Emitter& out) override;
 
-	void DrawGizmos();
+	virtual void OnDrawGizmos() override;
+
+	void RenderGizmos();
 
 	void PreRender();
 	void PostRender();

@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
+    <ClCompile Include="src\Reflection\PropertyDrawer.cpp" />
     <ClCompile Include="src\Tools\Bounds.cpp" />
     <ClCompile Include="src\Tools\File.cpp" />
     <ClCompile Include="Dependencies\gizmos\ImGuizmo.cpp" />
@@ -320,6 +321,7 @@
     <ClInclude Include="Dependencies\rttr\include\rttr\variant.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\variant_array_view.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
+    <ClInclude Include="src\Reflection\PropertyDrawer.h" />
     <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="src\Math\ImGuiExtensions.h" />
     <ClInclude Include="src\Math\Plane.h" />

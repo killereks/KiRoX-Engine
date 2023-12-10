@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 	icons_config.MergeMode = true;
 	icons_config.PixelSnapH = true;
 	float baseFontSize = 30.0f;
-	float iconFontSize = baseFontSize * 2.0 / 3.0f;
+	float iconFontSize = baseFontSize * 2.0f / 3.0f;
 	icons_config.GlyphMinAdvanceX = iconFontSize;
 	io.Fonts->AddFontFromFileTTF(iconPath.c_str(), iconFontSize, &icons_config, icon_ranges);
 
@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
 	{
 		currentTime = glfwGetTime();
 		double frameDiff = currentTime - previousTime;
-		Engine::deltaTime = frameDiff;
+		Engine::deltaTime = (float)frameDiff;
 		previousTime = currentTime;
 
 		// poll events

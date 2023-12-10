@@ -15,15 +15,12 @@ CLASS()
 class MeshComponent : public Component
 {
 	REFLECT()
-
-	PROPERTY()
-	int myNumber;
-
 	// cached shader uniforms
 	int modelMatrixLocation = -1;
 	int viewMatrixLocation = -1;
 	int projectionMatrixLocation = -1;
 
+	PROPERTY()
 	std::string meshName;
 
 	MeshFilter* meshFilter;
@@ -34,9 +31,13 @@ class MeshComponent : public Component
 		MeshComponent();
 		~MeshComponent();
 
+		FUNCTION()
+		void ApplyMeshName() {
+			SetMeshName(meshName);
+		}
+
 		void SetMeshName(std::string name);
 
-		void DrawInspector() override;
 		void Serialize(YAML::Emitter& out) override;
 
 		Bounds* GetBounds();
@@ -49,7 +50,7 @@ class MeshComponent : public Component
 			return 0;
 		}
 
-		const int GetTriangleCount() const
+		const size_t GetTriangleCount() const
 		{
 			if (meshFilter != nullptr)
 			{

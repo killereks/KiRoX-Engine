@@ -9,6 +9,8 @@
 #include "imgui_stdlib.h"
 #include "icons/IconsFontAwesome6.h"
 
+#include "Reflection/PropertyDrawer.h"
+
 #include "Tools/Stopwatch.h"
 #include "Macros.h"
 #include "refl.gen.h"
@@ -220,26 +222,30 @@ void Scene::DrawInspector()
 
 	ImGui::Separator();
 
-	std::string displayName = selectedEntity->GetTransform().GetIcon() + " " + selectedEntity->GetTransform().GetName();
+	// draw TransformComponent
+	const rttr::type& type = rttr::type::get<TransformComponent*>();
+	rttr::variant var = &selectedEntity->GetTransform();
+	var.convert(type);
 
-	if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		selectedEntity->GetTransform().DrawInspector();
+	for (rttr::property& prop : type.get_properties()) {
+		PropertyDrawer::DrawProperty(prop, var);
 	}
 
 	for (Component* component : selectedEntity->GetAllComponents()) {
 		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
 			const rttr::type& type = GetType(component->GetName());
 
+			component->OnDrawGizmos();
+
 			rttr::variant var = component;
 			var.convert(type);
 
 			for (rttr::property& prop : type.get_properties()) {
-				if (prop.get_type() == rttr::type::get<int>()) {
-					int value = prop.get_value(var).to_int();
-					ImGui::InputInt(prop.get_name().c_str(), &value);
-					prop.set_value(var, value);
-				}
+				PropertyDrawer::DrawProperty(prop, var);
+			}
+
+			for (rttr::method& method : type.get_methods()) {
+				PropertyDrawer::DrawFunction(method, var);
 			}
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
@@ -249,28 +255,7 @@ void Scene::DrawInspector()
 			}
 			ImGui::PopStyleColor();
 		}
-
 	}
-
-	//int index = 0;
-	//for (Component* component : selectedEntity->GetAllComponents()) {
-	//	ImGui::PushID(++index);
-	//	std::string displayName = component->GetIcon() + " " + component->GetName();
-	//
-	//	if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-	//		component->DrawInspector();
-	//
-	//		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-	//		if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
-	//		{
-	//			selectedEntity->RemoveComponent(component);
-	//		}
-	//		ImGui::PopStyleColor();
-	//	}
-	//	
-	//	ImGui::PopID();
-	//	ImGui::Separator();
-	//}
 
 	ImGui::Separator();
 

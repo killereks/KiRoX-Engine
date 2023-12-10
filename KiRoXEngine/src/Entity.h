@@ -37,7 +37,6 @@ public:
 	TransformComponent& GetTransform() { return transformComponent; }
 
 	const std::vector<Component*>& GetAllComponents() const {
-
 		return components;
 	}
 
@@ -59,6 +58,11 @@ public:
 		component->SetOwner(this);
 		components.push_back(component);
 		return component;
+	}
+
+	void AddComponent(Component* comp) {
+		comp->SetOwner(this);
+		components.push_back(comp);
 	}
 
 	template<typename T>
