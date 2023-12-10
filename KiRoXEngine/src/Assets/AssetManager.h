@@ -30,6 +30,8 @@ private:
     std::unordered_map<std::string, Asset*> assets;
     std::unordered_map<std::string, std::string> textureTypeLookup;
 
+    std::unordered_map<std::string, std::string> uuidToPath;
+
     std::vector<co::Coro> loadingCoroutines;
 
     std::string projectPath;
@@ -92,10 +94,17 @@ public:
         };
     }
 
+    void LoadUUID();
+    void SaveUUID();
+
+    const std::string GetUUID(const std::string& filePath);
+
     ~AssetManager() {
         for (auto& asset : assets) {
 			delete asset.second;
 		}
+
+        SaveUUID();
 	}
 
 	void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
@@ -125,6 +134,7 @@ public:
 
         asset->filePath = filePath;
         asset->fileName = name;
+        asset->uuid = GetUUID(name);
 
         assets[name] = asset;
 
@@ -153,6 +163,16 @@ public:
         return dynamic_cast<T*>(assets[name]);
     }
 
+    template<typename T>
+    T* GetByUUID(const std::string& uuid) {
+        if (uuidToPath.find(uuid) != uuidToPath.end()) {
+			return Get<T>(uuidToPath[uuid]);
+		}
+
+        std::cout << "ERROR!\n";
+        return nullptr;
+    }
+
     void AsyncUpdate()
     {
         for (size_t i = 0; i < loadingCoroutines.size(); ++i)
@@ -175,6 +195,8 @@ public:
 
     void LoadAllAssets() {
         PROFILE_FUNCTION()
+
+        LoadUUID();
 
         Console::Write("Loading all assets at: "+projectPath);
 

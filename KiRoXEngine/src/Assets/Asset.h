@@ -19,6 +19,7 @@ protected:
 public:
 	std::string filePath;
 	std::string fileName;
+	std::string uuid;
 
 	virtual ~Asset() {}
 

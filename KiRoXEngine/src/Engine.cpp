@@ -327,11 +327,11 @@ void Engine::RenderToolbar()
 			{
 				if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "CTRL+S"))
 				{
-					activeScene->SaveScene(projectPath + "/test.txt");
+					activeScene->SaveScene(projectPath + "/test2.scene");
 				}
 				if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Load", "CTRL+O"))
 				{
-					activeScene->LoadScene(projectPath + "/test.txt");
+					activeScene->LoadScene(projectPath + "/test2.scene");
 				}
 			}
 			else

@@ -24,6 +24,8 @@ public:
 
 	virtual void OnDrawGizmos() {}
 
+	virtual void DrawInspector() = 0;
+
 	virtual void Init() {}
 	virtual void Update() {}
 

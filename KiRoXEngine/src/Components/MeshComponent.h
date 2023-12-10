@@ -11,17 +11,14 @@
 #include "../Tools/Bounds.h"
 #include "icons/IconsFontAwesome6.h"
 
-CLASS()
 class MeshComponent : public Component
 {
-	REFLECT()
 	// cached shader uniforms
 	int modelMatrixLocation = -1;
 	int viewMatrixLocation = -1;
 	int projectionMatrixLocation = -1;
 
-	PROPERTY()
-	std::string meshName;
+	std::string meshUUID;
 
 	MeshFilter* meshFilter;
 
@@ -31,12 +28,9 @@ class MeshComponent : public Component
 		MeshComponent();
 		~MeshComponent();
 
-		FUNCTION()
-		void ApplyMeshName() {
-			SetMeshName(meshName);
-		}
+		void DrawInspector() override;
 
-		void SetMeshName(std::string name);
+		void SetMeshUUID(std::string uuid);
 
 		void Serialize(YAML::Emitter& out) override;
 

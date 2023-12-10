@@ -6,6 +6,63 @@
 
 AssetManager* AssetManager::instance = nullptr;
 
+void AssetManager::LoadUUID()
+{
+    std::ifstream file;
+
+    file.open(projectPath + "\\uuids.txt");
+
+    if (file.is_open())
+    {
+		std::string line;
+
+        while (std::getline(file, line))
+        {
+			std::string uuid = line.substr(0, line.find_first_of(" "));
+			std::string path = line.substr(line.find_first_of(" ") + 1);
+
+			uuidToPath[uuid] = path;
+		}
+	}
+
+    file.close();
+}
+
+void AssetManager::SaveUUID()
+{
+    std::ofstream file;
+
+	file.open(projectPath + "\\uuids.txt");
+
+    if (file.is_open())
+    {
+        for (auto& [uuid, path] : uuidToPath)
+        {
+			file << uuid << " " << path << std::endl;
+		}
+	}
+
+	file.close();
+}
+
+const std::string AssetManager::GetUUID(const std::string& filePath)
+{
+    for (auto& [uuid, _path] : uuidToPath)
+    {
+        if (_path == filePath) {
+            return uuid;
+        }
+    }
+
+    // create new UUID
+    UUIDv4::UUID uuid = UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID();
+    std::string uuidString = uuid.str();
+
+    uuidToPath[uuidString] = filePath;
+
+    return uuidString;
+}
+
 void AssetManager::DrawInspector()
 {
     ImGui::Begin("Assets");

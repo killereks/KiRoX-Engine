@@ -223,30 +223,39 @@ void Scene::DrawInspector()
 	ImGui::Separator();
 
 	// draw TransformComponent
-	const rttr::type& type = rttr::type::get<TransformComponent*>();
-	rttr::variant var = &selectedEntity->GetTransform();
-	var.convert(type);
+	//const rttr::type& type = rttr::type::get<TransformComponent*>();
+	//rttr::variant var = &selectedEntity->GetTransform();
+	//var.convert(type);
+	//
+	//for (rttr::property& prop : type.get_properties()) {
+	//	PropertyDrawer::DrawProperty(prop, var);
+	//}
 
-	for (rttr::property& prop : type.get_properties()) {
-		PropertyDrawer::DrawProperty(prop, var);
+	std::string displayName = selectedEntity->GetTransform().GetIcon() + " " + selectedEntity->GetTransform().GetName();
+
+	if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		selectedEntity->GetTransform().DrawInspector();
 	}
 
 	for (Component* component : selectedEntity->GetAllComponents()) {
 		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			const rttr::type& type = GetType(component->GetName());
+			//const rttr::type& type = GetType(component->GetName());
+			//
+			//component->OnDrawGizmos();
+			//
+			//rttr::variant var = component;
+			//var.convert(type);
+			//
+			//for (rttr::property& prop : type.get_properties()) {
+			//	PropertyDrawer::DrawProperty(prop, var);
+			//}
+			//
+			//for (rttr::method& method : type.get_methods()) {
+			//	PropertyDrawer::DrawFunction(method, var);
+			//}
 
-			component->OnDrawGizmos();
-
-			rttr::variant var = component;
-			var.convert(type);
-
-			for (rttr::property& prop : type.get_properties()) {
-				PropertyDrawer::DrawProperty(prop, var);
-			}
-
-			for (rttr::method& method : type.get_methods()) {
-				PropertyDrawer::DrawFunction(method, var);
-			}
+			component->DrawInspector();
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 			if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
@@ -328,7 +337,7 @@ void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
 		out << YAML::Key << "Parent" << YAML::Value << ent->GetParent()->GetUUID().str();
 	}
 
-	out << YAML::Key << "Transform";
+	out << YAML::Key << "TransformComponent";
 	out << YAML::BeginMap;
 	ent->GetTransform().Serialize(out);
 	out << YAML::EndMap;
@@ -352,6 +361,8 @@ void Scene::SaveScene(std::string path)
 
 	out << YAML::Key << "Entities" << YAML::Value;
 	out << YAML::BeginSeq;
+
+	SerializeEntity(out, rootEntity);
 
 	for (Entity* ent : entities)
 	{
@@ -432,29 +443,31 @@ void Scene::LoadScene(std::string path)
 			newEntity->SetParent(parentEntity);
 		}
 
-		YAML::Node transform = entityData["Transform"];
+		// iterate over components
+
+		YAML::Node transform = entityData["TransformComponent"];
 		if (transform)
 		{
 			newEntity->GetTransform().SetLocalPosition(transform["position"].as<glm::vec3>());
 			newEntity->GetTransform().SetLocalRotation(transform["rotation"].as<glm::quat>());
 			newEntity->GetTransform().SetLocalScale(transform["scale"].as<glm::vec3>());
 		}
-
-		YAML::Node camera = entityData["Camera"];
+		
+		YAML::Node camera = entityData["CameraComponent"];
 		if (camera)
 		{
 			CameraComponent* cam = newEntity->AddComponent<CameraComponent>();
 			// TODO: load
 		}
-
-		YAML::Node mesh = entityData["Mesh"];
+		
+		YAML::Node mesh = entityData["MeshComponent"];
 		if (mesh)
 		{
 			MeshComponent* meshComp = newEntity->AddComponent<MeshComponent>();
-
-			if (mesh["meshName"])
+		
+			if (mesh["meshUUID"])
 			{
-				meshComp->SetMeshName(mesh["meshName"].as<std::string>());
+				meshComp->SetMeshUUID(mesh["meshUUID"].as<std::string>());
 			}
 		}
 	}

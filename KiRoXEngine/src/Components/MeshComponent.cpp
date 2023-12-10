@@ -21,38 +21,8 @@ MeshComponent::~MeshComponent()
 	
 }
 
-void MeshComponent::SetMeshName(std::string name)
-{
-	meshName = name;
-	meshFilter = AssetManager::GetInstance()->Get<MeshFilter>(name);
-}
-
-/*void MeshComponent::DrawInspector()
-{
-	//ImGui::BeginTable("Mesh Information", 2);
-	//
-	//ImGui::TableNextColumn();
-	//ImGui::Text("Vertices");
-	//ImGui::TableNextColumn();
-	//ImGui::Text("%d", vertices.size());
-	//
-	//ImGui::TableNextColumn();
-	//ImGui::Text("Indices");
-	//ImGui::TableNextColumn();
-	//ImGui::Text("%d", indices.size());
-	//
-	//ImGui::TableNextColumn();
-	//ImGui::Text("Normals");
-	//ImGui::TableNextColumn();
-	//ImGui::Text("%d", normals.size());
-	//
-	//ImGui::TableNextColumn();
-	//ImGui::Text("UVs");
-	//ImGui::TableNextColumn();
-	//ImGui::Text("%d", uvs.size());
-	//
-	//ImGui::EndTable();
-	
+void MeshComponent::DrawInspector()
+{	
 	ImGui::PushItemWidth(-1);
 	if (meshFilter == nullptr)
 	{
@@ -71,16 +41,30 @@ void MeshComponent::SetMeshName(std::string name)
 
 			if (draggedMeshFilter != nullptr)
 			{
-				SetMeshName(draggedMeshFilter->fileName);
+				SetMeshUUID(draggedMeshFilter->uuid);
 			}
 		}
 		ImGui::EndDragDropTarget();
 	}
-}*/
+}
+
+void MeshComponent::SetMeshUUID(std::string uuid)
+{
+	meshUUID = uuid;
+
+	if (meshUUID != "")
+	{
+		meshFilter = AssetManager::GetInstance()->GetByUUID<MeshFilter>(meshUUID);
+	}
+	else
+	{
+		meshFilter = nullptr;
+	}
+}
 
 void MeshComponent::Serialize(YAML::Emitter& out)
 {
-	SERIALIZE_VALUE(meshName);
+	SERIALIZE_VALUE(meshUUID);
 }
 
 Bounds* MeshComponent::GetBounds()

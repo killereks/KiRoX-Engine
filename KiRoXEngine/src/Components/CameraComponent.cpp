@@ -29,6 +29,33 @@ CameraComponent::~CameraComponent()
 	delete renderTexture;
 }
 
+void CameraComponent::DrawInspector() {
+	if (cameraType == CameraType::Perspective) {
+		ImGui::InputFloat("Near Clip Plane", &nearClipPlane);
+		ImGui::InputFloat("Far Clip Plane", &farClipPlane);
+
+		ImGui::SliderFloat("Field Of View", &fieldOfView, 0.0f, 179.0f);
+
+		if (ImGui::Button("Switch to Orthographic", ImVec2(-1, 0))) {
+			cameraType = CameraType::Orthographic;
+		}
+	}
+	else if (cameraType == CameraType::Orthographic) {
+		ImGui::InputFloat("Left", &left);
+		ImGui::InputFloat("Right", &right);
+		ImGui::Separator();
+		ImGui::InputFloat("Top", &top);
+		ImGui::InputFloat("Bottom", &bottom);
+		ImGui::Separator();
+		ImGui::InputFloat("Near", &orthoNear);
+		ImGui::InputFloat("Far", &orthoFar);
+		ImGui::Separator();
+		if (ImGui::Button("Switch to Perspective", ImVec2(-1, 0))) {
+			cameraType = CameraType::Perspective;
+		}
+	}
+}
+
 void CameraComponent::OnDrawGizmos()
 {
 	// draw the frustum

@@ -54,6 +54,38 @@ void TransformComponent::Serialize(YAML::Emitter& out)
 	SERIALIZE_VALUE(scale);
 }
 
+void TransformComponent::DrawInspector()
+{
+	ImGui::Text("Position");
+	ImGui::Separator();
+	ImGui::DragFloat3("##Position", &position[0], 0.1f);
+	ImGui::SameLine();
+	if (ImGui::Button("R##Position")) {
+		SetLocalPosition(glm::vec3(0.0));
+	}
+
+	glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
+
+	ImGui::Text("Rotation");
+	ImGui::Separator();
+	ImGui::DragFloat3("##Rotation", &euler[0], 0.1f);
+	ImGui::SameLine();
+	if (ImGui::Button("R##Euler")) {
+		rotation = glm::quat(glm::vec3(0.0));
+	}
+
+	rotation = glm::quat(glm::radians(euler));
+
+	ImGui::Text("Scale");
+	ImGui::Separator();
+	ImGui::DragFloat3("##Scale", &scale[0], 0.1f);
+
+	ImGui::SameLine();
+	if (ImGui::Button("R##Scale")) {
+		SetLocalScale(glm::vec3(1.0));
+	}
+}
+
 void TransformComponent::SetLocalPosition(glm::vec3 pos)
 {
 	position = pos;

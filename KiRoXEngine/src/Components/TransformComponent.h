@@ -10,16 +10,11 @@
 
 class Entity;
 
-CLASS()
 class TransformComponent : public Component
 {
-	REFLECT()
 
-	PROPERTY()
 	glm::vec3 position;
-	PROPERTY()
 	glm::quat rotation;
-	PROPERTY()
 	glm::vec3 scale;
 
 public:
@@ -27,6 +22,8 @@ public:
 	~TransformComponent();
 
 	void Serialize(YAML::Emitter& out) override;
+
+	void DrawInspector() override;
 
 	std::string GetIcon() override
 	{

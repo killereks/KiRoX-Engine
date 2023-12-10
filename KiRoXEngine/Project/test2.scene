@@ -1,0 +1,17 @@
+Scene: Test Scene
+Entities:
+  - Entity: Root
+    UUID: 32e7712e-1b36-45b5-8824-f87845d0acaf
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Quad
+    UUID: 79f80390-9bdd-4df3-9bb6-dabe30961ee5
+    Parent: 32e7712e-1b36-45b5-8824-f87845d0acaf
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      meshUUID: 89661047-9e9b-461d-a6d1-e981ee1938fe
