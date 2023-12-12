@@ -61,6 +61,11 @@ public:
 	{
 	}
 
+	void Recompile()
+	{
+		LoadShader();
+	}
+
 	void LoadShader()
 	{
 		Console::Write("Reading shaders from path " + filePath, ImVec4(0.322f, 0.761f, 0.831f, 1.0f));
@@ -76,6 +81,12 @@ public:
 		// 2. compile shaders
 		unsigned int vertex, fragment;
 
+		if (ID != 0) {
+			glDeleteProgram(ID);
+		}
+
+		ID = glCreateProgram();
+
 		// vertex shader
 		Console::Write("Compiling vertex shader...", ImVec4(0.8f, 0.922f, 0.373f, 1.0f));
 		vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -89,9 +100,6 @@ public:
 		glShaderSource(fragment, 1, &fShaderCode, NULL);
 		glCompileShader(fragment);
 		checkCompileErrors(fragment, "FRAGMENT");
-
-		// shader Program
-		ID = glCreateProgram();
 
 		glAttachShader(ID, vertex);
 		glAttachShader(ID, fragment);
@@ -200,6 +208,7 @@ private:
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
 				Console::Write("ERROR::SHADER_COMPILATION_ERROR of type: " + type, ImVec4(1.0, 0.0, 0.0, 1.0));
+				Console::Write(infoLog, ImVec4(1.0, 0.0, 0.0, 1.0));
 				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << " " << infoLog << "\n";
 			}
 		}
@@ -210,6 +219,7 @@ private:
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
 				Console::Write("ERROR::PROGRAM_LINKING_ERROR of type: "+type, ImVec4(1.0, 0.0, 0.0, 1.0));
+				Console::Write(infoLog, ImVec4(1.0, 0.0, 0.0, 1.0));
 				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << " " << infoLog << "\n";
 			}
 		}

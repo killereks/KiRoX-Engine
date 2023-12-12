@@ -40,25 +40,13 @@ uniform sampler2D albedo;
 out vec4 FragColor;
 
 void main(){
-    //float tiling = 30.0;
-	//
-    //float x = floor(Vertex.x * tiling);
-    //float y = floor(Vertex.y * tiling);
-    //float result = sign(mod(x + y, 2.0));
-	//
-    //if (result < 1.0) {
-    //    FragColor = vec4(0.5, 0.5, 0.5, 1.0);
-    //} else {
-    //    FragColor = vec4(0.8, 0.8, 0.8, 1.0);
-    //}
-	
-	//vec3 lightPos = vec3(10, 20, 10);
-	//vec3 lightDir = normalize(lightPos - FragPos);
-	//
+	vec3 lightPos = vec3(10, 20, -10);
+	vec3 lightDir = normalize(lightPos - FragPos);
+
 	//float light = max(0.0, dot(lightDir, Normal));
-	//
-	//vec3 col = texture(albedo, UV).rgb * light;
-	vec3 col = texture(albedo, UV).rgb;
+	float light = 1.0;
+
+	vec3 col = texture(albedo, UV).rgb * light;
 	
 	FragColor = vec4(col, 1.0);
 }

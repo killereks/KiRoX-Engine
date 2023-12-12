@@ -77,7 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
@@ -100,7 +100,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
@@ -145,7 +145,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
@@ -161,7 +161,10 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Assets\ComputeShader.cpp" />
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
+    <ClCompile Include="Dependencies\mesh_simp\mdMeshDecimator.cpp" />
+    <ClCompile Include="src\Rendering\HZB.cpp" />
     <ClCompile Include="src\Reflection\PropertyDrawer.cpp" />
     <ClCompile Include="src\Tools\Bounds.cpp" />
     <ClCompile Include="src\Tools\File.cpp" />
@@ -199,6 +202,7 @@
     <ClCompile Include="Dependencies\yaml\src\stream.cpp" />
     <ClCompile Include="Dependencies\yaml\src\tag.cpp" />
     <ClCompile Include="src\Assets\AssetManager.cpp" />
+    <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
     <ClCompile Include="src\Tools\RenderTexture.cpp" />
     <ClCompile Include="src\Editor\Gizmos.cpp" />
     <ClCompile Include="src\Tools\Input.cpp" />
@@ -224,8 +228,12 @@
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Assets\ComputeShader.h" />
     <ClInclude Include="Dependencies\coroutines\CoroExtensions.h" />
     <ClInclude Include="Dependencies\coroutines\minicoro.h" />
+    <ClInclude Include="Dependencies\mesh_simp\mdMeshDecimator.h" />
+    <ClInclude Include="Dependencies\mesh_simp\mdSArray.h" />
+    <ClInclude Include="Dependencies\mesh_simp\mdVector.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\access_levels.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\argument.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\array_mapper.h" />
@@ -321,6 +329,7 @@
     <ClInclude Include="Dependencies\rttr\include\rttr\variant.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\variant_array_view.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
+    <ClInclude Include="src\Rendering\HZB.h" />
     <ClInclude Include="src\Reflection\PropertyDrawer.h" />
     <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="src\Math\ImGuiExtensions.h" />
@@ -467,6 +476,7 @@
     <ClInclude Include="Dependencies\yaml\src\token.h" />
     <ClInclude Include="src\Assets\MeshFilter.h" />
     <ClInclude Include="src\Math\Mathf.h" />
+    <ClInclude Include="src\Tools\MeshSimplifier.h" />
     <ClInclude Include="src\Tools\RenderTexture.h" />
     <ClInclude Include="src\Tools\FolderWatcher.h" />
     <ClInclude Include="src\Editor\Gizmos.h" />
@@ -515,6 +525,7 @@
     <None Include="Dependencies\assimp\SmoothingGroups.inl" />
     <None Include="Dependencies\assimp\vector2.inl" />
     <None Include="Dependencies\assimp\vector3.inl" />
+    <None Include="Dependencies\mesh_simp\mdVector.inl" />
     <None Include="Dependencies\rttr\include\rttr\registration" />
     <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis.md" />

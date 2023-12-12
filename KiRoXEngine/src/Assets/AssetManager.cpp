@@ -21,7 +21,9 @@ void AssetManager::LoadUUID()
 			std::string uuid = line.substr(0, line.find_first_of(" "));
 			std::string path = line.substr(line.find_first_of(" ") + 1);
 
-			uuidToPath[uuid] = path;
+            std::string assetName = path.substr(path.find_last_of("\\") + 1);
+
+			uuidToAssetName[uuid] = assetName;
 		}
 	}
 
@@ -36,7 +38,7 @@ void AssetManager::SaveUUID()
 
     if (file.is_open())
     {
-        for (auto& [uuid, path] : uuidToPath)
+        for (auto& [uuid, path] : uuidToAssetName)
         {
 			file << uuid << " " << path << std::endl;
 		}
@@ -47,7 +49,7 @@ void AssetManager::SaveUUID()
 
 const std::string AssetManager::GetUUID(const std::string& filePath)
 {
-    for (auto& [uuid, _path] : uuidToPath)
+    for (auto& [uuid, _path] : uuidToAssetName)
     {
         if (_path == filePath) {
             return uuid;
@@ -58,7 +60,9 @@ const std::string AssetManager::GetUUID(const std::string& filePath)
     UUIDv4::UUID uuid = UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID();
     std::string uuidString = uuid.str();
 
-    uuidToPath[uuidString] = filePath;
+    std::string assetName = filePath.substr(filePath.find_last_of("\\") + 1);
+
+    uuidToAssetName[uuidString] = assetName;
 
     return uuidString;
 }

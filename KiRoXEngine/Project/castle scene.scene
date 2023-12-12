@@ -14,7 +14,7 @@ Entities:
       rotation: [0.731353641, -0.194050342, -0.048940666, 0.651974797]
       scale: [1.02987909, 1.03002059, 1.0297991]
     MeshComponent:
-      meshName: soldier.fbx
+      meshName: 0fcd405e-215f-44de-b5c6-485cffe4c6c5
   - Entity: Castle
     UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
@@ -22,8 +22,8 @@ Entities:
       position: [-21.7210007, 100.473999, -37.4039993]
       rotation: [-0.346288234, -0.616607428, -0.616321743, 0.346449584]
       scale: [25.0000381, 24.9999771, 25.0012283]
-    Mesh:
-      meshName: Bretesche.fbx
+    MeshComponent:
+      meshUUID: 2c6b7d7d-1565-4d96-bb4d-69d2c21bbda6
   - Entity: Camera
     UUID: a9b0ae8d-1453-484e-9208-dd76eff6d935
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf

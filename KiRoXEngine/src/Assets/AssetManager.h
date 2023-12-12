@@ -2,6 +2,10 @@
 
 #include <map>
 #include <string>
+
+#include <locale>
+#include <codecvt>
+
 #include <filesystem>
 #include <functional>
 #include <typeindex>
@@ -21,6 +25,7 @@
 #include "coroutines/CoroExtensions.h"
 
 #include <imgui.h>
+#include "ComputeShader.h"
 
 class Engine;
 
@@ -30,7 +35,7 @@ private:
     std::unordered_map<std::string, Asset*> assets;
     std::unordered_map<std::string, std::string> textureTypeLookup;
 
-    std::unordered_map<std::string, std::string> uuidToPath;
+    std::unordered_map<std::string, std::string> uuidToAssetName;
 
     std::vector<co::Coro> loadingCoroutines;
 
@@ -90,7 +95,8 @@ public:
         textureTypeLookup = {
             {"Scene", "scene.png"},
             {"MeshFilter", "mesh.png"},
-            {"Shader", "layers.png"}
+            {"Shader", "layers.png"},
+            {"ComputeShader","computeshader.png"}
         };
     }
 
@@ -109,7 +115,22 @@ public:
 
 	void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
 	{
-        //std::cout << filename << " has changed... " << action << "\n";
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+        std::wstring wstr = std::wstring(filename);
+        std::string filenameStr = converter.to_bytes(wstr);
+
+        if (action == FolderWatcher::Action::Modified) {
+            // reload this asset, delete and create new one
+            std::string fileAssetName = filenameStr.substr(filenameStr.find_last_of("\\") + 1);
+            std::string extension = fileAssetName.substr(fileAssetName.find_last_of("."));
+
+            std::cout << "Reloading " << fileAssetName << "\n";
+
+            if (extension == ".shader") {
+                Get<Shader>(fileAssetName)->Recompile();
+            }
+
+        }
 	}
 
     void Update()
@@ -120,10 +141,19 @@ public:
 
     void DrawInspector();
 
+    void UnloadAsset(const std::string& name)
+    {
+        if (assets.find(name) != assets.end())
+        {
+			delete assets[name];
+			assets.erase(name);
+		}
+	}
+
 	template <typename T>
 	void Load(const std::string& name, const std::string& filePath)
 	{
-        std::cout << "Loading " << name << "\n";
+        //std::cout << "Loading " << name << "\n";
 
 		if (assets.find(name) != assets.end())
 		{
@@ -165,8 +195,8 @@ public:
 
     template<typename T>
     T* GetByUUID(const std::string& uuid) {
-        if (uuidToPath.find(uuid) != uuidToPath.end()) {
-			return Get<T>(uuidToPath[uuid]);
+        if (uuidToAssetName.find(uuid) != uuidToAssetName.end()) {
+			return Get<T>(uuidToAssetName[uuid]);
 		}
 
         std::cout << "ERROR!\n";
@@ -181,7 +211,7 @@ public:
 			if (loadingCoroutines[i].status() == co::Dead)
 			{
                 Asset* asset = (Asset*)loadingCoroutines[i].getUserData();
-                std::cout << asset->filePath << " has loaded\n";
+                //std::cout << asset->filePath << " has loaded\n";
 
                 std::swap(loadingCoroutines[i], loadingCoroutines.back());
                 loadingCoroutines.pop_back();
@@ -206,20 +236,26 @@ public:
             const auto& path = entry.path();
             const auto& extension = path.extension();
 
+            std::string fileName = path.filename().string();
+            std::string fullPath = path.string();
+
 			if (extension == ".png" || extension == ".jpeg" || extension == ".jpg")
 			{
-				Load<Texture>(path.filename().string(), path.string());
+				Load<Texture>(fileName, fullPath);
 			}
 			else if (extension == ".shader")
 			{
-			    Load<Shader>(path.filename().string(), path.string());
+			    Load<Shader>(fileName, fullPath);
 			}
             else if (extension == ".fbx" || extension == ".obj")
             {
-                Load<MeshFilter>(path.filename().string(), path.string());
+                Load<MeshFilter>(fileName, fullPath);
             }
             else if (extension == ".scene") {
-                Load<Scene>(path.filename().string(), path.string());
+                Load<Scene>(fileName, fullPath);
+            }
+            else if (extension == ".computeshader") {
+                Load<ComputeShader>(fileName, fullPath);
             }
         }
     }

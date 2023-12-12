@@ -114,3 +114,42 @@ bool Bounds::Contains(glm::vec3 point)
 
 	return true;
 }
+
+void Bounds::GetRenderCube(std::vector<glm::vec3>& vertices, std::vector<unsigned int>& indices)
+{
+	vertices.emplace_back(min.x, min.y, min.z);
+	vertices.emplace_back(min.x, min.y, max.z);
+	vertices.emplace_back(min.x, max.y, min.z);
+	vertices.emplace_back(max.x, min.y, min.z);
+	vertices.emplace_back(min.x, max.y, max.z);
+	vertices.emplace_back(max.x, min.y, max.z);
+	vertices.emplace_back(max.x, max.y, min.z);
+	vertices.emplace_back(max.x, max.y, max.z);
+
+	indices.emplace_back(0);
+	indices.emplace_back(1);
+	indices.emplace_back(1);
+	indices.emplace_back(2);
+	indices.emplace_back(2);
+	indices.emplace_back(3);
+	indices.emplace_back(3);
+	indices.emplace_back(0);
+
+	indices.emplace_back(4);
+	indices.emplace_back(5);
+	indices.emplace_back(5);
+	indices.emplace_back(6);
+	indices.emplace_back(6);
+	indices.emplace_back(7);
+	indices.emplace_back(7);
+	indices.emplace_back(4);
+
+	indices.emplace_back(0);
+	indices.emplace_back(4);
+	indices.emplace_back(1);
+	indices.emplace_back(5);
+	indices.emplace_back(2);
+	indices.emplace_back(6);
+	indices.emplace_back(3);
+	indices.emplace_back(7);
+}

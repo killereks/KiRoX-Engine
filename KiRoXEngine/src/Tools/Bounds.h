@@ -26,7 +26,9 @@ class Bounds
 	bool Intersects(Bounds bounds);
 	bool Contains(glm::vec3 point);
 
-private:
+	void GetRenderCube(std::vector<glm::vec3>& vertices, std::vector<unsigned int>& indices);
+
+ private:
 	glm::vec3 min;
 	glm::vec3 max;
 	glm::vec3 center;

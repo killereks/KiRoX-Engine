@@ -22,6 +22,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "../Tools/MeshSimplifier.h"
+
 class MeshFilter : public Asset {
 
 	std::vector<glm::vec3> vertices;
@@ -290,11 +292,8 @@ public:
 			}
 		}
 
-		//int M = 10000;
-		//for (int i = indices.size() - 1; i >= 0; i -= M)
-		//{
-		//	indices.erase(indices.begin() + i);
+		//if (fileName == "suzanne.fbx") {
+		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.5f);
 		//}
 	}
-
 };

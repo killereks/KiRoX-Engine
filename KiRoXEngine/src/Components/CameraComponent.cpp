@@ -216,6 +216,8 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 	shader->setMat4("perspectiveMatrix", GetProjectionMatrix());
 	shader->setMat4("viewMatrix", GetViewMatrix());
 
+	shader->setInt("depthTexture", 0);
+
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{

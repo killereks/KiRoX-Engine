@@ -72,6 +72,8 @@ void Engine::Update()
 	//PROFILE_FUNCTION()
 	assetManager->Update();
 
+	shader = assetManager->Get<Shader>("TestShader.shader");
+
 	SceneControls();
 	RenderEditorUI();
 	RenderScene(shader);
