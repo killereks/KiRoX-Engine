@@ -66,7 +66,6 @@
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
     <ClCompile Include="src\Reflection\PropertyDrawer.cpp" />
     <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
-    <ClCompile Include="Dependencies\mesh_simp\mdMeshDecimator.cpp" />
     <ClCompile Include="src\Rendering\HZB.cpp" />
     <ClCompile Include="src\Assets\ComputeShader.cpp" />
   </ItemGroup>
@@ -346,11 +345,9 @@
     <ClInclude Include="src\refl.gen.h" />
     <ClInclude Include="src\Reflection\PropertyDrawer.h" />
     <ClInclude Include="src\Tools\MeshSimplifier.h" />
-    <ClInclude Include="Dependencies\mesh_simp\mdMeshDecimator.h" />
-    <ClInclude Include="Dependencies\mesh_simp\mdSArray.h" />
-    <ClInclude Include="Dependencies\mesh_simp\mdVector.h" />
     <ClInclude Include="src\Rendering\HZB.h" />
     <ClInclude Include="src\Assets\ComputeShader.h" />
+    <ClInclude Include="Dependencies\mesh_simp\Simplify.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
@@ -379,6 +376,5 @@
     <None Include="Dependencies\rttr\include\rttr\registration" />
     <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="src\ReflectionProcessor.exe" />
-    <None Include="Dependencies\mesh_simp\mdVector.inl" />
   </ItemGroup>
 </Project>

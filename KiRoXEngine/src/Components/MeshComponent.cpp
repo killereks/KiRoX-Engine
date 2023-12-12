@@ -46,6 +46,20 @@ void MeshComponent::DrawInspector()
 		}
 		ImGui::EndDragDropTarget();
 	}
+
+	ImGui::BeginTable("Mesh Info", 2, ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable);
+	ImGui::TableNextRow();
+	ImGui::TableNextColumn();
+	ImGui::Text("Vertex Count:");
+	ImGui::TableNextColumn();
+	ImGui::Text("%d", GetVertexCount());
+
+	ImGui::TableNextRow();
+	ImGui::TableNextColumn();
+	ImGui::Text("Triangle Count:");
+	ImGui::TableNextColumn();
+	ImGui::Text("%d", GetTriangleCount());
+	ImGui::EndTable();
 }
 
 void MeshComponent::SetMeshUUID(std::string uuid)

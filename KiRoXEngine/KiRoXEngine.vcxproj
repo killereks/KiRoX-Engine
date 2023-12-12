@@ -163,7 +163,6 @@
   <ItemGroup>
     <ClCompile Include="src\Assets\ComputeShader.cpp" />
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
-    <ClCompile Include="Dependencies\mesh_simp\mdMeshDecimator.cpp" />
     <ClCompile Include="src\Rendering\HZB.cpp" />
     <ClCompile Include="src\Reflection\PropertyDrawer.cpp" />
     <ClCompile Include="src\Tools\Bounds.cpp" />
@@ -228,12 +227,10 @@
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\mesh_simp\Simplify.h" />
     <ClInclude Include="src\Assets\ComputeShader.h" />
     <ClInclude Include="Dependencies\coroutines\CoroExtensions.h" />
     <ClInclude Include="Dependencies\coroutines\minicoro.h" />
-    <ClInclude Include="Dependencies\mesh_simp\mdMeshDecimator.h" />
-    <ClInclude Include="Dependencies\mesh_simp\mdSArray.h" />
-    <ClInclude Include="Dependencies\mesh_simp\mdVector.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\access_levels.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\argument.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\array_mapper.h" />
@@ -525,7 +522,6 @@
     <None Include="Dependencies\assimp\SmoothingGroups.inl" />
     <None Include="Dependencies\assimp\vector2.inl" />
     <None Include="Dependencies\assimp\vector3.inl" />
-    <None Include="Dependencies\mesh_simp\mdVector.inl" />
     <None Include="Dependencies\rttr\include\rttr\registration" />
     <None Include="Dependencies\rttr\include\rttr\type" />
     <None Include="Dependencies\yaml\src\contrib\yaml-cpp.natvis.md" />

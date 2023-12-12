@@ -292,6 +292,10 @@ public:
 			}
 		}
 
+		if (indices.size() / 3 >= 25000) {
+			MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
+		}
+
 		//if (fileName == "suzanne.fbx") {
 		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.5f);
 		//}

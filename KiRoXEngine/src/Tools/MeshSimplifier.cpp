@@ -2,56 +2,46 @@
 #include <iostream>
 #include <execution>
 
-using namespace MeshDecimation;
+#include "mesh_simp/Simplify.h"
 
 void MeshSimplifier::SimplifyMesh(std::vector<glm::vec3>& vertices, std::vector<unsigned int>& indices, float percentage) {
 	assert(percentage > 0.0f && percentage < 1.0f);
 
-	size_t targetTriangles = indices.size() * percentage;
-	size_t targetVertices = vertices.size() * percentage;
+	Simplify::vertices.clear();
+	Simplify::triangles.clear();
 
-	MeshDecimator decimator;
-	Vec3<Float>* verts;
-	Vec3<int>* indx;
+	for (const auto& vertex : vertices) {
+		Simplify::Vertex v;
+		v.p.x = vertex.x;
+		v.p.y = vertex.y;
+		v.p.z = vertex.z;
 
-	verts = new Vec3<Float>[vertices.size()];
-	indx = new Vec3<int>[indices.size()];
-
-	for (int i = 0; i < vertices.size(); i++) {
-		verts[i] = Vec3<MeshDecimation::Float>(vertices[i].x, vertices[i].y, vertices[i].z);
+		Simplify::vertices.push_back(v);
 	}
 
-	for (int i = 0; i < indices.size(); i++) {
-		indx[i] = Vec3<int>(indices[i], indices[i + 1], indices[i + 2]);
+	for (size_t i = 0; i < indices.size(); i += 3) {
+		Simplify::Triangle t;
+		t.v[0] = indices[i];
+		t.v[1] = indices[i + 1];
+		t.v[2] = indices[i + 2];
+
+		Simplify::triangles.push_back(t);
 	}
 
-	decimator.Initialize(vertices.size(), indices.size(), &verts[0], &indx[0]);
-	decimator.Decimate(targetVertices, targetTriangles, 1.0f);
+	size_t targetCount = static_cast<size_t>(percentage * indices.size() / 3);
 
-	std::vector<Vec3<Float>> decimatedVertices;
-	std::vector<Vec3<int>> decimatedIndices;
-
-	decimatedVertices.resize(decimator.GetNVertices());
-	decimatedIndices.resize(decimator.GetNTriangles());
-
-	decimator.GetMeshData(&decimatedVertices[0], &decimatedIndices[0]);
+	Simplify::simplify_mesh(targetCount, 5.0, true);
 
 	vertices.clear();
 	indices.clear();
 
-	vertices.resize(decimatedVertices.size());
-	indices.resize(decimatedIndices.size());
-
-	for (int i = 0; i < decimatedVertices.size(); i++) {
-		vertices[i] = glm::vec3(decimatedVertices[i].X(), decimatedVertices[i].Y(), decimatedVertices[i].Z());
+	for (const auto& vertex : Simplify::vertices) {
+		vertices.emplace_back(vertex.p.x, vertex.p.y, vertex.p.z);
 	}
 
-	for (int i = 0; i < decimatedIndices.size(); i++) {
-		indices[i] = decimatedIndices[i].X();
-		indices[i + 1] = decimatedIndices[i].Y();
-		indices[i + 2] = decimatedIndices[i].Z();
+	for (const auto& triangle : Simplify::triangles) {
+		indices.push_back(triangle.v[0]);
+		indices.push_back(triangle.v[1]);
+		indices.push_back(triangle.v[2]);
 	}
-
-	delete[] verts;
-	delete[] indx;
 }
