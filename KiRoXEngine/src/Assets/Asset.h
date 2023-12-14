@@ -13,6 +13,8 @@ class Asset
 
 	std::string name;
 
+	float loadingProgress = -1.0f;
+
 protected:
 	bool loaded = false;
 
@@ -20,6 +22,10 @@ public:
 	std::string filePath;
 	std::string fileName;
 	std::string uuid;
+
+	float GetLoadingProgress() { return loadingProgress; }
+	bool HasLoadingProgress() { return loadingProgress >= 0.0f; }
+	void SetLoadingProgress(float progress) { loadingProgress = progress; }
 
 	virtual ~Asset() {}
 

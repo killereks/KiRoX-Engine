@@ -5,23 +5,25 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "gtx/quaternion.hpp"
-#include "../Macros.h"
 #include "icons/IconsFontAwesome6.h"
 
 class Entity;
 
+CLASS()
 class TransformComponent : public Component
 {
+	REFLECT(Component)
 
+	PROPERTY()
 	glm::vec3 position;
+	PROPERTY()
 	glm::quat rotation;
+	PROPERTY()
 	glm::vec3 scale;
 
 public:
 	TransformComponent();
 	~TransformComponent();
-
-	void Serialize(YAML::Emitter& out) override;
 
 	void DrawInspector() override;
 

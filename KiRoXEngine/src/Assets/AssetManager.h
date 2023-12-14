@@ -124,8 +124,6 @@ public:
             std::string fileAssetName = filenameStr.substr(filenameStr.find_last_of("\\") + 1);
             std::string extension = fileAssetName.substr(fileAssetName.find_last_of("."));
 
-            std::cout << "Reloading " << fileAssetName << "\n";
-
             if (extension == ".shader") {
                 Get<Shader>(fileAssetName)->Recompile();
             }

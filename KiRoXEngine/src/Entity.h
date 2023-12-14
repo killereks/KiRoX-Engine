@@ -25,7 +25,7 @@ class Entity
 	UUIDv4::UUID uuid;
 
 public:
-	Entity(std::string name);
+	Entity(const std::string& name);
 	~Entity();
 
 	const std::string& GetName() const { return name; }
@@ -36,12 +36,14 @@ public:
 
 	TransformComponent& GetTransform() { return transformComponent; }
 
+	void CopyFrom(Entity* other);
+
 	const std::vector<Component*>& GetAllComponents() const {
 		return components;
 	}
 
 	const UUIDv4::UUID GetUUID () const { return uuid; }
-	void SetUUID(UUIDv4::UUID& uuid)
+	void SetUUID(const UUIDv4::UUID& uuid)
 	{
 		this->uuid = uuid;
 	}

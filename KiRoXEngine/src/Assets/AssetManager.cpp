@@ -171,7 +171,12 @@ void AssetManager::DrawInspector()
 
             if (asset && !asset->IsLoaded())
             {
-                ImGui::Spinner("##spinner", fileViewSize * 0.5f, 6, ImGui::GetColorU32(ImGuiCol_ButtonHovered));
+                if (asset->HasLoadingProgress()) {
+                    ImGui::ProgressBar(asset->GetLoadingProgress(), ImVec2(fileViewSize, 0.0f));
+                }
+                else {
+                    ImGui::Spinner("##spinner", fileViewSize * 0.5f, 6, ImGui::GetColorU32(ImGuiCol_ButtonHovered));
+                }
             }
             else
             {
@@ -200,7 +205,7 @@ void AssetManager::DrawInspector()
                     ImGui::Button("Missing icon!", size);
                 }
 
-                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+                if (asset != nullptr && ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
                     Asset** assetPointer = &asset;
                     ImGui::SetDragDropPayload("ASSET", assetPointer, sizeof(assetPointer));
                     ImGui::Text("Dragging %s", asset->fileName.c_str());

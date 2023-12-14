@@ -47,13 +47,6 @@ TransformComponent::~TransformComponent()
 	}
 }*/
 
-void TransformComponent::Serialize(YAML::Emitter& out)
-{
-	SERIALIZE_VALUE(position);
-	SERIALIZE_VALUE(rotation);
-	SERIALIZE_VALUE(scale);
-}
-
 void TransformComponent::DrawInspector()
 {
 	ImGui::Text("Position");
@@ -172,32 +165,17 @@ glm::vec3 TransformComponent::GetWorldScale()
 
 glm::vec3 TransformComponent::GetLocalPosition()
 {
-	if (owner->GetParent() == nullptr)
-	{
-		return position;
-	}
-
-	return owner->GetParent()->GetTransform().GetWorldPosition() - position;
+	return position;
 }
 
 glm::quat TransformComponent::GetLocalRotation()
 {
-	if (owner->GetParent() == nullptr)
-	{
-		return rotation;
-	}
-
-	return glm::inverse(owner->GetParent()->GetTransform().GetWorldRotation()) * rotation;
+	return rotation;
 }
 
 glm::vec3 TransformComponent::GetLocalScale()
 {
-	if (owner->GetParent() == nullptr)
-	{
-		return scale;
-	}
-
-	return owner->GetParent()->GetTransform().GetWorldScale() - scale;
+	return scale;
 }
 
 glm::vec3 TransformComponent::GetForward()

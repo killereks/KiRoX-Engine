@@ -18,11 +18,29 @@
 #include "../Tools/Bounds.h"
 #include "../Tools/StatsCounter.h"
 
+#include <assimp/ProgressHandler.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
 #include "../Tools/MeshSimplifier.h"
+
+class MeshProgressHandle : public Assimp::ProgressHandler {
+public:
+	Asset* asset;
+
+	MeshProgressHandle(Asset* assetRef) {
+		asset = assetRef;
+	}
+
+	bool Update(float percentage) override
+	{
+		if (asset) {
+			asset->SetLoadingProgress(percentage);
+		}
+		return true;
+	}
+};
 
 class MeshFilter : public Asset {
 
@@ -236,8 +254,6 @@ public:
 		vertices.clear();
 		indices.clear();
 
-		std::cout << "Loading mesh " << std::this_thread::get_id() << "\n";
-
 		std::string fileExtension = filePath.substr(filePath.rfind("."));
 
 		Assimp::Importer importer;
@@ -249,6 +265,9 @@ public:
 			aiProcess_FindInvalidData |
 			aiProcess_OptimizeGraph |
 			aiProcess_GenNormals;
+
+		MeshProgressHandle* progressHandle = new MeshProgressHandle(this);
+		importer.SetProgressHandler(progressHandle);
 
 		const aiScene* scene = importer.ReadFile(filePath, steps);
 
@@ -292,9 +311,9 @@ public:
 			}
 		}
 
-		if (indices.size() / 3 >= 25000) {
-			MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
-		}
+		//if (indices.size() / 3 >= 25000) {
+		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
+		//}
 
 		//if (fileName == "suzanne.fbx") {
 		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.5f);

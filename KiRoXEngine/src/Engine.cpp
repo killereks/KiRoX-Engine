@@ -18,6 +18,8 @@
 #include "Tools/StatsCounter.h"
 #include "Math/Mathf.h"
 
+#include <ShObjIdl.h>
+
 Engine::Engine()
 {
 }
@@ -29,7 +31,7 @@ Engine::~Engine()
 
 void Engine::Start()
 {
-	RegisterTypes();
+	Reflection::RegisterTypes();
 
 	std::filesystem::path path = std::filesystem::current_path();
 	path /= "Project";
@@ -135,9 +137,9 @@ void Engine::RenderEditorUI()
 void Engine::LoadScene(const std::string& path)
 {
 	scene = std::make_shared<Scene>();
-	scene->LoadScene(path);
+	scene.get()->LoadScene(path);
 	activeScene = std::make_shared<Scene>();
-	activeScene->LoadScene(path);
+	activeScene.get()->CopyFrom(scene.get());
 }
 
 void Engine::SceneControls()
@@ -225,6 +227,9 @@ void Engine::SceneControls()
 		if (Input::GetKeyDown(GLFW_KEY_DELETE))
 		{
 			activeScene->DeleteEntity(selectedEntity);
+		}
+		if (Input::GetKeyDown(GLFW_KEY_D) && Input::GetKey(GLFW_KEY_LEFT_CONTROL)) {
+			activeScene->DuplicateEntity(selectedEntity);
 		}
 	}
 }
@@ -329,11 +334,92 @@ void Engine::RenderToolbar()
 			{
 				if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "CTRL+S"))
 				{
-					activeScene->SaveScene(projectPath + "/test2.scene");
+					std::string path;
+
+					// open save file dialog
+					HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+					if (SUCCEEDED(hr)) {
+						IFileOpenDialog* pFileOpen;
+
+						hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+						if (SUCCEEDED(hr)) {
+							hr = pFileOpen->Show(NULL);
+
+							if (SUCCEEDED(hr)) {
+								IShellItem* pItem;
+								hr = pFileOpen->GetResult(&pItem);
+								if (SUCCEEDED(hr)) {
+									LPWSTR pszFilePath;
+									hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+									if (SUCCEEDED(hr)) {
+										std::wstring ws(pszFilePath);
+										std::string str(ws.begin(), ws.end());
+
+										path = str;
+										CoTaskMemFree(pszFilePath);
+									}
+									pItem->Release();
+								}
+							}
+							pFileOpen->Release();
+						}
+					}
+
+					//activeScene->SaveScene(projectPath + "/serialization_test.scene");
+					//activeScene->SaveScene(std::string(ofn.lpstrFile));
+					if (path != "") {
+						activeScene->SaveScene(path);
+					}
 				}
 				if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Load", "CTRL+O"))
 				{
-					activeScene->LoadScene(projectPath + "/test2.scene");
+					//activeScene->LoadScene(projectPath + "/serialization_test.scene");
+
+					// open load file dialog
+					std::string path;
+
+					HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+
+					if (SUCCEEDED(hr))
+					{
+						IFileOpenDialog* pFileOpen;
+
+						hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+						if (SUCCEEDED(hr))
+						{
+							hr = pFileOpen->Show(NULL);
+
+							if (SUCCEEDED(hr))
+							{
+								IShellItem* pItem;
+								hr = pFileOpen->GetResult(&pItem);
+								if (SUCCEEDED(hr))
+								{
+									LPWSTR pszFilePath;
+									hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+									if (SUCCEEDED(hr))
+									{
+										std::wstring ws(pszFilePath);
+										std::string str(ws.begin(), ws.end());
+
+										path = str;
+										CoTaskMemFree(pszFilePath);
+									}
+									pItem->Release();
+								}
+							}
+							pFileOpen->Release();
+						}
+					}
+
+					if (path != "")
+					{
+						activeScene->LoadScene(path);
+					}
 				}
 			}
 			else

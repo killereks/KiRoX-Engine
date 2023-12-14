@@ -10,10 +10,10 @@
 #include "icons/IconsFontAwesome6.h"
 
 #include "Reflection/PropertyDrawer.h"
+#include "refl.gen.h"
 
 #include "Tools/Stopwatch.h"
 #include "Macros.h"
-#include "refl.gen.h"
 
 Scene::Scene()
 {
@@ -36,6 +36,9 @@ Scene::Scene()
 	//cameraEntity->GetTransform().LookAt(glm::vec3(0.0));
 	//
 	//ent2->SetParent(ent1);
+
+	rootEntity = new Entity("Root");
+	entities.push_back(rootEntity);
 }
 
 Scene::~Scene()
@@ -136,6 +139,20 @@ void Scene::DrawEntity(Entity* entity)
 	// DRAW ENTITY
 	if (selectedEntity == entity)
 	{
+		ImVec2 boxPos = ImGui::GetCursorScreenPos();
+		ImDrawList* drawList = ImGui::GetWindowDrawList();
+		ImVec2 padding = ImVec2(2, 2);
+
+		boxPos.x -= padding.x;
+		boxPos.y -= padding.y;
+
+		ImVec2 endPos = ImVec2(ImGui::GetWindowWidth() + padding.x * 2, ImGui::GetTextLineHeight() + padding.y * 2);
+		endPos.x += boxPos.x;
+		endPos.y += boxPos.y;
+
+		drawList->AddRectFilled(boxPos, endPos, IM_COL32(51, 51, 51, 255));
+		//drawList->AddText(ImVec2(boxPos.x + 5, boxPos.y), IM_COL32(255, 255, 255, 255), entity->GetName().c_str());
+
 		ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 1.0), entity->GetName().c_str(), ImVec2(-1, 0));
 	}
 	else
@@ -147,37 +164,13 @@ void Scene::DrawEntity(Entity* entity)
 		selectedEntity = entity;
 	}
 
-	//if (ImGui::BeginDragDropSource())
-	//{
-	//	const char* payload = entity->GetUUID().str().c_str();
-	//	ImGui::SetDragDropPayload("DragEntity", payload, sizeof(payload));
-	//	ImGui::EndDragDropSource();
-	//}
-	//if (ImGui::BeginDragDropTarget())
-	//{
-	//	const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DragEntity");
-	//	if (payload != nullptr)
-	//	{
-	//		const char* uuid = (const char*)payload->Data;
-	//
-	//		UUIDv4::UUID draggedUUID = UUIDv4::UUID::fromStrFactory(uuid);
-	//
-	//		Entity* ent = GetEntityByUUID(draggedUUID);
-	//		if (ent != nullptr)
-	//		{
-	//			ent->SetParent(entity);
-	//		}
-	//	}
-	//	ImGui::EndDragDropTarget();
-	//}
-
 	bool isFirst = true;
 	// DRAW COMPONENTS
 	for (auto component : entity->GetAllComponents())
 	{
 		if (isFirst)
 		{
-			ImGui::SameLine(300);
+			ImGui::SameLine(200);
 		}
 		else
 		{
@@ -240,22 +233,15 @@ void Scene::DrawInspector()
 
 	for (Component* component : selectedEntity->GetAllComponents()) {
 		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
-			//const rttr::type& type = GetType(component->GetName());
-			//
-			//component->OnDrawGizmos();
-			//
-			//rttr::variant var = component;
-			//var.convert(type);
-			//
-			//for (rttr::property& prop : type.get_properties()) {
-			//	PropertyDrawer::DrawProperty(prop, var);
-			//}
-			//
-			//for (rttr::method& method : type.get_methods()) {
-			//	PropertyDrawer::DrawFunction(method, var);
-			//}
-
+			component->OnDrawGizmos();
 			component->DrawInspector();
+
+			rttr::type type = rttr::type::get_by_name(component->GetName());
+			std::vector<rttr::method> methods = type.get_methods();
+			rttr::variant var = component;
+			for (auto& method : methods) {
+				PropertyDrawer::DrawFunction(method, var);
+			}
 
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 			if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
@@ -296,14 +282,23 @@ Entity* Scene::CreateEntity(std::string name)
 	Entity* entity = new Entity(name);
 	entities.push_back(entity);
 
-	if (rootEntity == nullptr)
-	{
-		rootEntity = new Entity("Root");
-	}
+	assert(entity != nullptr);
+	assert(rootEntity != nullptr);
 
 	entity->SetParent(rootEntity);
 
 	return entity;
+}
+
+Entity* Scene::GetEntityByUUID(const UUIDv4::UUID& uuid)
+{
+	for (Entity* ent : GetAllEntities()) {
+		if (ent->GetUUID() == uuid) {
+			return ent;
+		}
+	}
+
+	return nullptr;
 }
 
 void Scene::DeleteEntity(Entity* ent)
@@ -326,6 +321,96 @@ void Scene::DeleteEntity(Entity* ent)
 	delete ent;
 }
 
+void Scene::CopyFrom(Scene* other)
+{
+	PROFILE_FUNCTION()
+
+	if (other == nullptr) return;
+	if (other->rootEntity == nullptr) {
+		std::cout << "Cannot copy from empty scene!\n";
+		return;
+	}
+
+	assert(rootEntity != other->rootEntity);
+
+	other->selectedEntity = nullptr;
+	selectedEntity = nullptr;
+
+	delete rootEntity;
+	entities.clear();
+
+	filePath = other->filePath;
+	fileName = other->fileName;
+	uuid = other->uuid;
+
+	for (Entity* otherEntity : other->GetAllEntities()) {
+		assert(otherEntity != nullptr);
+
+		Entity* newEntity = new Entity(otherEntity->GetName());//CreateEntity(otherEntity->GetName());
+		newEntity->SetUUID(otherEntity->GetUUID());
+
+		assert(newEntity->GetName().length() <= 100);
+
+		bool isRoot = other->rootEntity == otherEntity;
+		if (isRoot) {
+			rootEntity = newEntity;
+		}
+
+		TransformComponent& otherTransform = otherEntity->GetTransform();
+		TransformComponent& thisTransform = newEntity->GetTransform();
+
+		glm::vec3 pos = otherTransform.GetLocalPosition();
+		glm::quat rot = otherTransform.GetLocalRotation();
+		glm::vec3 scale = otherTransform.GetLocalScale();
+		thisTransform.SetLocalPosition(pos);
+		thisTransform.SetLocalRotation(rot);
+		thisTransform.SetLocalScale(scale);
+
+		Entity* otherParent = otherEntity->GetParent();
+		if (otherParent != nullptr) {
+			Entity* parent = GetEntityByUUID(otherParent->GetUUID());
+			if (parent != nullptr) {
+				newEntity->SetParent(parent);
+			}
+		}
+
+		entities.push_back(newEntity);
+
+		for (Component* comp : otherEntity->GetAllComponents()) {
+			std::string compName = comp->GetName();
+
+			const rttr::type compType = Reflection::GetType(compName);
+
+			Component* newComponentInstance = Reflection::CreateComponent(compName);
+			rttr::variant thisVar = newComponentInstance;
+			thisVar.convert(compType);
+
+			Component* otherComponentInstance = comp;
+			rttr::variant otherVar = otherComponentInstance;
+			otherVar.convert(compType);
+
+			for (rttr::property prop : rttr::type::get_by_name(newComponentInstance->GetName()).get_properties()) {
+				std::string name = prop.get_name();
+				if (name == "") continue;
+
+				rttr::variant value = prop.get_value(otherVar);
+				bool setValueSuccess = prop.set_value(thisVar, value);
+				assert(setValueSuccess);
+			}
+
+			newEntity->AddComponent(newComponentInstance);
+		}
+	}
+}
+
+void Scene::DuplicateEntity(Entity* entity)
+{
+	std::string newName = entity->GetName() + " (Copy)";
+	Entity* ent = CreateEntity(newName);
+	ent->CopyFrom(entity);
+	selectedEntity = ent;
+}
+
 void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
 {
 	out << YAML::BeginMap;
@@ -339,14 +424,25 @@ void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
 
 	out << YAML::Key << "TransformComponent";
 	out << YAML::BeginMap;
-	ent->GetTransform().Serialize(out);
+
+	TransformComponent& transform = ent->GetTransform();
+	out << YAML::Key << "position" << YAML::Value << transform.GetLocalPosition();
+	out << YAML::Key << "rotation" << YAML::Value << transform.GetLocalRotation();
+	out << YAML::Key << "scale" << YAML::Value << transform.GetLocalScale();
+
 	out << YAML::EndMap;
 
-	for (Component* comp : ent->GetAllComponents())
-	{
+	for (Component* comp : ent->GetAllComponents()) {
+		rttr::type t = rttr::type::get_by_name(comp->GetName());
+
 		out << YAML::Key << comp->GetName();
 		out << YAML::BeginMap;
-		comp->Serialize(out);
+		for (rttr::property prop : t.get_properties()) {
+			std::string name = prop.get_name();
+			if (name == "") continue;
+			out << YAML::Key << name;
+			out << YAML::Value << prop.get_value(comp).to_string();
+		}
 		out << YAML::EndMap;
 	}
 
@@ -357,12 +453,10 @@ void Scene::SaveScene(std::string path)
 {
 	YAML::Emitter out;
 	out << YAML::BeginMap;
-	out << YAML::Key << "Scene" << YAML::Value << "Test Scene";
-
 	out << YAML::Key << "Entities" << YAML::Value;
 	out << YAML::BeginSeq;
 
-	SerializeEntity(out, rootEntity);
+	//SerializeEntity(out, rootEntity);
 
 	for (Entity* ent : entities)
 	{
@@ -407,21 +501,17 @@ void Scene::LoadScene(std::string path)
 	selectedEntity = nullptr;
 	rootEntity = nullptr;
 
-	std::string sceneName = data["Scene"].as<std::string>();
-
 	YAML::Node entitiesData = data["Entities"];
 
 	std::unordered_map<std::string, Entity*> uuidToEntity;
 
 	for (auto entityData : entitiesData)
 	{
-		//std::cout << "Loading new entity\n";
-
 		std::string name = entityData["Entity"].as<std::string>();
 		std::string uuid = entityData["UUID"].as<std::string>();
 
 		bool isFirstEntity = entityData == entitiesData[0];
-		Entity* newEntity = CreateEntity(name);
+		Entity* newEntity = new Entity(name); //CreateEntity(name);
 
 		// SET UUID
 		UUIDv4::UUID newUUID = UUIDv4::UUID::fromStrFactory(uuid);
@@ -444,31 +534,71 @@ void Scene::LoadScene(std::string path)
 		}
 
 		// iterate over components
+		auto compList = rttr::type::get<Component>().get_derived_classes();
 
+		for (auto& comp : compList) {
+			std::string strCompName = comp.get_name();
+
+			if (strCompName == "TransformComponent") continue;
+
+			// Component name
+			YAML::Node componentRef = entityData[strCompName];
+			if (!componentRef) continue;
+
+			// using rttr, create a new component
+			Component* componentInstance = Reflection::CreateComponent(strCompName);
+			rttr::variant var = componentInstance;
+
+			// iterate over properties
+			for (rttr::property currentProperty : comp.get_properties()) {
+				std::string name = currentProperty.get_name();
+				if (name == "") continue;
+
+				// variable inside the component
+				YAML::Node propData = componentRef[name];
+				if (!propData) continue;
+
+				rttr::type propType = currentProperty.get_type();
+
+				if (propType == rttr::type::get<std::string>()) {
+					currentProperty.set_value(var, propData.as<std::string>());
+				}
+				else if (propType == rttr::type::get<int>()) {
+					currentProperty.set_value(var, propData.as<int>());
+				} 
+				else if (propType == rttr::type::get<float>()) {
+					currentProperty.set_value(var, propData.as<float>());
+				}
+				else if (propType == rttr::type::get<bool>()) {
+					currentProperty.set_value(var, propData.as<bool>());
+				}
+				else if (propType == rttr::type::get<glm::vec3>()) {
+					currentProperty.set_value(var, propData.as<glm::vec3>());
+				}
+				else if (propType == rttr::type::get<glm::vec4>()) {
+					currentProperty.set_value(var, propData.as<glm::vec4>());
+				}
+				else if (propType == rttr::type::get<glm::quat>()) {
+					currentProperty.set_value(var, propData.as<glm::quat>());
+				}
+			}
+
+			if (componentInstance) {
+				std::cout << "Adding component " << componentInstance->GetName() << " to entity " << newEntity->GetName() << "\n";
+				newEntity->AddComponent(componentInstance);
+			}
+			else {
+				std::cout << "Error adding component " << componentInstance->GetName() << " to entity " << newEntity->GetName() << "\n";
+			}
+		}
+
+		// Transform is different, so we load it separately
 		YAML::Node transform = entityData["TransformComponent"];
 		if (transform)
 		{
 			newEntity->GetTransform().SetLocalPosition(transform["position"].as<glm::vec3>());
 			newEntity->GetTransform().SetLocalRotation(transform["rotation"].as<glm::quat>());
 			newEntity->GetTransform().SetLocalScale(transform["scale"].as<glm::vec3>());
-		}
-		
-		YAML::Node camera = entityData["CameraComponent"];
-		if (camera)
-		{
-			CameraComponent* cam = newEntity->AddComponent<CameraComponent>();
-			// TODO: load
-		}
-		
-		YAML::Node mesh = entityData["MeshComponent"];
-		if (mesh)
-		{
-			MeshComponent* meshComp = newEntity->AddComponent<MeshComponent>();
-		
-			if (mesh["meshUUID"])
-			{
-				meshComp->SetMeshUUID(mesh["meshUUID"].as<std::string>());
-			}
 		}
 	}
 }

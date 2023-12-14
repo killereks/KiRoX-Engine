@@ -1,4 +1,3 @@
-Scene: Test Scene
 Entities:
   - Entity: Root
     UUID: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
@@ -23,13 +22,13 @@ Entities:
       rotation: [-5.76702703e-08, 0.914296567, -5.76702703e-08, -0.40504542]
       scale: [0.999998391, 1, 0.999998391]
     CameraComponent:
-      nearClipPlane: 0.300000012
+      nearClipPlane: 0.3
       farClipPlane: 1000
       fieldOfView: 60
-      top: 10
-      bottom: -10
       left: -10
       right: 10
+      top: 10
+      bottom: -10
       orthoNear: 1
       orthoFar: 100
   - Entity: Soldier0 0

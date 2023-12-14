@@ -40,11 +40,10 @@ uniform sampler2D albedo;
 out vec4 FragColor;
 
 void main(){
-	vec3 lightPos = vec3(10, 20, -10);
+	vec3 lightPos = vec3(0, 20, 0);
 	vec3 lightDir = normalize(lightPos - FragPos);
 
-	//float light = max(0.0, dot(lightDir, Normal));
-	float light = 1.0;
+	float light = max(0.0, dot(lightDir, Normal));
 
 	vec3 col = texture(albedo, UV).rgb * light;
 	

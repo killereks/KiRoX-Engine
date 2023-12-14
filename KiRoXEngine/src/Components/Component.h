@@ -9,7 +9,10 @@
 
 class Entity;
 
+CLASS()
 class Component {
+	REFLECT()
+
 protected:
 	Entity* owner;
 
@@ -30,8 +33,6 @@ public:
 	virtual void Update() {}
 
 	virtual std::string GetIcon() = 0;
-
-	virtual void Serialize(YAML::Emitter& out) = 0;
 
 	virtual const char* GetName() {
 		if (!name.empty())
