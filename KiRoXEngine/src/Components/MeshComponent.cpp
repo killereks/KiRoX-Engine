@@ -65,7 +65,11 @@ void MeshComponent::DrawInspector()
 void MeshComponent::SetMeshUUID(std::string uuid)
 {
 	meshUUID = uuid;
+	UpdateUUID();
+}
 
+void MeshComponent::UpdateUUID()
+{
 	if (meshUUID != "")
 	{
 		meshFilter = AssetManager::GetInstance()->GetByUUID<MeshFilter>(meshUUID);
@@ -74,11 +78,6 @@ void MeshComponent::SetMeshUUID(std::string uuid)
 	{
 		meshFilter = nullptr;
 	}
-}
-
-void MeshComponent::Serialize(YAML::Emitter& out)
-{
-	SERIALIZE_VALUE(meshUUID);
 }
 
 Bounds* MeshComponent::GetBounds()
@@ -169,5 +168,8 @@ void MeshComponent::SimpleDraw(Shader* shader)
 		{
 			Gizmos::DrawWireCube(bounds->GetCenter(), bounds->GetSize(), glm::vec3(1.0));
 		}
+	}
+	else {
+		UpdateUUID();
 	}
 }

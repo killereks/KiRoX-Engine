@@ -60,15 +60,16 @@ public:
 		{
 		case SceneState::Editor:
 			// Load Editor Scene
-			activeScene = std::make_shared<Scene>();
-			activeScene->LoadScene(scene.get()->filePath);
+			//activeScene.get()->CopyFrom(scene.get());
+			// completely reload active scene
+			//activeScene.get()->LoadScene(activeScene.get()->filePath);
+			activeScene.get()->CopyFrom(scene.get());
 			break;
 		case SceneState::Playing:
 			// Copy current scene and play it
-			std::cout << "Current active scene: " << activeScene.get()->filePath << "\n";
-			std::cout << "Playing scene from: " << scene.get()->filePath << "\n";
-			activeScene = std::make_shared<Scene>();
-			activeScene->LoadScene(scene.get()->filePath);
+			// we are going to play mode, so we need to save this scene
+			activeScene.get()->SaveScene(activeScene.get()->filePath);
+			scene.get()->CopyFrom(activeScene.get());
 
 			ImGui::SetWindowFocus("Game");
 			break;

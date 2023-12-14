@@ -31,19 +31,11 @@ public:
 	void DrawInspector();
 
 	Entity* CreateEntity(std::string name);
+	Entity* GetEntityByUUID(const UUIDv4::UUID& uuid);
 	void DeleteEntity(Entity* ent);
-	
-	Entity* GetEntityByUUID(UUIDv4::UUID& uuid)
-	{
-		for (Entity* ent : GetAllEntities())
-		{
-			if (ent->GetUUID() == uuid)
-			{
-				return ent;
-			}
-		}
-		return nullptr;
-	}
+
+	void CopyFrom(Scene* other);
+	void DuplicateEntity(Entity* entity);
 
 	void SerializeEntity(YAML::Emitter& out, Entity* ent);
 	void SaveScene(std::string path);

@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../Entity.h"
-#include "../Macros.h"
 #include "MeshComponent.h"
 #include "../Assets/Shader.h"
 #include <vector>
@@ -19,19 +18,31 @@ enum class CameraType
 	Orthographic
 };
 
+CLASS()
 class CameraComponent : public Component
 {
+	REFLECT(Component)
+
 	// PERSPECTIVE
+	PROPERTY()
 	float nearClipPlane;
+	PROPERTY()
 	float farClipPlane;
+	PROPERTY()
 	float fieldOfView;
 
 	// ORTHOGRAPHIC
+	PROPERTY()
 	float left;
+	PROPERTY()
 	float right;
+	PROPERTY()
 	float top;
+	PROPERTY()
 	float bottom;
+	PROPERTY()
 	float orthoNear;
+	PROPERTY()
 	float orthoFar;
 
 	float aspect;
@@ -47,8 +58,6 @@ class CameraComponent : public Component
 public:
 	CameraComponent();
 	~CameraComponent();
-
-	void Serialize(YAML::Emitter& out) override;
 
 	virtual void OnDrawGizmos() override;
 

@@ -105,20 +105,6 @@ void CameraComponent::OnDrawGizmos()
 	Gizmos::DrawRay(transform.GetWorldPosition(), transform.GetForward(), glm::vec3(1.0, 1.0, 0.0));
 }
 
-void CameraComponent::Serialize(YAML::Emitter& out)
-{
-	SERIALIZE_VALUE(nearClipPlane);
-	SERIALIZE_VALUE(farClipPlane);
-	SERIALIZE_VALUE(fieldOfView);
-
-	SERIALIZE_VALUE(top);
-	SERIALIZE_VALUE(bottom);
-	SERIALIZE_VALUE(left);
-	SERIALIZE_VALUE(right);
-	SERIALIZE_VALUE(orthoNear);
-	SERIALIZE_VALUE(orthoFar);
-}
-
 void CameraComponent::RenderGizmos()
 {
 	Gizmos::GetInstance()->Draw(this);

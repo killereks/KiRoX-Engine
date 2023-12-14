@@ -33,5 +33,8 @@ da2ad4f2-cdf7-4c1c-b377-d6e972e95a56 quad.fbx
 78bc243e-52ef-42da-aa35-910cbbf70c9e bojovnikDiffuseMap.jpg
 1b29506f-b5da-4846-8c0a-5d35ae0343dc bojovnikNormalsMap.jpg
 0fcd405e-215f-44de-b5c6-485cffe4c6c5 soldier.fbx
+50ec1b87-cb77-4caf-859a-da7887b96aff DrawCall.computeshader
 4e944fd6-9912-43ff-813b-f369a38ac923 test.scene
 3835ba89-dccd-427c-962f-945ab9f2fb67 test_10x10.scene
+04373110-e080-408e-bd8f-4010fd183784 computeshader.png
+48083dde-3beb-4416-a28b-bb3ee6149cb9 serialization_test.scene

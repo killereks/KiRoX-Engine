@@ -236,8 +236,6 @@ public:
 		vertices.clear();
 		indices.clear();
 
-		std::cout << "Loading mesh " << std::this_thread::get_id() << "\n";
-
 		std::string fileExtension = filePath.substr(filePath.rfind("."));
 
 		Assimp::Importer importer;
@@ -292,9 +290,9 @@ public:
 			}
 		}
 
-		if (indices.size() / 3 >= 25000) {
-			MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
-		}
+		//if (indices.size() / 3 >= 25000) {
+		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
+		//}
 
 		//if (fileName == "suzanne.fbx") {
 		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.5f);
