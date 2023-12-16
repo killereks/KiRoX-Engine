@@ -421,6 +421,10 @@ void Engine::RenderToolbar()
 						activeScene->LoadScene(path);
 					}
 				}
+				if (ImGui::MenuItem(ICON_FA_CUBES_STACKED " Add Stress Test Cube Scene"))
+				{
+					activeScene->CubeScene();
+				}
 			}
 			else
 			{

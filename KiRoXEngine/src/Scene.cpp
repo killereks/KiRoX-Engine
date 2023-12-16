@@ -14,6 +14,7 @@
 
 #include "Tools/Stopwatch.h"
 #include "Macros.h"
+#include "Assets/AssetManager.h"
 
 Scene::Scene()
 {
@@ -470,6 +471,26 @@ void Scene::SaveScene(std::string path)
 	fout << out.c_str();
 
 	std::cout << "Saved to " << path << std::endl;
+}
+
+void Scene::CubeScene()
+{
+	// make a default scene, which is 20x20x20 default cube
+	int size = 5;
+
+	for (int i = -size / 2; i <= size / 2; i++) {
+		for (int j = -size / 2; j <= size / 2; j++) {
+			for (int k = -size / 2; k <= size / 2; k++) {
+				glm::vec3 pos = glm::vec3(i, j, k) * 5.0f;
+
+				Entity* ent = CreateEntity("Cube");
+				ent->GetTransform().SetLocalPosition(pos);
+
+				MeshComponent* meshComponent = ent->AddComponent<MeshComponent>();
+				meshComponent->SetMeshUUID("6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931");
+			}
+		}
+	}
 }
 
 void Scene::LoadScene(std::string path)

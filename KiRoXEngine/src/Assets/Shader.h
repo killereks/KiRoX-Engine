@@ -26,7 +26,7 @@ public:
 	{
 		bool isToken = false;
 
-		std::string outCode;
+		std::string outCode = "";
 		std::ifstream shaderFile(filePath);
 
 		std::string currentLine;
@@ -72,14 +72,17 @@ public:
 
 		std::string vertexCode = GetSrc(filePath, "@vs");
 		std::string fragmentCode = GetSrc(filePath, "@fs");
+		std::string geometryCode = GetSrc(filePath, "@gs");
 
 		//std::cout << "Vertex\n" << vertexCode;
 		//std::cout << "\nFragment\n" << fragmentCode;
 
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();
+		const char* gShaderCode = geometryCode.c_str();
+
 		// 2. compile shaders
-		unsigned int vertex, fragment;
+		unsigned int vertex, fragment, geometry;
 
 		if (ID != 0) {
 			glDeleteProgram(ID);
@@ -101,8 +104,22 @@ public:
 		glCompileShader(fragment);
 		checkCompileErrors(fragment, "FRAGMENT");
 
+		// geometry shader
+		if (geometryCode != "")
+		{
+			Console::Write("Compiling geometry shader...", ImVec4(0.8f, 0.922f, 0.373f, 1.0f));
+			geometry = glCreateShader(GL_GEOMETRY_SHADER);
+			glShaderSource(geometry, 1, &gShaderCode, NULL);
+			glCompileShader(geometry);
+			checkCompileErrors(geometry, "GEOMETRY");
+		}
+
 		glAttachShader(ID, vertex);
 		glAttachShader(ID, fragment);
+		if (geometryCode != "")
+		{
+			glAttachShader(ID, geometry);
+		}
 
 		glLinkProgram(ID);
 
@@ -110,6 +127,10 @@ public:
 		// delete the shaders as they're linked into our program now and no longer necessary
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
+		if (geometryCode != "")
+		{
+			glDeleteShader(geometry);
+		}
 
 		Console::Write("Successfully compiled...", ImVec4(0.322f, 0.859f, 0.302f, 1.0f));
 

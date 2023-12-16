@@ -36,6 +36,8 @@ public:
 
 	void CopyFrom(Scene* other);
 	void DuplicateEntity(Entity* entity);
+	
+	void CubeScene();
 
 	void SerializeEntity(YAML::Emitter& out, Entity* ent);
 	void SaveScene(std::string path);

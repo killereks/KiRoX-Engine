@@ -31,6 +31,8 @@ class MeshComponent : public Component
 		MeshComponent();
 		~MeshComponent();
 
+		MeshFilter* GetMeshFilter() const { return meshFilter; }
+
 		void DrawInspector() override;
 
 		void SetMeshUUID(std::string uuid);

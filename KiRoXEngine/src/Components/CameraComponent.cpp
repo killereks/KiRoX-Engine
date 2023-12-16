@@ -4,6 +4,7 @@
 #include "../Macros.h"
 #include "../Tools/Stopwatch.h"
 #include "../Editor/Gizmos.h"
+#include "../Assets/AssetManager.h"
 
 CameraComponent::CameraComponent()
 {
@@ -199,19 +200,26 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 {
 	shader->use();
 
-	shader->setMat4("perspectiveMatrix", GetProjectionMatrix());
-	shader->setMat4("viewMatrix", GetViewMatrix());
+	glm::mat4 viewMatrix = GetViewMatrix();
+	glm::mat4 projectionMatrix = GetProjectionMatrix();
+
+	shader->setMat4("perspectiveMatrix", projectionMatrix);
+	shader->setMat4("viewMatrix", viewMatrix);
 
 	shader->setInt("depthTexture", 0);
 
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{
-		Bounds* bounds = meshComp->GetBounds();
-		if (bounds != nullptr && !IsInFrustum(*bounds)) {
-			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
-			continue;
-		}
+		//Bounds* bounds = meshComp->GetBounds();
+		//if (bounds != nullptr && !IsInFrustum(*bounds)) {
+		//	StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
+		//	continue;
+		//}
+
+		MeshFilter* meshFilter = meshComp->GetMeshFilter();
+		meshComp->UpdateUUID();
+		if (meshFilter == nullptr) continue;
 
 		meshComp->SimpleDraw(shader);
 	}
@@ -221,6 +229,11 @@ void CameraComponent::Resize(int width, int height)
 {
 	this->width = width;
 	this->height = height;
-	aspect = (float)width / (float)height;
+	if (height != 0) {
+		aspect = (float)width / (float)height;
+	}
+	else {
+		aspect = 1.0f;
+	}
 	renderTexture->Resize(width, height);
 }
