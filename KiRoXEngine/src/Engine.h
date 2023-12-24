@@ -11,6 +11,8 @@
 
 #include "refl.gen.h"
 
+#include "Physics.h"
+
 enum class SceneState
 {
 	Editor, Playing, Paused, OneTick
@@ -29,6 +31,8 @@ class Engine
 	RenderMode currentRenderMode = RenderMode::Lit;
 
 	SceneState currentSceneState = SceneState::Editor;
+
+	Physics* physics;
 
 	std::string projectPath;
 
@@ -80,6 +84,8 @@ public:
 			activeScene.get()->SaveScene(activeScene.get()->filePath);
 			scene.get()->CopyFrom(activeScene.get());
 
+			OnScenePlay();
+
 			ImGui::SetWindowFocus("Game");
 			break;
 		case SceneState::Paused:
@@ -93,6 +99,8 @@ public:
 		}
 		currentSceneState = newSceneState;
 	}
+
+	void OnScenePlay();
 
 	void Start();
 	void Update();

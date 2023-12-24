@@ -29,6 +29,19 @@ Engine::~Engine()
 	delete sceneCamera;
 }
 
+void Engine::OnScenePlay()
+{
+	delete physics;
+
+	physics = new Physics();
+
+	// initialize rigidbodies
+	std::vector<Rigidbody*> rbs = activeScene.get()->FindComponentsOfType<Rigidbody>();
+	for (Rigidbody* rb : rbs) {
+		physics->RegisterRigidbody(rb);
+	}
+}
+
 void Engine::Start()
 {
 	Reflection::RegisterTypes();
@@ -56,17 +69,6 @@ void Engine::Start()
 	gizmosShader = assetManager->Get<Shader>("Gizmos.shader");
 
 	Gizmos::GetInstance()->Init(gizmosShader);
-
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	for (int j = 0; j < 10; j++)
-	//	{
-	//		Entity* ent = activeScene->CreateEntity("Soldier" + std::to_string(i) + " " + std::to_string(j));
-	//		ent->AddComponent<MeshComponent>()->SetMeshFilter("soldier.fbx");
-	//		ent->GetTransform().SetLocalPosition(glm::vec3(i * 50, 0.0, j * 50));
-	//		ent->GetTransform().SetLocalRotation(glm::vec3(-84.0f, 25.4f, -166.8f));
-	//	}
-	//}
 }
 
 void Engine::Update()
@@ -83,6 +85,17 @@ void Engine::Update()
 	if (currentSceneState == SceneState::Playing)
 	{
 		// simulate physics
+		physics->Update(Engine::deltaTime);
+
+		std::vector<Entity*> allEntities = activeScene.get()->GetAllEntities();
+
+		for (Entity* ent : allEntities) {
+			std::vector<Component*> components = ent->GetAllComponents();
+			
+			for (Component* comp : components) {
+				comp->Update(Engine::deltaTime);
+			}
+		}
 	}
 
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
@@ -113,14 +126,10 @@ void Engine::RenderScene(Shader* shader)
 		}
 	}
 
-	//shader->use();
-
-	if (currentSceneState != SceneState::Playing) {
-		GetSceneCamera()->PreRender();
-		GetSceneCamera()->Render(meshComponents, shader);
-		GetSceneCamera()->RenderGizmos();
-		GetSceneCamera()->PostRender();
-	}
+	GetSceneCamera()->PreRender();
+	GetSceneCamera()->Render(meshComponents, shader);
+	GetSceneCamera()->RenderGizmos();
+	GetSceneCamera()->PostRender();
 
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)

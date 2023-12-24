@@ -30,7 +30,7 @@ public:
 	virtual void DrawInspector() = 0;
 
 	virtual void Init() {}
-	virtual void Update() {}
+	virtual void Update(float dt) {}
 
 	virtual std::string GetIcon() = 0;
 

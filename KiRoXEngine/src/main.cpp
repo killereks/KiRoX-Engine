@@ -127,6 +127,8 @@ int main(int argc, char* argv[]) {
 
 	while (!glfwWindowShouldClose(window))
 	{
+		Sleep(5);
+
 		currentTime = glfwGetTime();
 		double frameDiff = currentTime - previousTime;
 		Engine::deltaTime = (float)frameDiff;
@@ -141,13 +143,10 @@ int main(int argc, char* argv[]) {
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 
-		glClearColor(0.1, 0.2, 0.3, 1.0);
-
-		ImGui::ShowDemoWindow();
-
 		// enable docking
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
+		glClearColor(0.1, 0.2, 0.3, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		engine.Update();

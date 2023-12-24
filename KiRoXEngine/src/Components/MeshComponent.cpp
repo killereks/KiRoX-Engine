@@ -164,10 +164,10 @@ void MeshComponent::SimpleDraw(Shader* shader)
 		Bounds* bounds = GetBounds();
 		if (bounds != nullptr)
 		{
-			Gizmos::DrawWireCube(bounds->GetCenter(), bounds->GetSize(), glm::vec3(1.0));
+			//Gizmos::DrawWireCube(bounds->GetCenter(), bounds->GetSize(), glm::vec3(1.0));
 
-			shader->setVec3("boundingBoxMin", bounds->GetMin());
-			shader->setVec3("boundingBoxMax", bounds->GetMax());
+			//shader->setVec3("boundingBoxMin", bounds->GetMin());
+			//shader->setVec3("boundingBoxMax", bounds->GetMax());
 		}
 
 		meshFilter->DrawCall();

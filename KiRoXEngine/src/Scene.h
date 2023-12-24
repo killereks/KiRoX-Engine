@@ -36,7 +36,7 @@ public:
 
 	void CopyFrom(Scene* other);
 	void DuplicateEntity(Entity* entity);
-	
+
 	void CubeScene();
 
 	void SerializeEntity(YAML::Emitter& out, Entity* ent);
@@ -72,7 +72,7 @@ public:
 	}
 
 	template<typename T>
-	T* FindComponentOfType(){
+	T* FindComponentOfType() {
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
 
 		std::vector<Entity*> allEntities = GetAllEntities();
@@ -85,6 +85,23 @@ public:
 			}
 		}
 		return nullptr;
+	}
+
+	template<typename T>
+	std::vector<T*> FindComponentsOfType() {
+		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+
+		std::vector<Entity*> allEntities = GetAllEntities();
+
+		std::vector<T*> componentsOut;
+
+		for (Entity* ent : allEntities) {
+			if (ent->HasComponent<T>()) {
+				componentsOut.push_back((T*) ent->GetComponent<T>());
+			}
+		}
+
+		return componentsOut;
 	}
 };
 
