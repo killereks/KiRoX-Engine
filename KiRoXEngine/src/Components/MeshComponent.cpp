@@ -168,9 +168,6 @@ void MeshComponent::SimpleDraw(Shader* shader)
 
 			shader->setVec3("boundingBoxMin", bounds->GetMin());
 			shader->setVec3("boundingBoxMax", bounds->GetMax());
-
-			Gizmos::DrawWireSphere(bounds->GetMin(), 0.5f, glm::vec3(1.0, 0.0, 0.0));
-			Gizmos::DrawWireSphere(bounds->GetMax(), 0.5f, glm::vec3(0.0, 1.0, 0.0));
 		}
 
 		meshFilter->DrawCall();

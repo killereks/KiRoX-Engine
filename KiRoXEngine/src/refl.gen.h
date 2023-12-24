@@ -5,6 +5,7 @@
 #include "Components/CameraComponent.h"
 #include "Components/Component.h"
 #include "Components/MeshComponent.h"
+#include "Components/TestComponent.h"
 #include "Components/TransformComponent.h"
 using namespace rttr;
 
@@ -29,6 +30,11 @@ registration::class_<MeshComponent>("MeshComponent")
 .constructor<>()
 .property("meshUUID", &MeshComponent::meshUUID)
 .method("UpdateUUID", &MeshComponent::UpdateUUID)
+;
+
+registration::class_<TestComponent>("TestComponent")
+.constructor<>()
+.property("age", &TestComponent::age)
 ;
 
 registration::class_<TransformComponent>("TransformComponent")
@@ -57,6 +63,11 @@ ok = true;
 return dynamic_cast<MeshComponent*>(comp);
 }
 
+inline TestComponent* converter_TestComponent(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<TestComponent*>(comp);
+}
+
 inline TransformComponent* converter_TransformComponent(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<TransformComponent*>(comp);
@@ -72,6 +83,9 @@ return rttr::type::get<Component*>();
 if (name == "MeshComponent"){
 return rttr::type::get<MeshComponent*>();
 }
+if (name == "TestComponent"){
+return rttr::type::get<TestComponent*>();
+}
 if (name == "TransformComponent"){
 return rttr::type::get<TransformComponent*>();
 }
@@ -85,6 +99,9 @@ return new CameraComponent();
 if (name == "MeshComponent"){
 return new MeshComponent();
 }
+if (name == "TestComponent"){
+return new TestComponent();
+}
 if (name == "TransformComponent"){
 return new TransformComponent();
 }
@@ -95,6 +112,7 @@ static void RegisterTypes(){
 rttr::type::get<Component*>().register_converter_func(converter_CameraComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Component);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
+rttr::type::get<Component*>().register_converter_func(converter_TestComponent);
 rttr::type::get<Component*>().register_converter_func(converter_TransformComponent);
 }
 

@@ -225,6 +225,7 @@
     <ClCompile Include="src\Assets\Texture.cpp" />
     <ClCompile Include="src\Components\TransformComponent.cpp" />
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
+    <ClCompile Include="src\Components\TestComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\mesh_simp\Simplify.h" />
@@ -505,6 +506,8 @@
     <ClInclude Include="src\Assets\Texture.h" />
     <ClInclude Include="src\Components\TransformComponent.h" />
     <ClInclude Include="src\Tools\StatsCounter.h" />
+    <ClInclude Include="src\Components\TestComponent.h" />
+    <ClInclude Include="src\Tools\StringTools.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\assimp-vc143-mtd.lib" />

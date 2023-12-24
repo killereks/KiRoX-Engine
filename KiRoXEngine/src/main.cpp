@@ -87,22 +87,24 @@ int main(int argc, char* argv[]) {
 	// load a font
 	std::string fontPath = basePath;
 	fontPath = fontPath.substr(0, fontPath.find_last_of("\\/"));
-	fontPath += "/Ubuntu.ttf";
+	fontPath += "\\Ubuntu.ttf";
 	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 20.0f);
 
 	// SETUP ICONS
 	std::string iconPath = basePath;
 	iconPath = iconPath.substr(0, iconPath.find_last_of("\\/"));
-	iconPath += "/fontawesome-webfont.ttf";
+	iconPath += "\\fontawesome-webfont.ttf";
 
-	static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+	static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
 	ImFontConfig icons_config;
 	icons_config.MergeMode = true;
 	icons_config.PixelSnapH = true;
 	float baseFontSize = 30.0f;
 	float iconFontSize = baseFontSize * 2.0f / 3.0f;
 	icons_config.GlyphMinAdvanceX = iconFontSize;
-	io.Fonts->AddFontFromFileTTF(iconPath.c_str(), iconFontSize, &icons_config, icon_ranges);
+	if (!io.Fonts->AddFontFromFileTTF(iconPath.c_str(), iconFontSize, &icons_config, icon_ranges)) {
+		printf("Error loading font: %s\n", iconPath.c_str());
+	}
 
 	// enable docking
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -140,6 +142,8 @@ int main(int argc, char* argv[]) {
 		ImGuizmo::BeginFrame();
 
 		glClearColor(0.1, 0.2, 0.3, 1.0);
+
+		ImGui::ShowDemoWindow();
 
 		// enable docking
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);

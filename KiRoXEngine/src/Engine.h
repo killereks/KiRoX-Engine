@@ -16,10 +16,17 @@ enum class SceneState
 	Editor, Playing, Paused, OneTick
 };
 
+enum class RenderMode {
+	Lit,
+	Wireframe
+};
+
 class Engine
 {
 	ImGuizmo::OPERATION currentOperation;
-	ImGuizmo::MODE currentMode = ImGuizmo::MODE::WORLD;
+	ImGuizmo::MODE currentGizmoMode = ImGuizmo::MODE::WORLD;
+
+	RenderMode currentRenderMode = RenderMode::Lit;
 
 	SceneState currentSceneState = SceneState::Editor;
 
@@ -64,6 +71,8 @@ public:
 			// completely reload active scene
 			//activeScene.get()->LoadScene(activeScene.get()->filePath);
 			activeScene.get()->CopyFrom(scene.get());
+
+			ImGui::SetWindowFocus("Scene");
 			break;
 		case SceneState::Playing:
 			// Copy current scene and play it

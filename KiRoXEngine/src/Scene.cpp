@@ -13,6 +13,7 @@
 #include "refl.gen.h"
 
 #include "Tools/Stopwatch.h"
+#include "Tools/StringTools.h"
 #include "Macros.h"
 #include "Assets/AssetManager.h"
 
@@ -264,13 +265,24 @@ void Scene::DrawInspector()
 	if (ImGui::BeginPopup("AddComponentPopup", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
 		ImGui::SeparatorText("General");
 
-		if (ImGui::MenuItem("Camera")) {
-			selectedEntity->AddComponent<CameraComponent>();
-		}
+		auto components = rttr::type::get<Component>().get_derived_classes();
 
-		if (ImGui::MenuItem("Mesh Renderer")) {
-			selectedEntity->AddComponent<MeshComponent>();
-		} 
+		static char searchBuffer[128] = "";
+		ImGui::InputText("##ComponentSearch", searchBuffer, sizeof(searchBuffer));
+
+		for (auto& comp : components) {
+			if (comp.get_name() == "TransformComponent") continue;
+
+			std::string compName = comp.get_name();
+			std::string lowercaseName = StringTools::ToLowerCase(compName);
+
+			if (lowercaseName.find(searchBuffer) != std::string::npos) {
+				if (ImGui::MenuItem(compName.c_str())) {
+					Component* newCompInstance = Reflection::CreateComponent(comp.get_name());
+					selectedEntity->AddComponent(newCompInstance);
+				}
+			}
+		}
 
 		ImGui::EndPopup();
 	}
@@ -605,11 +617,10 @@ void Scene::LoadScene(std::string path)
 			}
 
 			if (componentInstance) {
-				std::cout << "Adding component " << componentInstance->GetName() << " to entity " << newEntity->GetName() << "\n";
 				newEntity->AddComponent(componentInstance);
 			}
 			else {
-				std::cout << "Error adding component " << componentInstance->GetName() << " to entity " << newEntity->GetName() << "\n";
+				std::cout << "Error, could not add " << strCompName << " component to entity " << name << "\n";
 			}
 		}
 

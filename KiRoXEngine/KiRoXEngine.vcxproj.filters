@@ -68,6 +68,7 @@
     <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
     <ClCompile Include="src\Rendering\HZB.cpp" />
     <ClCompile Include="src\Assets\ComputeShader.cpp" />
+    <ClCompile Include="src\Components\TestComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -348,6 +349,8 @@
     <ClInclude Include="src\Rendering\HZB.h" />
     <ClInclude Include="src\Assets\ComputeShader.h" />
     <ClInclude Include="Dependencies\mesh_simp\Simplify.h" />
+    <ClInclude Include="src\Components\TestComponent.h" />
+    <ClInclude Include="src\Tools\StringTools.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

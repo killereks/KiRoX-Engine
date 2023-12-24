@@ -6,30 +6,12 @@ Entities:
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
   - Entity: Quad
-    UUID: 9cbb2ff5-d5c7-44ff-a8b8-f81ca015220d
+    UUID: 706423aa-a967-4c20-abd3-f01d6153ecb3
     Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
     TransformComponent:
-      position: [6.55714464, 5.18173313, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 2.25455022, 1]
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-  - Entity: Quad
-    UUID: 09cfbeea-76e0-4728-a447-55ff1ee34874
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-5.69433451, 3.36925054, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-  - Entity: Quad
-    UUID: c36f4134-e373-4ccf-a178-11845e88f438
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [0, 3.36925054, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
+      position: [0, 0, 0]
+      rotation: [0.707106769, 0, 0, 0.707106769]
+      scale: [32.5584717, 32.5576057, 1.11370552]
     MeshComponent:
       meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
   - Entity: Camera
@@ -50,11 +32,29 @@ Entities:
       orthoNear: 1
       orthoFar: 100
   - Entity: Quad
-    UUID: 706423aa-a967-4c20-abd3-f01d6153ecb3
+    UUID: c36f4134-e373-4ccf-a178-11845e88f438
     Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
     TransformComponent:
-      position: [0, 0, 0]
-      rotation: [0.707106769, 0, 0, 0.707106769]
-      scale: [32.5584717, 32.5576057, 1.11370552]
+      position: [0, 3.36925054, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
+  - Entity: Quad
+    UUID: 09cfbeea-76e0-4728-a447-55ff1ee34874
+    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
+    TransformComponent:
+      position: [-5.69433451, 3.36925054, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
+  - Entity: Quad
+    UUID: 9cbb2ff5-d5c7-44ff-a8b8-f81ca015220d
+    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
+    TransformComponent:
+      position: [6.55714464, 5.18173313, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 2.25455022, 1]
     MeshComponent:
       meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931

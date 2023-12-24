@@ -92,6 +92,19 @@ void Engine::Update()
 
 void Engine::RenderScene(Shader* shader)
 {
+	switch (currentRenderMode) {
+		case RenderMode::Lit:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			break;
+		}
+		case RenderMode::Wireframe:
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			break;
+		}
+	}
+
 	std::vector<MeshComponent*> meshComponents;
 
 	for (auto& entity : activeScene.get()->GetEntities()) {
@@ -332,23 +345,28 @@ void Engine::RenderToolbar()
 		{
 			if (currentSceneState == SceneState::Editor)
 			{
-				if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "CTRL+S"))
+				if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save As...", "CTRL+S"))
 				{
 					std::string path;
 
-					// open save file dialog
+					// Open save file dialog
 					HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 					if (SUCCEEDED(hr)) {
-						IFileOpenDialog* pFileOpen;
+						IFileSaveDialog* pFileSave;
 
-						hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+						hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL, IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
 
 						if (SUCCEEDED(hr)) {
-							hr = pFileOpen->Show(NULL);
+							// Set default extension to .scene
+							COMDLG_FILTERSPEC fileTypes[] = { { L"Scene Files", L"*.scene" } };
+							pFileSave->SetFileTypes(1, fileTypes);
+							pFileSave->SetDefaultExtension(L"scene");
+
+							hr = pFileSave->Show(NULL);
 
 							if (SUCCEEDED(hr)) {
 								IShellItem* pItem;
-								hr = pFileOpen->GetResult(&pItem);
+								hr = pFileSave->GetResult(&pItem);
 								if (SUCCEEDED(hr)) {
 									LPWSTR pszFilePath;
 									hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
@@ -363,17 +381,16 @@ void Engine::RenderToolbar()
 									pItem->Release();
 								}
 							}
-							pFileOpen->Release();
+							pFileSave->Release();
 						}
 					}
 
-					//activeScene->SaveScene(projectPath + "/serialization_test.scene");
-					//activeScene->SaveScene(std::string(ofn.lpstrFile));
-					if (path != "") {
+					if (!path.empty()) {
 						activeScene->SaveScene(path);
 					}
 				}
-				if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Load", "CTRL+O"))
+
+				if (ImGui::MenuItem(ICON_FA_FILE_IMPORT " Open...", "CTRL+O"))
 				{
 					//activeScene->LoadScene(projectPath + "/serialization_test.scene");
 
@@ -438,18 +455,31 @@ void Engine::RenderToolbar()
 
 	// GIZMOS
 	ImGui::SameLine();
-	if (currentMode == ImGuizmo::MODE::WORLD)
+	if (currentGizmoMode == ImGuizmo::MODE::WORLD)
 	{
 		if (ImGui::Button(ICON_FA_EARTH_EUROPE " World"))
 		{
-			currentMode = ImGuizmo::MODE::LOCAL;
+			currentGizmoMode = ImGuizmo::MODE::LOCAL;
 		}
 	}
 	else
 	{
 		if (ImGui::Button(ICON_FA_VECTOR_SQUARE " Local"))
 		{
-			currentMode = ImGuizmo::MODE::WORLD;
+			currentGizmoMode = ImGuizmo::MODE::WORLD;
+		}
+	}
+
+	// RENDER MODE
+	ImGui::SameLine();
+	if (currentRenderMode == RenderMode::Lit) {
+		if (ImGui::Button("Lit Mode")) {
+			currentRenderMode = RenderMode::Wireframe;
+		}
+	}
+	else {
+		if (ImGui::Button("Wireframe Mode")) {
+			currentRenderMode = RenderMode::Lit;
 		}
 	}
 
@@ -530,7 +560,7 @@ void Engine::EditTransform(Entity* ent)
 	float* viewMatrixPtr = glm::value_ptr(viewMatrix);
 	float* projectionMatrixPtr = glm::value_ptr(projection);
 
-	ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, currentMode, matrixPtr, nullptr, &snap[0]);
+	ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, currentGizmoMode, matrixPtr, nullptr, &snap[0]);
 
 	if (ImGuizmo::IsUsing())
 	{

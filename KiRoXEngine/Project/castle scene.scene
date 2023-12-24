@@ -1,4 +1,3 @@
-Scene: Test Scene
 Entities:
   - Entity: Root
     UUID: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
@@ -6,15 +5,23 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Soldier
-    UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
+  - Entity: Camera
+    UUID: a9b0ae8d-1453-484e-9208-dd76eff6d935
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
     TransformComponent:
-      position: [-21.7210007, 47.3779984, -37.4039993]
-      rotation: [0.731353641, -0.194050342, -0.048940666, 0.651974797]
-      scale: [1.02987909, 1.03002059, 1.0297991]
-    MeshComponent:
-      meshName: 0fcd405e-215f-44de-b5c6-485cffe4c6c5
+      position: [-64.0317764, 52.9274483, -70.6600494]
+      rotation: [5.76702703e-08, 0.914296567, 5.76702703e-08, -0.40504542]
+      scale: [0.999998391, 1, 0.999998391]
+    CameraComponent:
+      nearClipPlane: 0.3
+      farClipPlane: 1000
+      fieldOfView: 60
+      left: -10
+      right: 10
+      top: 10
+      bottom: -10
+      orthoNear: 1
+      orthoFar: 100
   - Entity: Castle
     UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
@@ -24,20 +31,12 @@ Entities:
       scale: [25.0000381, 24.9999771, 25.0012283]
     MeshComponent:
       meshUUID: 2c6b7d7d-1565-4d96-bb4d-69d2c21bbda6
-  - Entity: Camera
-    UUID: a9b0ae8d-1453-484e-9208-dd76eff6d935
+  - Entity: Soldier
+    UUID: fdb94743-08f0-4397-aef1-d5e70c2d103b
     Parent: 086f1713-30e7-40f4-b1a1-3a31e6ecfdbf
     TransformComponent:
-      position: [-64.0317764, 52.9274483, -70.6600494]
-      rotation: [-5.76702703e-08, 0.914296567, -5.76702703e-08, -0.40504542]
-      scale: [0.999998391, 1, 0.999998391]
-    CameraComponent:
-      nearClipPlane: 0.300000012
-      farClipPlane: 1000
-      fieldOfView: 60
-      top: 10
-      bottom: -10
-      left: -10
-      right: 10
-      orthoNear: 1
-      orthoFar: 100
+      position: [-21.7210007, 47.3779984, -37.4039993]
+      rotation: [0.731353641, -0.194050342, -0.048940666, 0.651974797]
+      scale: [1.02987909, 1.03002059, 1.0297991]
+    MeshComponent:
+      meshUUID: 0fcd405e-215f-44de-b5c6-485cffe4c6c5

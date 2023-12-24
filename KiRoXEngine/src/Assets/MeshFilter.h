@@ -277,39 +277,41 @@ public:
 			return;
 		}
 
-		aiMesh* mesh = scene->mMeshes[0];
-
-		vertices.resize(mesh->mNumVertices);
-		indices.resize(mesh->mNumFaces * 3);
+		std::cout << "Found " << scene->mNumMeshes << " meshes in " << fileName << "\n";
 
 		bounds->Clear();
 
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-		{
-			glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		//for (int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+			//aiMesh* mesh = scene->mMeshes[meshIndex];
 
-			bounds->InsertPoint(vertex);
+		aiMesh* mesh = scene->mMeshes[0];
 
-			vertices[i] = vertex;
-
-			if (mesh->HasNormals())
+			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
-				normals.emplace_back(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
-			}
-			if (mesh->HasTextureCoords(0))
-			{
-				uvs.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, 1.0 - mesh->mTextureCoords[0][i].y));
-			}
-		}
+				glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-		{
-			aiFace face = mesh->mFaces[i];
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
-			{
-				indices.push_back(face.mIndices[j]);
+				bounds->InsertPoint(vertex);
+				vertices.emplace_back(vertex);
+
+				if (mesh->HasNormals())
+				{
+					normals.emplace_back(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+				}
+				if (mesh->HasTextureCoords(0))
+				{
+					uvs.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, 1.0 - mesh->mTextureCoords[0][i].y));
+				}
 			}
-		}
+
+			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+			{
+				aiFace face = mesh->mFaces[i];
+				for (unsigned int j = 0; j < face.mNumIndices; j++)
+				{
+					indices.emplace_back(face.mIndices[j]);
+				}
+			}
+		//}
 
 		//if (indices.size() / 3 >= 25000) {
 		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);

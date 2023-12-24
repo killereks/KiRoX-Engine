@@ -1,0 +1,17 @@
+Entities:
+  - Entity: Root
+    UUID: 21879707-da1a-4fa8-96a8-8561d00fbf82
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Empty
+    UUID: 9dcd05fe-85ce-41c7-ab9b-d8f3b6391fee
+    Parent: 21879707-da1a-4fa8-96a8-8561d00fbf82
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    TestComponent:
+      age: 23
+      money: 38
