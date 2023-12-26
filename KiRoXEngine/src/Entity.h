@@ -31,7 +31,7 @@ public:
 	const std::string& GetName() const { return name; }
 	void SetName(std::string newName) { name = newName; }
 
-	const std::vector<Entity*> &GetChildren() const { return children; }
+	const std::vector<Entity*> GetChildren() const { return children; }
 	Entity* GetParent() const { return parent; }
 
 	TransformComponent& GetTransform() { return transformComponent; }
@@ -46,6 +46,15 @@ public:
 	void SetUUID(const UUIDv4::UUID& uuid)
 	{
 		this->uuid = uuid;
+	}
+
+	bool IsAncestorOf(Entity* potentialAncestor) {
+		if (parent == nullptr) {
+			return false;
+		}
+		if (parent == potentialAncestor) return true;
+
+		return parent->IsAncestorOf(potentialAncestor);
 	}
 
 	void SetParent(Entity* parent);

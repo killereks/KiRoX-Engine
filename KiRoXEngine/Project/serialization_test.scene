@@ -3,21 +3,26 @@ Entities:
     UUID: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
     TransformComponent:
       position: [0, 0, 0]
-      rotation: [0, 0, 0, 1]
+      rotation: [0, 0, 0, 0]
       scale: [1, 1, 1]
-  - Entity: Ground
-    UUID: 706423aa-a967-4c20-abd3-f01d6153ecb3
+  - Entity: Quad
+    UUID: f061f5c3-aba7-4596-bea5-b6980c2443f5
     Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
     TransformComponent:
-      position: [0, 0, 0]
+      position: [5, 3, 0]
       rotation: [0, 0, 0, 1]
-      scale: [30, 1, 30]
-    BoxCollider:
-      {}
+      scale: [1, 2, 1]
     MeshComponent:
       meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: true
+  - Entity: Quad
+    UUID: 09cfbeea-76e0-4728-a447-55ff1ee34874
+    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
+    TransformComponent:
+      position: [-5.69433451, 2, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
   - Entity: Camera
     UUID: a3c89449-d89f-4f18-8fae-aa3c3950460c
     Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
@@ -36,111 +41,11 @@ Entities:
       orthoNear: 1
       orthoFar: 100
   - Entity: Quad
-    UUID: 09cfbeea-76e0-4728-a447-55ff1ee34874
+    UUID: d12bbb59-1bd4-4ce0-ab2c-a1ce62286575
     Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
     TransformComponent:
-      position: [-5.69433451, 2, 0]
+      position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
+      scale: [40, 1, 40]
     MeshComponent:
       meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-  - Entity: Quad
-    UUID: f061f5c3-aba7-4596-bea5-b6980c2443f5
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [5, 3, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 2, 1]
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-  - Entity: Quad
-    UUID: c89822c7-2283-4980-acad-9dc80083f0a1
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-1.19433451, 9, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: false
-  - Entity: Quad
-    UUID: 3bd75d1c-8b70-422a-beb8-20d39fae6fe4
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-3.19433451, 13, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: false
-  - Entity: Quad
-    UUID: 6beb5ea7-5ac0-4794-8612-be59c476e479
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-2.69433451, 4.5, 0.5]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: true
-  - Entity: Quad
-    UUID: 48ea6a48-b223-428a-83e0-3bc827c62e68
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-3.19433451, 19, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [2, 2, 2]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: false
-  - Entity: Quad
-    UUID: b888116a-d39d-4e5c-b895-40a05a1f9675
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-0.194334507, 27.5, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [2, 2, 2]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: false
-  - Entity: Quad
-    UUID: 880ca6b8-adf4-4e5f-98ca-f88bfa8c6ec5
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-0.194334507, 27.5, -10]
-      rotation: [0, 0, 0, 1]
-      scale: [2, 2, 2]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: false
-  - Entity: Quad
-    UUID: b3521691-3e75-498b-8c59-276df2faf174
-    Parent: 26d8a5fe-e5b6-4f41-8e36-968e5d50f913
-    TransformComponent:
-      position: [-0.194334507, 32, -8.5]
-      rotation: [0, 0, 0, 1]
-      scale: [2, 2, 2]
-    BoxCollider:
-      {}
-    MeshComponent:
-      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
-    Rigidbody:
-      isStatic: false

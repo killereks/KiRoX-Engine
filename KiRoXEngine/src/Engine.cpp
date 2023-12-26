@@ -18,6 +18,8 @@
 #include "Tools/StatsCounter.h"
 #include "Math/Mathf.h"
 
+#include "Tools/StringTools.h"
+
 #include <ShObjIdl.h>
 
 Engine::Engine()
@@ -569,15 +571,20 @@ void Engine::EditTransform(Entity* ent)
 	float* viewMatrixPtr = glm::value_ptr(viewMatrix);
 	float* projectionMatrixPtr = glm::value_ptr(projection);
 
-	ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, currentGizmoMode, matrixPtr, nullptr, &snap[0]);
+	if (useSnap) {
+		ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, currentGizmoMode, matrixPtr, nullptr, &snap[0]);
+	}
+	else {
+		ImGuizmo::Manipulate(viewMatrixPtr, projectionMatrixPtr, currentOperation, currentGizmoMode, matrixPtr, nullptr, nullptr);
+	}
 
 	if (ImGuizmo::IsUsing())
 	{
 		glm::vec3 translation, rotation, scale;
 		ImGuizmo::DecomposeMatrixToComponents(matrixPtr, &translation.x, &rotation.x, &scale.x);
 
-		ent->GetTransform().SetLocalPosition(translation);
-		ent->GetTransform().SetLocalRotation(rotation);
-		ent->GetTransform().SetLocalScale(scale);
+		ent->GetTransform().SetWorldPosition(translation);
+		ent->GetTransform().SetWorldRotation(rotation);
+		ent->GetTransform().SetWorldScale(scale);
 	}
 }

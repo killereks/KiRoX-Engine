@@ -74,8 +74,12 @@ void Entity::CopyFrom(Entity* otherEntity)
 
 void Entity::SetParent(Entity* _parent)
 {
-	if (_parent == nullptr)
-	{
+	if (_parent == nullptr || _parent == this){
+		return;
+	}
+
+	if (_parent->IsAncestorOf(this)) {
+		std::cout << "Trying to parent " << _parent->GetName() << " to its own child!\n";
 		return;
 	}
 
@@ -84,8 +88,23 @@ void Entity::SetParent(Entity* _parent)
 	}
 
 	assert(_parent != nullptr);
-	
+
+	// Store current world transformation
+	glm::vec3 currentWorldPosition = transformComponent.GetWorldPosition();
+	glm::quat currentWorldRotation = transformComponent.GetWorldRotation();
+	glm::vec3 currentWorldScale = transformComponent.GetWorldScale();
+
 	_parent->AddChild(this);
+
+	// Recalculate local transformation relative to new parent
+	glm::vec3 newLocalPosition = currentWorldPosition - _parent->transformComponent.GetWorldPosition();
+	glm::quat newLocalRotation = glm::inverse(_parent->transformComponent.GetWorldRotation()) * currentWorldRotation;
+	newLocalRotation = glm::inverse(newLocalRotation);  // Normalize quaternion
+	glm::vec3 newLocalScale = currentWorldScale / _parent->transformComponent.GetWorldScale();
+
+	transformComponent.SetLocalPosition(currentWorldPosition);
+	transformComponent.SetLocalRotation(currentWorldRotation);
+	transformComponent.SetLocalScale(currentWorldScale);
 
 	parent = _parent;
 }
@@ -94,10 +113,12 @@ void Entity::AddChild(Entity* child)
 {
 	assert(child != nullptr);
 	children.push_back(child);
+	child->parent = this;
 }
 
 void Entity::RemoveChild(Entity* child)
 {
 	assert(child != nullptr);
 	children.erase(std::remove(children.begin(), children.end(), child), children.end());
+	child->parent = nullptr;
 }

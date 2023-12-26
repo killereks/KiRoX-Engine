@@ -1,4 +1,6 @@
 ﻿#include "Scene.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include "Editor/Console.h"
 
@@ -120,7 +122,7 @@ void Scene::DrawEntity(Entity* entity)
 	{
 		if (isCollapsed)
 		{
-			ImGui::Text(" " ICON_FA_CARET_RIGHT);
+			ImGui::Text(ICON_FA_CARET_RIGHT);
 			if (ImGui::IsItemClicked())
 			{
 				storage->SetBool(id, false);
@@ -128,7 +130,7 @@ void Scene::DrawEntity(Entity* entity)
 		}
 		else
 		{
-			ImGui::Text(" " ICON_FA_CARET_DOWN);
+			ImGui::Text(ICON_FA_CARET_DOWN);
 			if (ImGui::IsItemClicked())
 			{
 				storage->SetBool(id, true);
@@ -166,6 +168,24 @@ void Scene::DrawEntity(Entity* entity)
 		selectedEntity = entity;
 	}
 
+	if (ImGui::BeginDragDropTarget()) {
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY")) {
+			Entity* draggedEntity = dynamic_cast<Entity*>(*(Entity**)payload->Data);
+
+			if (draggedEntity != nullptr) {
+				draggedEntity->SetParent(entity);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (entity != rootEntity && ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID)) {
+		Entity** entityPointer = &entity;
+		ImGui::SetDragDropPayload("ENTITY", entityPointer, sizeof(entityPointer));
+		ImGui::Text("Dragging %s", entity->GetName().c_str());
+		ImGui::EndDragDropSource();
+	}
+
 	bool isFirst = true;
 	// DRAW COMPONENTS
 	for (auto component : entity->GetAllComponents())
@@ -187,11 +207,9 @@ void Scene::DrawEntity(Entity* entity)
 		for (auto ent : entity->GetChildren())
 		{
 			ImGui::PushID(ent->GetName().c_str());
-			ImGui::Indent();
-			ImGui::Indent();
+			ImGui::Indent(30.0f);
 			DrawEntity(ent);
-			ImGui::Unindent();
-			ImGui::Unindent();
+			ImGui::Unindent(30.0f);
 			ImGui::PopID();
 		}
 	}

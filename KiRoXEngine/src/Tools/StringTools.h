@@ -21,4 +21,8 @@ public:
 		std::transform(result.begin(), result.end(), result.begin(), ::tolower);
 		return result;
 	}
+
+	static std::string GetVectorAsString(glm::vec3& vec) {
+		return "X: " + std::to_string(vec.x) + ", Y: " + std::to_string(vec.y) + ", Z: " + std::to_string(vec.z);
+	}
 };
