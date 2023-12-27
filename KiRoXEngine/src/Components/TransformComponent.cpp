@@ -10,37 +10,73 @@ TransformComponent::TransformComponent()
 	scale = glm::vec3(1.0f);
 }
 
+void DrawColoredVector(glm::vec3& vec, const glm::vec3& resetValue, const char* label) {
+	ImGui::PushID(label);
+
+	// Define colors for X, Y, Z buttons
+	ImVec4 colorX = ImVec4(0.91f, 0.3f, 0.24f, 1.0f);	// #e74c3c
+	ImVec4 colorY = ImVec4(0.3f, 0.79f, 0.31f, 1.0f);   // #4caf50
+	ImVec4 colorZ = ImVec4(0.2f, 0.6f, 0.86f, 1.0f);    // #3498db
+
+	float buttonWidth = 30.0f;
+
+	ImGui::TableNextColumn();
+	ImGui::Text(label);
+
+	ImGui::TableNextColumn();
+	ImGui::PushStyleColor(ImGuiCol_Button, colorX);
+	if (ImGui::Button("X", ImVec2(buttonWidth, 0))) {
+		vec = resetValue;
+	}
+	ImGui::PopStyleColor();
+	ImGui::SameLine();
+	ImGui::DragFloat("##X", &vec.x, 0.1f);
+
+	ImGui::TableNextColumn();
+	ImGui::PushStyleColor(ImGuiCol_Button, colorY);
+	if (ImGui::Button("Y", ImVec2(buttonWidth, 0))) {
+		vec = resetValue;
+	}
+	ImGui::PopStyleColor();
+	ImGui::SameLine();
+	ImGui::DragFloat("##Y", &vec.y, 0.1f);
+
+	ImGui::TableNextColumn();
+	ImGui::PushStyleColor(ImGuiCol_Button, colorZ);
+	if (ImGui::Button("Z", ImVec2(buttonWidth, 0))) {
+		vec = resetValue;
+	}
+	ImGui::PopStyleColor();
+	ImGui::SameLine();
+	ImGui::DragFloat("##Z", &vec.z, 0.1f);
+
+	ImGui::PopID();
+}
+
 void TransformComponent::DrawInspector()
 {
-	ImGui::Text("Position");
-	ImGui::Separator();
-	ImGui::DragFloat3("##Position", &position[0], 0.1f);
-	ImGui::SameLine();
-	if (ImGui::Button("R##PositionReset")) {
-		SetLocalPosition(glm::vec3(0.0));
-	}
+	ImGuiTableFlags flags =
+		ImGuiTableFlags_NoPadInnerX |
+		ImGuiTableFlags_NoPadOuterX;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
+
+	ImGui::BeginTable("TransformTable", 4, flags);
 
 	glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
+	// Column 2: Position Input (X, Y, Z)
+	DrawColoredVector(position, glm::vec3(0.0f), "Position");
+	DrawColoredVector(euler, glm::vec3(0.0f), "Rotation");
+	DrawColoredVector(scale, glm::vec3(1.0f), "Scale");
 
-	ImGui::Text("Rotation");
-	ImGui::Separator();
-	if (ImGui::DragFloat3("##Rotation", &rotation[0], 0.1f)) {
-		rotation = glm::quat(glm::radians(euler));
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("R##EulerReset")) {
-		SetLocalRotation(glm::quat());
-	}
+	rotation = glm::quat(glm::radians(euler));
 
-	ImGui::Text("Scale");
-	ImGui::Separator();
-	ImGui::DragFloat3("##Scale", &scale[0], 0.1f);
+	ImGui::EndTable();
 
-	ImGui::SameLine();
-	if (ImGui::Button("R##ScaleReset")) {
-		SetLocalScale(glm::vec3(1.0));
-	}
+	ImGui::PopStyleVar(2);
 }
+
 
 void TransformComponent::SetWorldPosition(glm::vec3 pos)
 {
@@ -56,6 +92,7 @@ void TransformComponent::SetWorldPosition(glm::vec3 pos)
 void TransformComponent::SetWorldRotation(glm::vec3 euler)
 {
 	glm::quat newWorldRotation = glm::quat(euler * glm::pi<float>() / 180.0f);
+	newWorldRotation = glm::normalize(newWorldRotation);
 	SetWorldRotation(newWorldRotation);
 }
 
@@ -63,12 +100,11 @@ void TransformComponent::SetWorldRotation(glm::quat quat)
 {
 	Entity* parent = owner->GetParent();
 	if (parent) {
-		rotation = glm::inverse(parent->GetTransform().GetWorldRotation()) * quat;
+		rotation = glm::normalize(glm::inverse(parent->GetTransform().GetWorldRotation()) * quat);
 	}
 	else {
-		rotation = quat;
+		rotation = glm::normalize(quat);
 	}
-	rotation = glm::normalize(rotation);
 }
 
 void TransformComponent::SetWorldScale(glm::vec3 scale)
@@ -125,9 +161,9 @@ glm::vec3 TransformComponent::GetWorldPosition() const {
 glm::quat TransformComponent::GetWorldRotation() const {
 	Entity* parent = owner->GetParent();
 	if (parent) {
-		return parent->GetTransform().GetWorldRotation() * rotation;
+		return glm::normalize(parent->GetTransform().GetWorldRotation() * rotation);
 	}
-	return rotation;
+	return glm::normalize(rotation);
 }
 
 glm::vec3 TransformComponent::GetWorldScale() const {
@@ -140,7 +176,7 @@ glm::vec3 TransformComponent::GetWorldScale() const {
 
 glm::vec3 TransformComponent::GetLocalPosition() const { return position;}
 
-glm::quat TransformComponent::GetLocalRotation() const { return rotation;}
+glm::quat TransformComponent::GetLocalRotation() const { return glm::normalize(rotation);}
 
 glm::vec3 TransformComponent::GetLocalScale() const { return scale; }
 

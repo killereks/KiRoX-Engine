@@ -32,8 +32,8 @@ CameraComponent::~CameraComponent()
 
 void CameraComponent::DrawInspector() {
 	if (cameraType == CameraType::Perspective) {
-		ImGui::InputFloat("Near Clip Plane", &nearClipPlane);
-		ImGui::InputFloat("Far Clip Plane", &farClipPlane);
+		ImGui::DragFloat("Near Clip Plane", &nearClipPlane);
+		ImGui::DragFloat("Far Clip Plane", &farClipPlane);
 
 		ImGui::SliderFloat("Field Of View", &fieldOfView, 0.0f, 179.0f);
 
@@ -42,14 +42,14 @@ void CameraComponent::DrawInspector() {
 		}
 	}
 	else if (cameraType == CameraType::Orthographic) {
-		ImGui::InputFloat("Left", &left);
-		ImGui::InputFloat("Right", &right);
+		ImGui::DragFloat("Left", &left);
+		ImGui::DragFloat("Right", &right);
 		ImGui::Separator();
-		ImGui::InputFloat("Top", &top);
-		ImGui::InputFloat("Bottom", &bottom);
+		ImGui::DragFloat("Top", &top);
+		ImGui::DragFloat("Bottom", &bottom);
 		ImGui::Separator();
-		ImGui::InputFloat("Near", &orthoNear);
-		ImGui::InputFloat("Far", &orthoFar);
+		ImGui::DragFloat("Near", &orthoNear);
+		ImGui::DragFloat("Far", &orthoFar);
 		ImGui::Separator();
 		if (ImGui::Button("Switch to Perspective", ImVec2(-1, 0))) {
 			cameraType = CameraType::Perspective;
@@ -59,51 +59,91 @@ void CameraComponent::DrawInspector() {
 
 void CameraComponent::OnDrawGizmos()
 {
-	// draw the frustum
-	float halfFOV = glm::radians(fieldOfView) * 0.5f;
-	
-	float nearHeight = 2.0f * glm::tan(halfFOV) * nearClipPlane;
-	float nearWidth = nearHeight * aspect;
+	if (cameraType == CameraType::Perspective) {
+		// draw the frustum
+		float halfFOV = glm::radians(fieldOfView) * 0.5f;
 
-	float farHeight = 2.0f * glm::tan(halfFOV) * farClipPlane;
-	float farWidth = farHeight * aspect;
+		float nearHeight = 2.0f * glm::tan(halfFOV) * nearClipPlane;
+		float nearWidth = nearHeight * aspect;
 
-	TransformComponent& transform = owner->GetTransform();
+		float farHeight = 2.0f * glm::tan(halfFOV) * farClipPlane;
+		float farWidth = farHeight * aspect;
 
-	glm::vec3 nearCenter = transform.GetWorldPosition() - transform.GetForward() * nearClipPlane;
-	glm::vec3 farCenter = transform.GetWorldPosition() - transform.GetForward() * farClipPlane;
+		TransformComponent& transform = owner->GetTransform();
 
-	// NEAR
-	glm::vec3 nearTopLeft =		nearCenter - transform.GetRight() * (nearWidth * 0.5f) + transform.GetUp() * (nearHeight * 0.5f);
-	glm::vec3 nearTopRight =	nearCenter + transform.GetRight() * (nearWidth * 0.5f) + transform.GetUp() * (nearHeight * 0.5f);
+		glm::vec3 nearCenter = transform.GetWorldPosition() - transform.GetForward() * nearClipPlane;
+		glm::vec3 farCenter = transform.GetWorldPosition() - transform.GetForward() * farClipPlane;
 
-	glm::vec3 nearBottomLeft =	nearCenter - transform.GetRight() * (nearWidth * 0.5f) - transform.GetUp() * (nearHeight * 0.5f);
-	glm::vec3 nearBottomRight = nearCenter + transform.GetRight() * (nearWidth * 0.5f) - transform.GetUp() * (nearHeight * 0.5f);
+		// NEAR
+		glm::vec3 nearTopLeft = nearCenter - transform.GetRight() * (nearWidth * 0.5f) + transform.GetUp() * (nearHeight * 0.5f);
+		glm::vec3 nearTopRight = nearCenter + transform.GetRight() * (nearWidth * 0.5f) + transform.GetUp() * (nearHeight * 0.5f);
 
-	// FAR
-	glm::vec3 farTopLeft =		farCenter - transform.GetRight() * (farWidth * 0.5f) + transform.GetUp() * (farHeight * 0.5f);
-	glm::vec3 farTopRight =		farCenter + transform.GetRight() * (farWidth * 0.5f) + transform.GetUp() * (farHeight * 0.5f);
+		glm::vec3 nearBottomLeft = nearCenter - transform.GetRight() * (nearWidth * 0.5f) - transform.GetUp() * (nearHeight * 0.5f);
+		glm::vec3 nearBottomRight = nearCenter + transform.GetRight() * (nearWidth * 0.5f) - transform.GetUp() * (nearHeight * 0.5f);
 
-	glm::vec3 farBottomLeft =	farCenter - transform.GetRight() * (farWidth * 0.5f) - transform.GetUp() * (farHeight * 0.5f);
-	glm::vec3 farBottomRight =	farCenter + transform.GetRight() * (farWidth * 0.5f) - transform.GetUp() * (farHeight * 0.5f);
+		// FAR
+		glm::vec3 farTopLeft = farCenter - transform.GetRight() * (farWidth * 0.5f) + transform.GetUp() * (farHeight * 0.5f);
+		glm::vec3 farTopRight = farCenter + transform.GetRight() * (farWidth * 0.5f) + transform.GetUp() * (farHeight * 0.5f);
 
-	// GIZMOS
-	Gizmos::DrawLine(nearTopLeft, nearTopRight, glm::vec3(1.0));
-	Gizmos::DrawLine(nearTopRight, nearBottomRight, glm::vec3(1.0));
-	Gizmos::DrawLine(nearBottomRight, nearBottomLeft, glm::vec3(1.0));
-	Gizmos::DrawLine(nearBottomLeft, nearTopLeft, glm::vec3(1.0));
+		glm::vec3 farBottomLeft = farCenter - transform.GetRight() * (farWidth * 0.5f) - transform.GetUp() * (farHeight * 0.5f);
+		glm::vec3 farBottomRight = farCenter + transform.GetRight() * (farWidth * 0.5f) - transform.GetUp() * (farHeight * 0.5f);
 
-	Gizmos::DrawLine(farTopLeft, farTopRight, glm::vec3(1.0));
-	Gizmos::DrawLine(farTopRight, farBottomRight, glm::vec3(1.0));
-	Gizmos::DrawLine(farBottomRight, farBottomLeft, glm::vec3(1.0));
-	Gizmos::DrawLine(farBottomLeft, farTopLeft, glm::vec3(1.0));
+		// GIZMOS
+		Gizmos::DrawLine(nearTopLeft, nearTopRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearTopRight, nearBottomRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomRight, nearBottomLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomLeft, nearTopLeft, glm::vec3(1.0));
 
-	Gizmos::DrawLine(nearTopLeft, farTopLeft, glm::vec3(1.0));
-	Gizmos::DrawLine(nearTopRight, farTopRight, glm::vec3(1.0));
-	Gizmos::DrawLine(nearBottomRight, farBottomRight, glm::vec3(1.0));
-	Gizmos::DrawLine(nearBottomLeft, farBottomLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(farTopLeft, farTopRight, glm::vec3(1.0));
+		Gizmos::DrawLine(farTopRight, farBottomRight, glm::vec3(1.0));
+		Gizmos::DrawLine(farBottomRight, farBottomLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(farBottomLeft, farTopLeft, glm::vec3(1.0));
 
-	Gizmos::DrawRay(transform.GetWorldPosition(), transform.GetForward(), glm::vec3(1.0, 1.0, 0.0));
+		Gizmos::DrawLine(nearTopLeft, farTopLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(nearTopRight, farTopRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomRight, farBottomRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomLeft, farBottomLeft, glm::vec3(1.0));
+	}
+	else if (cameraType == CameraType::Orthographic) {
+		// draw the frustum
+		TransformComponent& transform = owner->GetTransform();
+
+		// ORTHO
+		float orthoWidth = right - left;
+		float orthoHeight = top - bottom;
+
+		glm::vec3 orthoCenter = transform.GetWorldPosition() - transform.GetForward() * orthoNear;
+
+		// Calculate frustum corners
+		glm::vec3 nearTopLeft = orthoCenter - transform.GetRight() * (orthoWidth * 0.5f) + transform.GetUp() * (orthoHeight * 0.5f);
+		glm::vec3 nearTopRight = orthoCenter + transform.GetRight() * (orthoWidth * 0.5f) + transform.GetUp() * (orthoHeight * 0.5f);
+		glm::vec3 nearBottomLeft = orthoCenter - transform.GetRight() * (orthoWidth * 0.5f) - transform.GetUp() * (orthoHeight * 0.5f);
+		glm::vec3 nearBottomRight = orthoCenter + transform.GetRight() * (orthoWidth * 0.5f) - transform.GetUp() * (orthoHeight * 0.5f);
+
+		glm::vec3 farTopLeft = nearTopLeft - transform.GetForward() * orthoFar;
+		glm::vec3 farTopRight = nearTopRight - transform.GetForward() * orthoFar;
+		glm::vec3 farBottomLeft = nearBottomLeft - transform.GetForward() * orthoFar;
+		glm::vec3 farBottomRight = nearBottomRight - transform.GetForward() * orthoFar;
+
+		// GIZMOS
+		// Draw near plane
+		Gizmos::DrawLine(nearTopLeft, nearTopRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearTopRight, nearBottomRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomRight, nearBottomLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomLeft, nearTopLeft, glm::vec3(1.0));
+
+		// Draw far plane
+		Gizmos::DrawLine(farTopLeft, farTopRight, glm::vec3(1.0));
+		Gizmos::DrawLine(farTopRight, farBottomRight, glm::vec3(1.0));
+		Gizmos::DrawLine(farBottomRight, farBottomLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(farBottomLeft, farTopLeft, glm::vec3(1.0));
+
+		// Draw connecting lines
+		Gizmos::DrawLine(nearTopLeft, farTopLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(nearTopRight, farTopRight, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomLeft, farBottomLeft, glm::vec3(1.0));
+		Gizmos::DrawLine(nearBottomRight, farBottomRight, glm::vec3(1.0));
+	}
 }
 
 void CameraComponent::RenderGizmos()

@@ -60,13 +60,13 @@ void Scene::DrawHierarchy()
 {
 	ImGui::Begin("Hierarchy");
 
-	if (ImGui::Button("Create Entity", ImVec2(-1, 0))) {
-		ImGui::OpenPopup("CreateEntityPopup");
+	if (ImGui::IsMouseReleased(1)) {
+		if (ImGui::IsWindowHovered()) {
+			ImGui::OpenPopup("CreateEntityPopup");
+		}
 	}
 
 	if (ImGui::BeginPopup("CreateEntityPopup", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
-		ImGui::SeparatorText("General");
-
 		if (ImGui::MenuItem("Empty")) {
 			CreateEntity("Empty");
 		}
@@ -77,9 +77,9 @@ void Scene::DrawHierarchy()
 			ent->AddComponent<CameraComponent>();
 		}
 
-		if (ImGui::BeginMenu("3D Object")) {
-			if (ImGui::MenuItem("Quad")) {
-				Entity* ent = CreateEntity("Quad");
+		if (ImGui::BeginMenu("3D")) {
+			if (ImGui::MenuItem("Empty Mesh")) {
+				Entity* ent = CreateEntity("Mesh");
 				ent->AddComponent<MeshComponent>();
 			}
 			ImGui::EndMenu();
@@ -231,7 +231,7 @@ void Scene::DrawInspector()
 	ImGui::PopItemWidth();
 	selectedEntity->SetName(name);
 
-	ImGui::Button(selectedEntity->GetUUID().str().c_str(), ImVec2(-1, 0));
+	ImGui::Text(selectedEntity->GetUUID().str().c_str(), ImVec2(-1, 0));
 
 	ImGui::Separator();
 
@@ -244,38 +244,79 @@ void Scene::DrawInspector()
 	//	PropertyDrawer::DrawProperty(prop, var);
 	//}
 
-	std::string displayName = selectedEntity->GetTransform().GetIcon() + " " + selectedEntity->GetTransform().GetName();
+	ImGuiStorage* storage = ImGui::GetStateStorage();
+	constexpr float ellipsisMenuWidth = 20.0f;
+	float width = ImGui::GetContentRegionAvail().x - ellipsisMenuWidth;
 
-	if (ImGui::CollapsingHeader(displayName.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		selectedEntity->GetTransform().DrawInspector();
-	}
+	int index = 0;
 
-	for (Component* component : selectedEntity->GetAllComponents()) {
-		if (ImGui::CollapsingHeader(component->GetName(), ImGuiTreeNodeFlags_DefaultOpen)) {
+	for (Component* component : selectedEntity->GetAllComponentsWithTransform()) {
+		if (component == nullptr) continue;
+
+		ImGui::PushID(index++);
+
+		ImGuiID id = ImGuiID(component->GetName());
+		bool isOpen = storage->GetBool(id, true);
+
+		std::string nameWithIcon = component->GetIcon() + " " + StringTools::FormatComponentName(component->GetName());
+
+		if (isOpen) {
+			nameWithIcon = ICON_FA_CARET_DOWN + nameWithIcon;
+		}
+		else {
+			nameWithIcon = ICON_FA_CARET_RIGHT + nameWithIcon;
+		}
+
+		ImGui::Text(nameWithIcon.c_str());
+		if (ImGui::IsItemClicked()) {
+			storage->SetBool(id, !isOpen);
+		}
+		ImGui::SameLine();
+
+		// CONTEXT MENU
+		ImGui::SetCursorPosX(width);
+
+		// Ellipsis button
+		ImGui::Text(ICON_FA_ELLIPSIS_VERTICAL);
+
+		if (ImGui::IsItemClicked()) {
+			ImGui::OpenPopup("ComponentContextMenu");
+		}
+
+		if (isOpen) {
+			ImGui::Indent();
+
 			component->OnDrawGizmos();
 			component->DrawInspector();
 
-			rttr::type type = rttr::type::get_by_name(component->GetName());
-			std::vector<rttr::method> methods = type.get_methods();
-			rttr::variant var = component;
-			for (auto& method : methods) {
-				PropertyDrawer::DrawFunction(method, var);
+			ImGui::Unindent();
+		}
+
+		// Context menu
+		if (ImGui::BeginPopup("ComponentContextMenu")) {
+			if (ImGui::Button("Remove Component")) {
+				selectedEntity->RemoveComponent(component);
+				ImGui::CloseCurrentPopup();
+			}
+			else {
+				rttr::type type = rttr::type::get_by_name(component->GetName());
+				std::vector<rttr::method> methods = type.get_methods();
+				rttr::variant var = component;
+				for (auto& method : methods) {
+					PropertyDrawer::DrawFunction(method, var);
+				}
 			}
 
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
-			if (ImGui::Button("Delete Component", ImVec2(-1, 0)))
-			{
-				selectedEntity->RemoveComponent(component);
-			}
-			ImGui::PopStyleColor();
+			ImGui::EndPopup();
 		}
+
+		ImGui::PopID();
+
+		ImGui::Separator();
 	}
 
-	ImGui::Separator();
-
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.f));
-	if (ImGui::Button(ICON_FA_PLUS " Add Component", ImVec2(-1, 0))) {
+	if (ImGui::Button(ICON_FA_PLUS " Add Component")) {
 		ImGui::OpenPopup("AddComponentPopup");
 	}
 	ImGui::PopStyleColor();
@@ -295,7 +336,8 @@ void Scene::DrawInspector()
 			std::string lowercaseName = StringTools::ToLowerCase(compName);
 
 			if (lowercaseName.find(searchBuffer) != std::string::npos) {
-				if (ImGui::MenuItem(compName.c_str())) {
+				std::string compDisplayName = StringTools::FormatComponentName(compName.c_str());
+				if (ImGui::MenuItem(compDisplayName.c_str())) {
 					Component* newCompInstance = Reflection::CreateComponent(comp.get_name());
 					selectedEntity->AddComponent(newCompInstance);
 				}

@@ -6,15 +6,23 @@
 
 class StringTools {
 public:
-	static std::string FormatComponentName(std::string name) {
-		size_t pos = name.rfind("Component");
+    static std::string FormatComponentName(std::string name) {
+        for (size_t i = 1; i < name.length(); ++i) {
+            if (isupper(name[i])) {
+                name.insert(i, " ");
+                ++i;
+            }
+        }
 
-		if (pos != std::string::npos && pos == name.length() - 9) {
-			name.erase(pos);
-		}
+        size_t pos = name.rfind(" Component");
 
-		return name;
-	}
+        if (pos != std::string::npos && pos == name.length() - 10) {
+            name.erase(pos);
+        }
+
+        return name;
+    }
+
 
 	static std::string ToLowerCase(std::string& input) {
 		std::string result = input;

@@ -130,7 +130,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;$(SolutionDir)KiRoXEngine\Dependencies\physics;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;reactphysics3d.lib;user32.lib;gdi32.lib;Ole32.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;reactphysics3d_d.lib;user32.lib;gdi32.lib;Ole32.lib;Shell32.lib;rttr_core_d.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)\KiRoXEngine\src\ReflectionProcessor.exe</Command>
@@ -154,7 +154,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\lib;$(SolutionDir)KiRoXEngine\Dependencies\yaml;$(SolutionDir)KiRoXEngine\Dependencies\rttr\lib;$(SolutionDir)KiRoXEngine\Dependencies\physics;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;reactphysics3d.lib;user32.lib;gdi32.lib;Ole32.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;yaml-cppd.lib;reactphysics3d.lib;user32.lib;gdi32.lib;Ole32.lib;Shell32.lib;rttr_core.lib</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>$(SolutionDir)\KiRoXEngine\src\ReflectionProcessor.exe</Command>

@@ -42,6 +42,17 @@ public:
 		return components;
 	}
 
+	const std::vector<Component*> GetAllComponentsWithTransform() {
+		std::vector<Component*> componentsOut;
+		componentsOut.push_back(&transformComponent);
+
+		for (Component* comp : components) {
+			componentsOut.push_back(comp);
+		}
+
+		return componentsOut;
+	}
+
 	const UUIDv4::UUID GetUUID () const { return uuid; }
 	void SetUUID(const UUIDv4::UUID& uuid)
 	{

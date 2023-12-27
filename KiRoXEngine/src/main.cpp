@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 	// load a font
 	std::string fontPath = basePath;
 	fontPath = fontPath.substr(0, fontPath.find_last_of("\\/"));
-	fontPath += "\\Ubuntu.ttf";
+	fontPath += "\\Inter-Medium.ttf";
 	io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 20.0f);
 
 	// SETUP ICONS
@@ -165,7 +165,6 @@ int main(int argc, char* argv[]) {
 
 void SetupImGuiStyle()
 {
-	// Moonlight style by Madam-Herta from ImThemes
 	ImGuiStyle& style = ImGui::GetStyle();
 
 	style.Alpha = 1.0f;
@@ -220,7 +219,7 @@ void SetupImGuiStyle()
 	style.Colors[ImGuiCol_CheckMark] = ImVec4(0.9725490212440491f, 1.0f, 0.4980392158031464f, 1.0f);
 	style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.9725490212440491f, 1.0f, 0.4980392158031464f, 1.0f);
 	style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(1.0f, 0.7960784435272217f, 0.4980392158031464f, 1.0f);
-	style.Colors[ImGuiCol_Button] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+	style.Colors[ImGuiCol_Button] = ImVec4(60.0f / 255.0f, 60.0f / 255.0f, 63.0f / 255.0f, 1.0f);
 	style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.2503921610116959f, 0.2582352977991104f, 0.256078434586525f, 1.0f);
 	style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.3329411822557449f, 0.3329411822557449f, 0.3329411822557449f, 1.0f);
 	style.Colors[ImGuiCol_Header] = ImVec4(0.1411764770746231f, 0.1647058874368668f, 0.2078431397676468f, 1.0f);
