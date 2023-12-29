@@ -13,14 +13,20 @@ Physics::Physics()
 	reactphysics3d::PhysicsWorld::WorldSettings settings;
 	settings.defaultVelocitySolverNbIterations = 5;
 	settings.isSleepingEnabled = true;
-	settings.gravity = reactphysics3d::Vector3(0, -1, 0);
-	settings.defaultBounciness = 0.2f;
+	settings.gravity = reactphysics3d::Vector3(0, -9.81, 0);
+	settings.defaultBounciness = 0.9f;
 
 	world = physicsCommon.createPhysicsWorld(settings);
+
+	accumulatedTime = 0.0f;
+	running = true;
+
+	physicsThread = std::thread(&Physics::RunPhysicsThread, this);
 }
 
 Physics::~Physics()
 {
+	running = false;
 	physicsCommon.destroyPhysicsWorld(world);
 }
 
@@ -38,6 +44,7 @@ void Physics::RegisterRigidbody(Rigidbody* rb)
 	}
 
 	rb->SetBody(body);
+	rb->SetPhysics(this);
 
 	Entity* owner = rb->GetOwner();
 
@@ -75,13 +82,19 @@ reactphysics3d::Transform Physics::GetTransform(Entity* ent)
 
 void Physics::Update(float inDeltaTime)
 {
-	PROFILE_FUNCTION()
-	for (int i = 0; i < 5; i++) {
-		world->update(inDeltaTime);
-	}
+	accumulatedTime += inDeltaTime;
 }
 
-void Physics::CleanUp()
+void Physics::RunPhysicsThread()
 {
+	while (running) {
+		while (accumulatedTime >= fixedTimeStep) {
+			if (!running) return;
 
+			if (world != nullptr) {
+				world->update(fixedTimeStep);
+				accumulatedTime -= fixedTimeStep;
+			}
+		}
+	}
 }

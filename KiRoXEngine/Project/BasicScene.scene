@@ -1,0 +1,50 @@
+Entities:
+  - Entity: Root
+    UUID: 71455dfa-a138-489f-9db9-584677e4b3ed
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Camera
+    UUID: 47277261-5027-4c8f-8394-e3683d4bb392
+    Parent: 71455dfa-a138-489f-9db9-584677e4b3ed
+    TransformComponent:
+      position: [0, 6.28770733, 16.3323402]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    CameraComponent:
+      nearClipPlane: 0.3
+      farClipPlane: 1000
+      fieldOfView: 60
+      left: -10
+      right: 10
+      top: 10
+      bottom: -10
+      orthoNear: 1
+      orthoFar: 100
+  - Entity: Mesh
+    UUID: a8cd5a9c-8937-496f-999f-829aeb928d9b
+    Parent: 71455dfa-a138-489f-9db9-584677e4b3ed
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [40, 1, 40]
+    MeshComponent:
+      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
+    BoxCollider:
+      {}
+    Rigidbody:
+      isStatic: true
+  - Entity: Mesh
+    UUID: 4ab4e7e4-2012-4ed8-87bf-551240e3d136
+    Parent: 71455dfa-a138-489f-9db9-584677e4b3ed
+    TransformComponent:
+      position: [0, 3.96990204, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      meshUUID: 6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931
+    BoxCollider:
+      {}
+    Rigidbody:
+      isStatic: false

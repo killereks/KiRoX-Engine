@@ -5,6 +5,8 @@
 
 #include "reactphysics3d/body/RigidBody.h"
 
+class Physics;
+
 CLASS()
 class Rigidbody : public Component
 {
@@ -15,12 +17,16 @@ class Rigidbody : public Component
 
 	reactphysics3d::RigidBody* body;
 
+	Physics* physics;
+
 public:
 
 	bool IsStatic() { return isStatic; }
 
 	void SetBody(reactphysics3d::RigidBody* body);
 	inline reactphysics3d::RigidBody* GetBody() { return body; }
+
+	void SetPhysics(Physics* physics);
 
 	virtual void DrawInspector() override;
 	virtual std::string GetIcon() override {

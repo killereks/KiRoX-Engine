@@ -34,7 +34,9 @@ Engine::~Engine()
 
 void Engine::OnScenePlay()
 {
-	delete physics;
+	if (physics != nullptr) {
+		delete physics;
+	}
 
 	physics = new Physics();
 
@@ -123,6 +125,8 @@ void Engine::RenderScene(Shader* shader)
 
 	std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
 	DirectionalLight* dirLight = activeScene.get()->FindComponentOfType<DirectionalLight>();
+
+	StatsCounter::GetInstance()->SetCounter("meshEntities", meshComponents.size());
 
 	// SHADOW MAP PASS
 	glEnable(GL_CULL_FACE);
@@ -544,6 +548,7 @@ void Engine::RenderStatistics()
 	ImGui::Text("Draw Calls: %s", Mathf::FormatWithCommas(counter->GetCounter("drawCalls")).c_str());
 	ImGui::Text("Triangles: %s", Mathf::FormatWithCommas(counter->GetCounter("triangles")).c_str());
 	ImGui::Text("Triangles culled: %s", Mathf::FormatWithCommas(counter->GetCounter("culledTriangles")).c_str());
+	ImGui::Text("Total mesh entities: %s", Mathf::FormatWithCommas(counter->GetCounter("meshEntities")).c_str());
 	ImGui::End();
 
 	counter->Reset();
