@@ -1,10 +1,11 @@
 #pragma once
 
-#include <unordered_map>
+#include <vector>
+#include <tuple>
 
 class StatsCounter
 {
-	std::unordered_map<const char*, int> counter;
+	std::vector<std::tuple<const char*, int>> counterVector;
 
 	static StatsCounter* instance;
 
@@ -22,6 +23,8 @@ public:
 	void Reset();
 	void IncreaseCounter(const char* label);
 	void IncreaseCounter(const char* label, int amount);
+
+	void SetCounter(const char* label, int value);
 
 	int GetCounter(const char* label);
 };

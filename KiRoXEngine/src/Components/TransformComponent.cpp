@@ -62,17 +62,18 @@ void TransformComponent::DrawInspector()
 	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
 
-	ImGui::BeginTable("TransformTable", 4, flags);
+	if (ImGui::BeginTable("TransformTable", 4, flags)) {
 
-	glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
-	// Column 2: Position Input (X, Y, Z)
-	DrawColoredVector(position, glm::vec3(0.0f), "Position");
-	DrawColoredVector(euler, glm::vec3(0.0f), "Rotation");
-	DrawColoredVector(scale, glm::vec3(1.0f), "Scale");
+		glm::vec3 euler = glm::degrees(glm::eulerAngles(rotation));
+		// Column 2: Position Input (X, Y, Z)
+		DrawColoredVector(position, glm::vec3(0.0f), "Position");
+		DrawColoredVector(euler, glm::vec3(0.0f), "Rotation");
+		DrawColoredVector(scale, glm::vec3(1.0f), "Scale");
 
-	rotation = glm::quat(glm::radians(euler));
+		rotation = glm::quat(glm::radians(euler));
 
-	ImGui::EndTable();
+		ImGui::EndTable();
+	}
 
 	ImGui::PopStyleVar(2);
 }

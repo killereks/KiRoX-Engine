@@ -6,14 +6,14 @@ StatsCounter* StatsCounter::instance = nullptr;
 
 void StatsCounter::DeleteAll()
 {
-	counter.clear();
+	counterVector.clear();
 }
 
 void StatsCounter::Reset()
 {
-	for (auto element : counter)
+	for (std::tuple<const char*, int>& element : counterVector)
 	{
-		counter[element.first] = 0;
+		element = std::make_tuple(std::get<0>(element), 0);
 	}
 }
 
@@ -24,20 +24,40 @@ void StatsCounter::IncreaseCounter(const char* label)
 
 void StatsCounter::IncreaseCounter(const char* label, int amount)
 {
-	if (counter.find(label) == counter.end())
+	for (std::tuple<const char*, int>& element : counterVector)
 	{
-		counter[label] = amount;
-		return;
+		if (strcmp(std::get<0>(element), label) == 0)
+		{
+			std::get<1>(element) += amount;
+			return;
+		}
 	}
-	counter[label] += amount;
+
+	counterVector.push_back(std::make_tuple(label, amount));
+}
+
+void StatsCounter::SetCounter(const char* label, int value)
+{
+	for (std::tuple<const char*, int>& element : counterVector)
+	{
+		if (strcmp(std::get<0>(element), label) == 0)
+		{
+			std::get<1>(element) = value;
+			return;
+		}
+	}
+
+	counterVector.push_back(std::make_tuple(label, value));
 }
 
 int StatsCounter::GetCounter(const char* label)
 {
-	if (counter.find(label) == counter.end())
-	{
-		return -1;
+	for (std::tuple<const char*, int>& element : counterVector){
+		if (strcmp(std::get<0>(element), label) == 0)
+		{
+			return std::get<1>(element);
+		}
 	}
 
-	return counter[label];
+	return -1;
 }

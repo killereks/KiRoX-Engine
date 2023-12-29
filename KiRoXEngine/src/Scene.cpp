@@ -548,15 +548,20 @@ void Scene::SaveScene(std::string path)
 void Scene::CubeScene()
 {
 	// make a default scene, which is 20x20x20 default cube
-	int size = 5;
+	int size = 10;
 
 	for (int i = -size / 2; i <= size / 2; i++) {
 		for (int j = -size / 2; j <= size / 2; j++) {
 			for (int k = -size / 2; k <= size / 2; k++) {
 				glm::vec3 pos = glm::vec3(i, j, k) * 5.0f;
 
-				Entity* ent = CreateEntity("Cube");
+				std::string formattedName = "Cube " + std::to_string(i) + "_" + std::to_string(j) + "_" + std::to_string(k);
+
+				Entity* ent = CreateEntity(formattedName);
 				ent->GetTransform().SetLocalPosition(pos);
+
+				ent->AddComponent<Rigidbody>();
+				ent->AddComponent<BoxCollider>();
 
 				MeshComponent* meshComponent = ent->AddComponent<MeshComponent>();
 				meshComponent->SetMeshUUID("6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931");

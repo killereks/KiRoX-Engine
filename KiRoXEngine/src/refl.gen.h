@@ -5,6 +5,7 @@
 #include "Components/BoxCollider.h"
 #include "Components/CameraComponent.h"
 #include "Components/Component.h"
+#include "Components/DirectionalLight.h"
 #include "Components/MeshComponent.h"
 #include "Components/Rigidbody.h"
 #include "Components/TestComponent.h"
@@ -30,6 +31,10 @@ registration::class_<CameraComponent>("CameraComponent")
 ;
 
 registration::class_<Component>("Component")
+;
+
+registration::class_<DirectionalLight>("DirectionalLight")
+.constructor<>()
 ;
 
 registration::class_<MeshComponent>("MeshComponent")
@@ -74,6 +79,11 @@ ok = true;
 return dynamic_cast<Component*>(comp);
 }
 
+inline DirectionalLight* converter_DirectionalLight(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<DirectionalLight*>(comp);
+}
+
 inline MeshComponent* converter_MeshComponent(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<MeshComponent*>(comp);
@@ -104,6 +114,9 @@ return rttr::type::get<CameraComponent*>();
 if (name == "Component"){
 return rttr::type::get<Component*>();
 }
+if (name == "DirectionalLight"){
+return rttr::type::get<DirectionalLight*>();
+}
 if (name == "MeshComponent"){
 return rttr::type::get<MeshComponent*>();
 }
@@ -126,6 +139,9 @@ return new BoxCollider();
 if (name == "CameraComponent"){
 return new CameraComponent();
 }
+if (name == "DirectionalLight"){
+return new DirectionalLight();
+}
 if (name == "MeshComponent"){
 return new MeshComponent();
 }
@@ -145,6 +161,7 @@ static void RegisterTypes(){
 rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
 rttr::type::get<Component*>().register_converter_func(converter_CameraComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Component);
+rttr::type::get<Component*>().register_converter_func(converter_DirectionalLight);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Rigidbody);
 rttr::type::get<Component*>().register_converter_func(converter_TestComponent);

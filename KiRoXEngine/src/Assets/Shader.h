@@ -132,8 +132,6 @@ public:
 			glDeleteShader(geometry);
 		}
 
-		Console::Write("Successfully compiled...", ImVec4(0.322f, 0.859f, 0.302f, 1.0f));
-
 		this->loaded = true;
 	}
 

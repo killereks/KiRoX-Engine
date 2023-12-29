@@ -3,12 +3,15 @@
 #include "Entity.h"
 #include "Components/TransformComponent.h"
 
+#include <Macros.h>
+#include <Tools/Stopwatch.h>
+
 #include <iostream>
 
 Physics::Physics()
 {
 	reactphysics3d::PhysicsWorld::WorldSettings settings;
-	settings.defaultVelocitySolverNbIterations = 20;
+	settings.defaultVelocitySolverNbIterations = 5;
 	settings.isSleepingEnabled = true;
 	settings.gravity = reactphysics3d::Vector3(0, -1, 0);
 	settings.defaultBounciness = 0.2f;
@@ -44,7 +47,7 @@ void Physics::RegisterRigidbody(Rigidbody* rb)
 		RegisterCollisionBody(boxCollider, rb);
 	}
 
-	std::cout << "Registered a new body! " << rb->GetOwner()->GetName() << "\n";
+	//std::cout << "Registered a new body! " << rb->GetOwner()->GetName() << "\n";
 }
 
 void Physics::RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb) {
@@ -53,7 +56,7 @@ void Physics::RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb) {
 	reactphysics3d::BoxShape* boxShape = physicsCommon.createBoxShape(reactphysics3d::Vector3(scale.x, scale.y, scale.z));
 	rb->GetBody()->addCollider(boxShape, reactphysics3d::Transform::identity());
 
-	std::cout << "Found a box collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
+	//std::cout << "Found a box collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
 }
 
 reactphysics3d::Transform Physics::GetTransform(Entity* ent)
@@ -72,7 +75,8 @@ reactphysics3d::Transform Physics::GetTransform(Entity* ent)
 
 void Physics::Update(float inDeltaTime)
 {
-	for (int i = 0; i < 20; i++) {
+	PROFILE_FUNCTION()
+	for (int i = 0; i < 5; i++) {
 		world->update(inDeltaTime);
 	}
 }

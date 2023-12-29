@@ -23,6 +23,8 @@ class MeshComponent : public Component
 	PROPERTY()
 	std::string meshUUID;
 
+	Shader* shader;
+
 	MeshFilter* meshFilter;
 
 	Bounds* boundsRotated;

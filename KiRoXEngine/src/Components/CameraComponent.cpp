@@ -238,28 +238,20 @@ void CameraComponent::CreateRenderTexture(int width, int height)
 
 void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader)
 {
-	shader->use();
-
 	glm::mat4 viewMatrix = GetViewMatrix();
 	glm::mat4 projectionMatrix = GetProjectionMatrix();
 
 	shader->setMat4("perspectiveMatrix", projectionMatrix);
 	shader->setMat4("viewMatrix", viewMatrix);
 
-	shader->setInt("depthTexture", 0);
-
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{
-		//Bounds* bounds = meshComp->GetBounds();
-		//if (bounds != nullptr && !IsInFrustum(*bounds)) {
-		//	StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
-		//	continue;
-		//}
-
-		MeshFilter* meshFilter = meshComp->GetMeshFilter();
-		meshComp->UpdateUUID();
-		if (meshFilter == nullptr) continue;
+		Bounds* bounds = meshComp->GetBounds();
+		if (bounds != nullptr && !IsInFrustum(*bounds)) {
+			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
+			continue;
+		}
 
 		meshComp->SimpleDraw(shader);
 	}

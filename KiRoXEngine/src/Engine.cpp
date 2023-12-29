@@ -21,6 +21,7 @@
 #include "Tools/StringTools.h"
 
 #include <ShObjIdl.h>
+#include <Components/DirectionalLight.h>
 
 Engine::Engine()
 {
@@ -120,14 +121,24 @@ void Engine::RenderScene(Shader* shader)
 		}
 	}
 
-	std::vector<MeshComponent*> meshComponents;
+	std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
+	DirectionalLight* dirLight = activeScene.get()->FindComponentOfType<DirectionalLight>();
 
-	for (auto& entity : activeScene.get()->GetEntities()) {
-		if (entity->HasComponent<MeshComponent>()) {
-			meshComponents.push_back(entity->GetComponent<MeshComponent>());
-		}
+	// SHADOW MAP PASS
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+	if (dirLight != nullptr) {
+		dirLight->Render(meshComponents);
 	}
+	// END SHADOW MAP PASS
 
+	shader->use();
+	shader->setInt("shadowMap", 1);
+	if (dirLight != nullptr) {
+		dirLight->BindShadowMap(1);
+		shader->setMat4("lightSpaceMatrix", dirLight->GetLightSpaceMatrix());
+	}
+	glCullFace(GL_BACK);
 	GetSceneCamera()->PreRender();
 	GetSceneCamera()->Render(meshComponents, shader);
 	GetSceneCamera()->RenderGizmos();
@@ -136,6 +147,12 @@ void Engine::RenderScene(Shader* shader)
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)
 	{
+		shader->use();
+		shader->setInt("shadowMap", 1);
+		if (dirLight != nullptr) {
+			dirLight->BindShadowMap(1);
+			shader->setMat4("lightSpaceMatrix", dirLight->GetLightSpaceMatrix());
+		}
 		gameCamera->PreRender();
 		gameCamera->Render(meshComponents, shader);
 		gameCamera->PostRender();

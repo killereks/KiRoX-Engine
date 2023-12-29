@@ -102,17 +102,15 @@ void AssetManager::DrawInspector()
     ImGui::Text("/");
     ImGui::SameLine();
 
-    if (relativePath.size() > 0) {
-        for (int i = 0; i < relativePath.size() - 1; ++i) {
-            if (ImGui::Button((ICON_FA_FOLDER" " + relativePath[i]).c_str())) {
-                relativePath.erase(relativePath.begin() + i + 1, relativePath.end());
-                cachedPaths.clear();
-                break;
-            }
-            ImGui::SameLine();
-            ImGui::Text("/");
-            ImGui::SameLine();
+    for (int i = 0; i < relativePath.size(); ++i) {
+        if (ImGui::Button((ICON_FA_FOLDER" " + relativePath[i]).c_str())) {
+            relativePath.erase(relativePath.begin() + i + 1, relativePath.end());
+            cachedPaths.clear();
+            break;
         }
+        ImGui::SameLine();
+        ImGui::Text("/");
+        ImGui::SameLine();
     }
     ImGui::Separator();
 

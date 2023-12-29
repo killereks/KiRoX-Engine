@@ -58,8 +58,8 @@ public:
 	glm::mat4 GetViewMatrix() const {
 		glm::mat4 viewMatrix = glm::mat4(1.0f);
 
-		glm::mat4 matrixT = glm::translate(viewMatrix, position);
-		glm::mat4 matrixR = glm::toMat4(rotation);
+		glm::mat4 matrixT = glm::translate(viewMatrix, GetWorldPosition());
+		glm::mat4 matrixR = glm::toMat4(GetWorldRotation());
 
 		return glm::inverse(matrixT * matrixR);
 	}

@@ -119,7 +119,9 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	glfwSwapInterval(0);
+	// VSYNC
+	//glfwSwapInterval(0);
+	glfwSwapInterval(1);
 
 	Input::GetInstance()->SetWindow(window);
 

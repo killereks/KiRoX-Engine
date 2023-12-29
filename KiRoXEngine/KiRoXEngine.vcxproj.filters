@@ -66,7 +66,6 @@
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
     <ClCompile Include="src\Reflection\PropertyDrawer.cpp" />
     <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
-    <ClCompile Include="src\Rendering\HZB.cpp" />
     <ClCompile Include="src\Assets\ComputeShader.cpp" />
     <ClCompile Include="src\Components\TestComponent.cpp" />
     <ClCompile Include="src\Physics.cpp" />
@@ -155,6 +154,8 @@
     <ClCompile Include="Dependencies\physics\src\utils\Profiler.cpp" />
     <ClCompile Include="src\Components\BoxCollider.cpp" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
+    <ClCompile Include="src\Rendering\ShadowMap.cpp" />
+    <ClCompile Include="src\Components\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -432,7 +433,6 @@
     <ClInclude Include="src\refl.gen.h" />
     <ClInclude Include="src\Reflection\PropertyDrawer.h" />
     <ClInclude Include="src\Tools\MeshSimplifier.h" />
-    <ClInclude Include="src\Rendering\HZB.h" />
     <ClInclude Include="src\Assets\ComputeShader.h" />
     <ClInclude Include="src\Components\TestComponent.h" />
     <ClInclude Include="src\Tools\StringTools.h" />
@@ -833,6 +833,8 @@
     <ClInclude Include="Dependencies\glm\vec3.hpp" />
     <ClInclude Include="Dependencies\glm\vec4.hpp" />
     <ClInclude Include="Dependencies\glm\vector_relational.hpp" />
+    <ClInclude Include="src\Rendering\ShadowMap.h" />
+    <ClInclude Include="src\Components\DirectionalLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

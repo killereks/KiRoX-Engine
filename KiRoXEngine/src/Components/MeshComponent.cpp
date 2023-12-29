@@ -11,6 +11,8 @@
 #include "../Editor/Gizmos.h"
 #include "../Tools/StatsCounter.h"
 
+#include "../Reflection/PropertyDrawer.h"
+
 MeshComponent::MeshComponent()
 {
 	
@@ -47,19 +49,22 @@ void MeshComponent::DrawInspector()
 		ImGui::EndDragDropTarget();
 	}
 
-	ImGui::BeginTable("Mesh Info", 2, ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable);
-	ImGui::TableNextRow();
-	ImGui::TableNextColumn();
-	ImGui::Text("Vertex Count:");
-	ImGui::TableNextColumn();
-	ImGui::Text("%d", GetVertexCount());
+	//PropertyDrawer::DrawAssetDragDrop<Shader>(shader);
 
-	ImGui::TableNextRow();
-	ImGui::TableNextColumn();
-	ImGui::Text("Triangle Count:");
-	ImGui::TableNextColumn();
-	ImGui::Text("%d", GetTriangleCount());
-	ImGui::EndTable();
+	if (ImGui::BeginTable("Mesh Info", 2, ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable)) {
+		ImGui::TableNextRow();
+		ImGui::TableNextColumn();
+		ImGui::Text("Vertex Count:");
+		ImGui::TableNextColumn();
+		ImGui::Text("%d", GetVertexCount());
+
+		ImGui::TableNextRow();
+		ImGui::TableNextColumn();
+		ImGui::Text("Triangle Count:");
+		ImGui::TableNextColumn();
+		ImGui::Text("%d", GetTriangleCount());
+		ImGui::EndTable();
+	}
 }
 
 void MeshComponent::SetMeshUUID(std::string uuid)
@@ -113,62 +118,22 @@ Bounds* MeshComponent::GetBounds()
 	boundsRotated = new Bounds(globalCenter, glm::vec3(Ii, Ij, Ik) * 0.5f);
 
 	return boundsRotated;
-	
-	//glm::vec3 min = glm::vec3(1.0f) * std::numeric_limits<float>::infinity();
-	//glm::vec3 max = glm::vec3(-1.0f) * std::numeric_limits<float>::infinity();
-	//
-	//std::vector<glm::vec3> boundVertices = bounds.GetVertices();
-	//
-	//glm::mat4 modelMatrix = owner->GetTransform().GetModelMatrix();
-	//
-	//for (int i = 0; i < boundVertices.size(); i++)
-	//{
-	//	glm::vec3 vertex = boundVertices[i];
-	//	glm::vec3 transformed = modelMatrix * glm::vec4(vertex.x, vertex.y, vertex.z, 1.0);
-	//
-	//	Gizmos::DrawWireSphere(vertex, 0.5f, glm::vec3(1.0, 0.0, 0.0));
-	//	Gizmos::DrawWireSphere(transformed, 0.5f, glm::vec3(0.0, 1.0, 0.0));
-	//	Gizmos::DrawLine(vertex, transformed, glm::vec3(0.0, 0.0, 1.0));
-	//
-	//	min = glm::min(min, transformed);
-	//	max = glm::max(max, transformed);
-	//}
-	//
-	//glm::vec3 pos = (max + min) * 0.5f;
-	//glm::vec3 size = (max - min) * 0.5f;
-	//
-	//delete boundsRotated;
-	//
-	//boundsRotated = new Bounds(pos, size);
-	//
-	//return *boundsRotated;
 }
 
 void MeshComponent::SimpleDraw(Shader* shader)
 {
 	shader->setMat4("modelMatrix", owner->GetTransform().GetModelMatrix());
 
-	Texture* tex = AssetManager::GetInstance()->Get<Texture>("bojovnikDiffuseMap.jpg");
-	tex->Bind(1);
-	shader->setInt("albedo", 1);
-
-	if (owner->GetName() == "Castle")
-	{
-		Texture* tex = AssetManager::GetInstance()->Get<Texture>("Bretesche.jpg");
-		tex->Bind(1);
-		shader->setInt("albedo", 1);
-	}
-
 	if (meshFilter != nullptr)
 	{
-		Bounds* bounds = GetBounds();
-		if (bounds != nullptr)
-		{
-			//Gizmos::DrawWireCube(bounds->GetCenter(), bounds->GetSize(), glm::vec3(1.0));
-
-			//shader->setVec3("boundingBoxMin", bounds->GetMin());
-			//shader->setVec3("boundingBoxMax", bounds->GetMax());
-		}
+		//Bounds* bounds = GetBounds();
+		//if (bounds != nullptr)
+		//{
+		//	//Gizmos::DrawWireCube(bounds->GetCenter(), bounds->GetSize(), glm::vec3(1.0));
+		//
+		//	//shader->setVec3("boundingBoxMin", bounds->GetMin());
+		//	//shader->setVec3("boundingBoxMax", bounds->GetMax());
+		//}
 
 		meshFilter->DrawCall();
 	}
