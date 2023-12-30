@@ -13,8 +13,7 @@ Physics::Physics()
 	reactphysics3d::PhysicsWorld::WorldSettings settings;
 	settings.defaultVelocitySolverNbIterations = 5;
 	settings.isSleepingEnabled = true;
-	settings.gravity = reactphysics3d::Vector3(0, -9.81, 0);
-	settings.defaultBounciness = 0.9f;
+	settings.gravity = reactphysics3d::Vector3(0, reactphysics3d::decimal(-9.81), 0);
 
 	world = physicsCommon.createPhysicsWorld(settings);
 
@@ -27,6 +26,8 @@ Physics::Physics()
 Physics::~Physics()
 {
 	running = false;
+
+	physicsThread.join();
 	physicsCommon.destroyPhysicsWorld(world);
 }
 
@@ -61,7 +62,12 @@ void Physics::RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb) {
 	glm::vec3 scale = boxCollider->GetScale();
 
 	reactphysics3d::BoxShape* boxShape = physicsCommon.createBoxShape(reactphysics3d::Vector3(scale.x, scale.y, scale.z));
-	rb->GetBody()->addCollider(boxShape, reactphysics3d::Transform::identity());
+	reactphysics3d::Transform physicsTransform = reactphysics3d::Transform::identity();
+
+	glm::vec3 offset = boxCollider->GetOffset();
+	physicsTransform.setPosition(reactphysics3d::Vector3(offset.x, offset.y, offset.z));
+
+	rb->GetBody()->addCollider(boxShape, physicsTransform);
 
 	//std::cout << "Found a box collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
 }
@@ -89,12 +95,10 @@ void Physics::RunPhysicsThread()
 {
 	while (running) {
 		while (accumulatedTime >= fixedTimeStep) {
-			if (!running) return;
+			if (!running) break;
 
-			if (world != nullptr) {
-				world->update(fixedTimeStep);
-				accumulatedTime -= fixedTimeStep;
-			}
+			world->update(fixedTimeStep);
+			accumulatedTime -= fixedTimeStep;
 		}
 	}
 }

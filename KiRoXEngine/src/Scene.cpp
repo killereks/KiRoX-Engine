@@ -287,7 +287,20 @@ void Scene::DrawInspector()
 			ImGui::Indent();
 
 			component->OnDrawGizmos();
-			component->DrawInspector();
+
+			bool isInspectorOverriden = component->DrawInspector();
+			if (!isInspectorOverriden) {
+				const rttr::type type = Reflection::GetType(component->GetName());
+				rttr::variant var = component;
+				var.convert(type);
+
+				for (rttr::property prop : type.get_properties()) {
+					std::string name = prop.get_name();
+					if (name == "") continue;
+
+					PropertyDrawer::DrawProperty(prop, var);
+				}
+			}
 
 			ImGui::Unindent();
 		}
@@ -514,7 +527,26 @@ void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
 			std::string name = prop.get_name();
 			if (name == "") continue;
 			out << YAML::Key << name;
-			out << YAML::Value << prop.get_value(comp).to_string();
+
+			if (prop.get_value(comp).get_type() == rttr::type::get<glm::vec2>()) {
+				glm::vec2 value = prop.get_value(comp).get_value<glm::vec2>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(comp).get_type() == rttr::type::get<glm::vec3>()) {
+				glm::vec3 value = prop.get_value(comp).get_value<glm::vec3>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(comp).get_type() == rttr::type::get<glm::vec4>()) {
+				glm::vec4 value = prop.get_value(comp).get_value<glm::vec4>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(comp).get_type() == rttr::type::get<glm::quat>()) {
+				glm::quat value = prop.get_value(comp).get_value<glm::quat>();
+				out << YAML::Value << value;
+			}
+			else {
+				out << YAML::Value << prop.get_value(comp).to_string();
+			}
 		}
 		out << YAML::EndMap;
 	}

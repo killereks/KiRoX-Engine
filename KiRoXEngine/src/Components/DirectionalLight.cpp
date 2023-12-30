@@ -7,9 +7,11 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-void DirectionalLight::DrawInspector()
+bool DirectionalLight::DrawInspector()
 {
 	ImGui::Image((ImTextureID)shadowMap->GetDepthMap(), ImVec2(256, 256), ImVec2(0, 1), ImVec2(1, 0));
+
+	return true;
 }
 
 void DirectionalLight::OnDrawGizmos()
@@ -24,7 +26,7 @@ void DirectionalLight::OnDrawGizmos()
 
 std::string DirectionalLight::GetIcon()
 {
-	return ICON_FA_LIGHTBULB;
+	return ICON_FA_SUN;
 }
 
 void DirectionalLight::Render(std::vector<MeshComponent*>& meshes)
@@ -47,7 +49,7 @@ glm::mat4 DirectionalLight::GetLightSpaceMatrix()
 
 	glm::vec3 worldPos = transform.GetWorldPosition();
 
-	glm::mat4 lightProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, nearPlane, farPlane);
+	glm::mat4 lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, nearPlane, farPlane);
 	glm::mat4 lightView = glm::lookAt(worldPos, worldPos + transform.GetForward(), transform.GetUp());
 
 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;

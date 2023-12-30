@@ -28,9 +28,8 @@ public:
 
 	void SetPhysics(Physics* physics);
 
-	virtual void DrawInspector() override;
 	virtual std::string GetIcon() override {
-		return ICON_FA_FLASK;
+		return ICON_FA_ATOM;
 	}
 
 	virtual void Update(float dt) override;

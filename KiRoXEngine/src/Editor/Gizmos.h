@@ -107,6 +107,7 @@ public:
 	}
 
 	static void DrawWireCube(glm::vec3 position, glm::vec3 size, glm::vec3 color);
+	static void DrawWireCubeRotated(glm::vec3 position, glm::vec3 size, glm::quat rotation, glm::vec3 color);
 	static void DrawLine(glm::vec3 startPosition, glm::vec3 endPosition, glm::vec3 color);
 	static void DrawRay(glm::vec3 startPosition, glm::vec3 direction, glm::vec3 color);
 	static void DrawWireSphere(glm::vec3 position, float radius, glm::vec3 color);

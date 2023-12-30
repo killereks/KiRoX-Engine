@@ -8,9 +8,13 @@ class TestComponent : public Component
 	REFLECT(Component);
 
 	PROPERTY()
-	std::string age;
+	int a;
 
-	virtual void DrawInspector() override;
+	PROPERTY()
+	float time;
+
+	PROPERTY()
+	std::string name;
 
 	virtual std::string GetIcon() override;
 };

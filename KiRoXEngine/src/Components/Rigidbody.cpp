@@ -12,11 +12,6 @@ void Rigidbody::SetBody(reactphysics3d::RigidBody* body)
 	this->body = body;
 }
 
-void Rigidbody::DrawInspector()
-{
-	ImGui::Checkbox("Is Static?", &isStatic);
-}
-
 void Rigidbody::SetPhysics(Physics* physics)
 {
 	this->physics = physics;

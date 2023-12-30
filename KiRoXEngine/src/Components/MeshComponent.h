@@ -35,7 +35,7 @@ class MeshComponent : public Component
 
 		MeshFilter* GetMeshFilter() const { return meshFilter; }
 
-		void DrawInspector() override;
+		bool DrawInspector() override;
 
 		void SetMeshUUID(std::string uuid);
 		FUNCTION()
@@ -63,7 +63,7 @@ class MeshComponent : public Component
 
 		std::string GetIcon() override
 		{
-			return " " ICON_FA_CUBE;
+			return " " ICON_FA_DRAW_POLYGON;
 		}
 
 		void SimpleDraw(Shader* shader);

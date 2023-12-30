@@ -2,8 +2,15 @@
 
 #include <rttr/registration>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+
+#include <string>
+#include <sstream>
+
 #include "Components/BoxCollider.h"
 #include "Components/CameraComponent.h"
+#include "Components/Collider.h"
 #include "Components/Component.h"
 #include "Components/DirectionalLight.h"
 #include "Components/MeshComponent.h"
@@ -12,9 +19,60 @@
 #include "Components/TransformComponent.h"
 using namespace rttr;
 
+inline std::string glm_vec2_to_string(const glm::vec2& vec, bool& ok){
+std::stringstream ss;
+ss << "[" << vec.x << ", " << vec.y << "]";
+ok = true;
+return ss.str();
+}
+
+inline std::string glm_vec3_to_string(const glm::vec3& vec, bool& ok){
+std::stringstream ss;
+ss << "[" << vec.x << ", " << vec.y << ", " << vec.z << "]";
+ok = true;
+return ss.str();
+}
+
+inline std::string glm_vec4_to_string(const glm::vec4& vec, bool& ok){
+std::stringstream ss;
+ss << "[" << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w << "]";
+ok = true;
+return ss.str();
+}
+
+inline std::string glm_quat_to_string(const glm::quat& quat, bool& ok){
+std::stringstream ss;
+ss << "[" << quat.x << ", " << quat.y << ", " << quat.z << ", " << quat.w << "]";
+ok = true;
+return ss.str();
+}
+
 RTTR_REGISTRATION { 
+registration::class_<glm::vec2>("glm::vec2")
+.constructor<>()
+.property("x", &glm::vec2::x)
+.property("y", &glm::vec2::y);
+registration::class_<glm::vec3>("glm::vec3")
+.constructor<>()
+.property("x", &glm::vec3::x)
+.property("y", &glm::vec3::y)
+.property("z", &glm::vec3::z);
+registration::class_<glm::vec4>("glm::vec4")
+.constructor<>()
+.property("x", &glm::vec4::x)
+.property("y", &glm::vec4::y)
+.property("z", &glm::vec4::z)
+.property("w", &glm::vec4::w);
+registration::class_<glm::quat>("glm::quat")
+.constructor<>()
+.property("x", &glm::quat::x)
+.property("y", &glm::quat::y)
+.property("z", &glm::quat::z)
+.property("w", &glm::quat::w);
 registration::class_<BoxCollider>("BoxCollider")
 .constructor<>()
+.property("offset", &BoxCollider::offset)
+.property("scale", &BoxCollider::scale)
 ;
 
 registration::class_<CameraComponent>("CameraComponent")
@@ -28,6 +86,10 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("bottom", &CameraComponent::bottom)
 .property("orthoNear", &CameraComponent::orthoNear)
 .property("orthoFar", &CameraComponent::orthoFar)
+;
+
+registration::class_<Collider>("Collider")
+.property("isTrigger", &Collider::isTrigger)
 ;
 
 registration::class_<Component>("Component")
@@ -50,7 +112,9 @@ registration::class_<Rigidbody>("Rigidbody")
 
 registration::class_<TestComponent>("TestComponent")
 .constructor<>()
-.property("age", &TestComponent::age)
+.property("a", &TestComponent::a)
+.property("time", &TestComponent::time)
+.property("name", &TestComponent::name)
 ;
 
 registration::class_<TransformComponent>("TransformComponent")
@@ -72,6 +136,11 @@ return dynamic_cast<BoxCollider*>(comp);
 inline CameraComponent* converter_CameraComponent(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<CameraComponent*>(comp);
+}
+
+inline Collider* converter_Collider(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<Collider*>(comp);
 }
 
 inline Component* converter_Component(Component* comp, bool& ok){
@@ -110,6 +179,9 @@ return rttr::type::get<BoxCollider*>();
 }
 if (name == "CameraComponent"){
 return rttr::type::get<CameraComponent*>();
+}
+if (name == "Collider"){
+return rttr::type::get<Collider*>();
 }
 if (name == "Component"){
 return rttr::type::get<Component*>();
@@ -160,12 +232,17 @@ throw std::runtime_error("No type found for " + name);
 static void RegisterTypes(){
 rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
 rttr::type::get<Component*>().register_converter_func(converter_CameraComponent);
+rttr::type::get<Component*>().register_converter_func(converter_Collider);
 rttr::type::get<Component*>().register_converter_func(converter_Component);
 rttr::type::get<Component*>().register_converter_func(converter_DirectionalLight);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Rigidbody);
 rttr::type::get<Component*>().register_converter_func(converter_TestComponent);
 rttr::type::get<Component*>().register_converter_func(converter_TransformComponent);
+rttr::type::get<glm::vec2>().register_converter_func(glm_vec2_to_string);
+rttr::type::get<glm::vec3>().register_converter_func(glm_vec3_to_string);
+rttr::type::get<glm::vec4>().register_converter_func(glm_vec4_to_string);
+rttr::type::get<glm::quat>().register_converter_func(glm_quat_to_string);
 }
 
 }

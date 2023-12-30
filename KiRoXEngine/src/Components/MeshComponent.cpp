@@ -23,7 +23,7 @@ MeshComponent::~MeshComponent()
 	
 }
 
-void MeshComponent::DrawInspector()
+bool MeshComponent::DrawInspector()
 {	
 	ImGui::PushItemWidth(-1);
 	if (meshFilter == nullptr)
@@ -65,6 +65,8 @@ void MeshComponent::DrawInspector()
 		ImGui::Text("%d", GetTriangleCount());
 		ImGui::EndTable();
 	}
+
+	return true;
 }
 
 void MeshComponent::SetMeshUUID(std::string uuid)

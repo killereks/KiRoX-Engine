@@ -27,7 +27,7 @@ public:
 
 	virtual void OnDrawGizmos() {}
 
-	virtual void DrawInspector() = 0;
+	virtual bool DrawInspector();
 
 	virtual void Init() {}
 	virtual void Update(float dt) {}

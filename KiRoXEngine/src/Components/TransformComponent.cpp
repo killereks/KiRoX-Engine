@@ -53,7 +53,7 @@ void DrawColoredVector(glm::vec3& vec, const glm::vec3& resetValue, const char* 
 	ImGui::PopID();
 }
 
-void TransformComponent::DrawInspector()
+bool TransformComponent::DrawInspector()
 {
 	ImGuiTableFlags flags =
 		ImGuiTableFlags_NoPadInnerX |
@@ -76,6 +76,8 @@ void TransformComponent::DrawInspector()
 	}
 
 	ImGui::PopStyleVar(2);
+
+	return true;
 }
 
 

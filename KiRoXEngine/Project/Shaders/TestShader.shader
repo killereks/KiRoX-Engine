@@ -23,7 +23,7 @@ void main(){
 
 	FragPos = vec3(modelMatrix * vec4(aPos, 1.0));
 	Vertex = aPos;
-	Normal = aNormal;
+	Normal = normalize(transpose(inverse(mat3(modelMatrix))) * aNormal);
 	UV = aUV;
 
 	FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);

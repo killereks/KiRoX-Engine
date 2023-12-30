@@ -30,7 +30,7 @@ CameraComponent::~CameraComponent()
 	delete renderTexture;
 }
 
-void CameraComponent::DrawInspector() {
+bool CameraComponent::DrawInspector() {
 	if (cameraType == CameraType::Perspective) {
 		ImGui::DragFloat("Near Clip Plane", &nearClipPlane);
 		ImGui::DragFloat("Far Clip Plane", &farClipPlane);
@@ -55,6 +55,8 @@ void CameraComponent::DrawInspector() {
 			cameraType = CameraType::Perspective;
 		}
 	}
+
+	return true;
 }
 
 void CameraComponent::OnDrawGizmos()

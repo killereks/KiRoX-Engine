@@ -156,6 +156,7 @@
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="src\Rendering\ShadowMap.cpp" />
     <ClCompile Include="src\Components\DirectionalLight.cpp" />
+    <ClCompile Include="src\Components\Collider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -835,6 +836,7 @@
     <ClInclude Include="Dependencies\glm\vector_relational.hpp" />
     <ClInclude Include="src\Rendering\ShadowMap.h" />
     <ClInclude Include="src\Components\DirectionalLight.h" />
+    <ClInclude Include="src\Components\Collider.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

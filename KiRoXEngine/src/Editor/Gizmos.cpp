@@ -37,6 +37,38 @@ void Gizmos::DrawWireCube(glm::vec3 position, glm::vec3 size, glm::vec3 color)
 	}
 }
 
+void Gizmos::DrawWireCubeRotated(glm::vec3 position, glm::vec3 size, glm::quat rotation, glm::vec3 color)
+{
+	Gizmos* gizmos = GetInstance();
+
+	glm::vec3 halfSize = size * 0.5f;
+
+	// Define the 8 vertices of the cube
+	glm::vec3 vertices[8] = {
+		position + rotation * glm::vec3(-halfSize.x, -halfSize.y, -halfSize.z),
+		position + rotation * glm::vec3(halfSize.x, -halfSize.y, -halfSize.z),
+		position + rotation * glm::vec3(halfSize.x, halfSize.y, -halfSize.z),
+		position + rotation * glm::vec3(-halfSize.x, halfSize.y, -halfSize.z),
+		position + rotation * glm::vec3(-halfSize.x, -halfSize.y, halfSize.z),
+		position + rotation * glm::vec3(halfSize.x, -halfSize.y, halfSize.z),
+		position + rotation * glm::vec3(halfSize.x, halfSize.y, halfSize.z),
+		position + rotation * glm::vec3(-halfSize.x, halfSize.y, halfSize.z)
+	};
+
+	// Define the 12 edges of the cube
+	int edges[12][2] = {
+		{0, 1}, {1, 2}, {2, 3}, {3, 0},  // Bottom face
+		{4, 5}, {5, 6}, {6, 7}, {7, 4},  // Top face
+		{0, 4}, {1, 5}, {2, 6}, {3, 7}   // Connecting edges
+	};
+
+	// Draw each edge
+	for (int i = 0; i < 12; ++i)
+	{
+		DrawLine(vertices[edges[i][0]], vertices[edges[i][1]], color);
+	}
+}
+
 void Gizmos::DrawLine(glm::vec3 startPosition, glm::vec3 endPosition, glm::vec3 color)
 {
 	Gizmos* gizmos = GetInstance();

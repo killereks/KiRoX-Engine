@@ -10,7 +10,7 @@ class DirectionalLight : public Component {
 	ShadowMap* shadowMap;
 
 public:
-	virtual void DrawInspector() override;
+	virtual bool DrawInspector() override;
 
 	virtual void OnDrawGizmos() override;
 

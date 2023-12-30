@@ -61,7 +61,7 @@ public:
 
 	virtual void OnDrawGizmos() override;
 
-	void DrawInspector() override;
+	bool DrawInspector() override;
 
 	void RenderGizmos();
 

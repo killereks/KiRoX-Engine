@@ -24,7 +24,7 @@ class TransformComponent : public Component
 public:
 	TransformComponent();
 
-	void DrawInspector() override;
+	bool DrawInspector() override;
 
 	std::string GetIcon() override
 	{

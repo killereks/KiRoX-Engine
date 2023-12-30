@@ -100,6 +100,32 @@ public:
 		mousePosition = newMousePosition;
 	}
 
+	static bool IsControllerConnected() {
+		return glfwJoystickPresent(GLFW_JOYSTICK_1);
+	}
+
+	static glm::vec2 GetLeftStick() {
+		int count;
+		const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+
+		if (count >= 2) {
+			return glm::vec2(axes[0], axes[1]);
+		}
+
+		return glm::vec2(0.0f);
+	}
+
+	static glm::vec2 GetRightStick() {
+		int count;
+		const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+
+		if (count >= 4) {
+			return glm::vec2(axes[2], axes[3]);
+		}
+
+		return glm::vec2(0.0f);
+	}
+
 	static bool GetKey(int key) {
 		return GetInstance()->keys[key];
 	}
