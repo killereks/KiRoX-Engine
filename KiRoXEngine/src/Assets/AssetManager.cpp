@@ -6,56 +6,98 @@
 
 AssetManager* AssetManager::instance = nullptr;
 
-void AssetManager::LoadUUID()
+void AssetManager::AddCallback_OnLoaded(std::string assetName, std::function<void()> callback)
 {
-    std::ifstream file;
-
-    file.open(projectPath + "\\uuids.txt");
-
-    if (file.is_open())
+    if (assets.find(assetName) != assets.end())
     {
-		std::string line;
-
-        while (std::getline(file, line))
+        if (assets[assetName]->IsLoaded())
         {
-			std::string uuid = line.substr(0, line.find_first_of(" "));
-			std::string path = line.substr(line.find_first_of(" ") + 1);
-
-            std::string assetName = path.substr(path.find_last_of("\\") + 1);
-
-			uuidToAssetName[uuid] = assetName;
-		}
-	}
-
-    file.close();
+            callback();
+        }
+        else
+        {
+            onLoadedCallbacks[assetName].push_back(callback);
+        }
+    }
+    else
+    {
+        onLoadedCallbacks[assetName].push_back(callback);
+    }
 }
 
-void AssetManager::SaveUUID()
+AssetManager::AssetManager(std::filesystem::path path)
 {
-    std::ofstream file;
+    projectPath = path.string();
 
-	file.open(projectPath + "\\uuids.txt");
+    LoadAllMetaFiles();
+    LoadAllAssets();
 
-    if (file.is_open())
-    {
-        for (auto& [uuid, path] : uuidToAssetName)
+    folderWatcher.watchFolder(path.c_str());
+    //folderWatcher.OnFileChanged = OnFileChanged;
+    folderWatcher.OnFileChanged = [this](std::wstring_view filename, FolderWatcher::Action action)
         {
-			file << uuid << " " << path << std::endl;
-		}
-	}
+            OnFileChanged(filename, action);
+        };
 
-	file.close();
+    instance = this;
+
+    textureTypeLookup = {
+        {"Scene", "scene.png"},
+        {"MeshFilter", "mesh.png"},
+        {"Shader", "layers.png"},
+        {"ComputeShader","computeshader.png"}
+    };
+}
+
+void AssetManager::LoadAllMetaFiles()
+{
+    // go over every meta file in the project
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
+        std::string extension = entry.path().extension().string();
+
+        if (extension == ".meta") {
+            // see if it has a corresponding asset file
+            std::string assetFilePath = entry.path().string().substr(0, entry.path().string().size() - 5);
+
+            if (!std::filesystem::exists(assetFilePath) || std::filesystem::is_directory(assetFilePath)) {
+                std::filesystem::remove(entry.path());
+                std::cout << "Removed meta file: " << entry.path().string() << std::endl;
+            }
+        }
+    }
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
+        std::string path = entry.path().string();
+        if (std::filesystem::is_directory(path)) {
+            continue;
+        }
+
+        std::string extension = entry.path().extension().string();
+
+        if (extension == ".meta") continue;
+
+        LoadOrCreateMetaFile(path);
+	}
+}
+
+void AssetManager::LoadOrCreateMetaFile(const std::string& filePath)
+{
+    std::string metaFilePath = filePath + ".meta";
+
+    if (!std::filesystem::exists(metaFilePath)) {
+        // we create the .meta file
+        std::ofstream file(metaFilePath);
+        file.close();
+
+        std::cout << "Created meta file: " << metaFilePath << std::endl;
+    }
+    else {
+        std::cout << "Loading meta file: " << metaFilePath << std::endl;
+    }
 }
 
 const std::string AssetManager::GetUUID(const std::string& filePath)
 {
-    for (auto& [uuid, _path] : uuidToAssetName)
-    {
-        if (_path == filePath) {
-            return uuid;
-        }
-    }
-
     // create new UUID
     UUIDv4::UUID uuid = UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID();
     std::string uuidString = uuid.str();
@@ -65,6 +107,37 @@ const std::string AssetManager::GetUUID(const std::string& filePath)
     uuidToAssetName[uuidString] = assetName;
 
     return uuidString;
+}
+
+AssetManager::~AssetManager()
+{
+    for (auto& asset : assets) {
+        delete asset.second;
+    }
+}
+
+void AssetManager::OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    std::wstring wstr = std::wstring(filename);
+    std::string filenameStr = converter.to_bytes(wstr);
+
+    if (action == FolderWatcher::Action::Modified) {
+        // reload this asset, delete and create new one
+        std::string fileAssetName = filenameStr.substr(filenameStr.find_last_of("\\") + 1);
+        std::string extension = fileAssetName.substr(fileAssetName.find_last_of("."));
+
+        if (extension == ".shader") {
+            Get<Shader>(fileAssetName)->Recompile();
+        }
+
+    }
+}
+
+void AssetManager::Update()
+{
+    folderWatcher.update();
+    AsyncUpdate();
 }
 
 void AssetManager::DrawInspector()
@@ -142,6 +215,9 @@ void AssetManager::DrawInspector()
         if (entry.is_directory() && entry.path().filename() == "Editor") {
             continue;
         }
+
+        std::string extension = entry.path().extension().string();
+        if (extension == ".meta") continue;
 
         ImGui::PushID(index++);
 
@@ -235,4 +311,77 @@ void AssetManager::DrawInspector()
     ImGui::PopStyleVar();
 
     ImGui::End();
+}
+
+void AssetManager::UnloadAsset(const std::string& name)
+{
+    if (assets.find(name) != assets.end())
+    {
+        delete assets[name];
+        assets.erase(name);
+    }
+}
+
+void AssetManager::InvokeLoadedCallbacks(std::string& assetName)
+{
+    std::vector<std::function<void()>> callbacks = onLoadedCallbacks[assetName];
+
+    for (std::function<void()>& callback : callbacks)
+    {
+        callback();
+    }
+}
+
+void AssetManager::AsyncUpdate()
+{
+    for (size_t i = 0; i < loadingCoroutines.size(); ++i)
+    {
+        loadingCoroutines[i].resume();
+        if (loadingCoroutines[i].status() == co::Dead)
+        {
+            Asset* asset = (Asset*)loadingCoroutines[i].getUserData();
+            //std::cout << asset->filePath << " has loaded\n";
+
+            std::swap(loadingCoroutines[i], loadingCoroutines.back());
+            loadingCoroutines.pop_back();
+            --i;
+
+            asset->loaded = true;
+            InvokeLoadedCallbacks(asset->fileName);
+        }
+    }
+}
+
+void AssetManager::LoadAllAssets()
+{
+    PROFILE_FUNCTION()
+
+        Console::Write("Loading all assets at: " + projectPath);
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
+        const auto& path = entry.path();
+        const auto& extension = path.extension();
+
+        std::string fileName = path.filename().string();
+        std::string fullPath = path.string();
+
+        if (extension == ".png" || extension == ".jpeg" || extension == ".jpg")
+        {
+            Load<Texture>(fileName, fullPath);
+        }
+        else if (extension == ".shader")
+        {
+            Load<Shader>(fileName, fullPath);
+        }
+        else if (extension == ".fbx" || extension == ".obj")
+        {
+            Load<MeshFilter>(fileName, fullPath);
+        }
+        else if (extension == ".scene") {
+            Load<Scene>(fileName, fullPath);
+        }
+        else if (extension == ".computeshader") {
+            Load<ComputeShader>(fileName, fullPath);
+        }
+    }
 }

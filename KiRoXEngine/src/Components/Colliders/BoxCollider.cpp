@@ -1,7 +1,7 @@
 #include "BoxCollider.h"
 
 #include "imgui.h"
-#include "../Editor/Gizmos.h"
+#include <Editor/Gizmos.h>
 
 BoxCollider::BoxCollider()
 {

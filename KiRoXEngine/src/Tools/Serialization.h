@@ -4,6 +4,12 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#include <rttr/registration.h>
+
+// saving and loading generic objects
+// it takes in an object, then uses reflection
+// to create a YAML file
+
 inline YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v) {
 	out << YAML::Flow;
 	out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
@@ -43,7 +49,7 @@ namespace YAML
 			return node;
 		}
 
-		static bool decode(const Node& node, glm::vec3& rhs) {
+		static bool decode(const Node& node, glm::vec2& rhs) {
 			if (!node.IsSequence() || node.size() != 2) {
 				return false;
 			}

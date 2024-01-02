@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Components/Rigidbody.h"
-#include "Components/BoxCollider.h"
+#include "Components/Colliders/BoxCollider.h"
 
 #include "reactphysics3d/engine/PhysicsCommon.h"
 #include "reactphysics3d/engine/PhysicsWorld.h"

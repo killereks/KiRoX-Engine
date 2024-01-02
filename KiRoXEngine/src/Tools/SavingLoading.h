@@ -1,0 +1,117 @@
+#pragma once
+
+#include <Tools/Serialization.h>
+#include <rttr/registration.h>
+#include <yaml-cpp/yaml.h>
+
+#include <vector>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+
+namespace SavingLoading {
+
+	std::string SaveYAML(rttr::variant& var) {
+		YAML::Emitter out;
+		out << YAML::BeginMap;
+
+		const rttr::type& type = var.get_type();
+
+		for (auto prop : type.get_properties()) {
+			std::string name = prop.get_name();
+
+			std::cout << "Property: " << name << std::endl;
+
+			out << YAML::Key << name;
+
+			if (prop.get_value(var).get_type() == rttr::type::get<glm::vec2>()) {
+				glm::vec2 value = prop.get_value(var).get_value<glm::vec2>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(var).get_type() == rttr::type::get<glm::vec3>()) {
+				glm::vec3 value = prop.get_value(var).get_value<glm::vec3>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(var).get_type() == rttr::type::get<glm::vec4>()) {
+				glm::vec4 value = prop.get_value(var).get_value<glm::vec4>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(var).get_type() == rttr::type::get<glm::quat>()) {
+				glm::quat value = prop.get_value(var).get_value<glm::quat>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(var).get_type() == rttr::type::get<std::string>()) {
+				std::string value = prop.get_value(var).get_value<std::string>();
+				out << YAML::Value << value;
+			}
+			else {
+				out << YAML::Value << prop.get_value(var).to_string();
+			}
+		}
+
+		out << YAML::EndMap;
+
+		return out.c_str();
+	}
+
+	template<typename T>
+	T LoadYAMLFile(const std::string& filePath) {
+		std::ifstream file(filePath);
+		std::string bufferData((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+		return LoadYAML<T>(bufferData);
+	}
+
+	template<typename T>
+	T LoadYAML(const std::string bufferData) {
+		YAML::Node data = YAML::Load(bufferData);
+
+		T obj;
+
+		const rttr::type& type = rttr::type::get<T>();
+
+		for (auto prop : type.get_properties()) {
+			std::string name = prop.get_name();
+
+			std::cout << "Attempting to load property: " << name << "\n";
+
+			YAML::Node propData = data[name];
+			if (!propData) continue;
+
+			if (prop.get_value(obj).get_type() == rttr::type::get<glm::vec2>()) {
+				glm::vec2 value = data[name].as<glm::vec2>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<glm::vec3>()) {
+				glm::vec3 value = data[name].as<glm::vec3>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<glm::vec4>()) {
+				glm::vec4 value = data[name].as<glm::vec4>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<glm::quat>()) {
+				glm::quat value = data[name].as<glm::quat>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<std::string>()) {
+				std::string value = data[name].as<std::string>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<int>()) {
+				int value = data[name].as<int>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<float>()) {
+				float value = data[name].as<float>();
+				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<bool>()) {
+				bool value = data[name].as<bool>();
+				prop.set_value(obj, value);
+			}
+		}
+
+		return obj;
+	}
+
+}

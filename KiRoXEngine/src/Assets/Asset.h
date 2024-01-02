@@ -3,12 +3,16 @@
 #include <string>
 #include <iostream>
 
+#include <Macros.h>
+
 #include "coroutines/CoroExtensions.h"
 
 class AssetManager;
 
-class Asset
-{
+CLASS()
+class Asset {
+	REFLECT()
+
 	friend AssetManager;
 
 	std::string name;
@@ -21,11 +25,15 @@ protected:
 public:
 	std::string filePath;
 	std::string fileName;
+	PROPERTY()
 	std::string uuid;
 
 	float GetLoadingProgress() { return loadingProgress; }
 	bool HasLoadingProgress() { return loadingProgress >= 0.0f; }
 	void SetLoadingProgress(float progress) { loadingProgress = progress; }
+
+	Asset() = default;
+	Asset(const Asset& other) = default;
 
 	virtual ~Asset() {}
 

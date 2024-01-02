@@ -1,7 +1,7 @@
 #pragma once
-#include "Component.h"
+#include <Components/Component.h>
 #include "Collider.h"
-#include "../Macros.h"
+#include <Macros.h>
 #include "icons/IconsFontAwesome6.h"
 #include "Entity.h"
 

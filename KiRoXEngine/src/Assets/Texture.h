@@ -6,8 +6,11 @@
 
 #include "image_load/stb_image.h"
 
+CLASS()
 class Texture : public Asset
 {
+	REFLECT(Asset)
+
 private:
 	int width, height, comp;
 
@@ -19,7 +22,11 @@ private:
 
 public:
 	Texture();
+	Texture(const Texture& other) : Asset(other) {}
 	~Texture();
+
+	PROPERTY()
+	int testWrapProp;
 
 	unsigned int GetTextureID() const { return textureID; }
 

@@ -8,9 +8,11 @@
 #include <string>
 #include <sstream>
 
-#include "Components/BoxCollider.h"
+#include "Assets/Asset.h"
+#include "Assets/Texture.h"
 #include "Components/CameraComponent.h"
-#include "Components/Collider.h"
+#include "Components/Colliders/BoxCollider.h"
+#include "Components/Colliders/Collider.h"
 #include "Components/Component.h"
 #include "Components/DirectionalLight.h"
 #include "Components/MeshComponent.h"
@@ -69,10 +71,13 @@ registration::class_<glm::quat>("glm::quat")
 .property("y", &glm::quat::y)
 .property("z", &glm::quat::z)
 .property("w", &glm::quat::w);
-registration::class_<BoxCollider>("BoxCollider")
+registration::class_<Asset>("Asset")
+.property("uuid", &Asset::uuid)
+;
+
+registration::class_<Texture>("Texture")
 .constructor<>()
-.property("offset", &BoxCollider::offset)
-.property("scale", &BoxCollider::scale)
+.property("testWrapProp", &Texture::testWrapProp)
 ;
 
 registration::class_<CameraComponent>("CameraComponent")
@@ -86,6 +91,12 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("bottom", &CameraComponent::bottom)
 .property("orthoNear", &CameraComponent::orthoNear)
 .property("orthoFar", &CameraComponent::orthoFar)
+;
+
+registration::class_<BoxCollider>("BoxCollider")
+.constructor<>()
+.property("offset", &BoxCollider::offset)
+.property("scale", &BoxCollider::scale)
 ;
 
 registration::class_<Collider>("Collider")
@@ -128,14 +139,14 @@ registration::class_<TransformComponent>("TransformComponent")
 
 namespace Reflection {
 
-inline BoxCollider* converter_BoxCollider(Component* comp, bool& ok){
-ok = true;
-return dynamic_cast<BoxCollider*>(comp);
-}
-
 inline CameraComponent* converter_CameraComponent(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<CameraComponent*>(comp);
+}
+
+inline BoxCollider* converter_BoxCollider(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<BoxCollider*>(comp);
 }
 
 inline Collider* converter_Collider(Component* comp, bool& ok){
@@ -174,17 +185,11 @@ return dynamic_cast<TransformComponent*>(comp);
 }
 
 static const rttr::type GetType(const std::string& name){
-if (name == "BoxCollider"){
-return rttr::type::get<BoxCollider*>();
-}
 if (name == "CameraComponent"){
 return rttr::type::get<CameraComponent*>();
 }
-if (name == "Collider"){
-return rttr::type::get<Collider*>();
-}
-if (name == "Component"){
-return rttr::type::get<Component*>();
+if (name == "BoxCollider"){
+return rttr::type::get<BoxCollider*>();
 }
 if (name == "DirectionalLight"){
 return rttr::type::get<DirectionalLight*>();
@@ -205,11 +210,11 @@ throw std::runtime_error("No type found for " + name);
 }
 
 static Component* CreateComponent(const std::string& name){
-if (name == "BoxCollider"){
-return new BoxCollider();
-}
 if (name == "CameraComponent"){
 return new CameraComponent();
+}
+if (name == "BoxCollider"){
+return new BoxCollider();
 }
 if (name == "DirectionalLight"){
 return new DirectionalLight();
@@ -230,10 +235,8 @@ throw std::runtime_error("No type found for " + name);
 }
 
 static void RegisterTypes(){
-rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
 rttr::type::get<Component*>().register_converter_func(converter_CameraComponent);
-rttr::type::get<Component*>().register_converter_func(converter_Collider);
-rttr::type::get<Component*>().register_converter_func(converter_Component);
+rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
 rttr::type::get<Component*>().register_converter_func(converter_DirectionalLight);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Rigidbody);

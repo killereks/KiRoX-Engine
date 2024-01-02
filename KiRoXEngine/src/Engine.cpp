@@ -23,6 +23,8 @@
 #include <ShObjIdl.h>
 #include <Components/DirectionalLight.h>
 
+#include <Tools/SavingLoading.h>
+
 Engine::Engine()
 {
 }

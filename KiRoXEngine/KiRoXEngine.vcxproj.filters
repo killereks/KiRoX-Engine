@@ -152,11 +152,11 @@
     <ClCompile Include="Dependencies\physics\src\utils\DebugRenderer.cpp" />
     <ClCompile Include="Dependencies\physics\src\utils\DefaultLogger.cpp" />
     <ClCompile Include="Dependencies\physics\src\utils\Profiler.cpp" />
-    <ClCompile Include="src\Components\BoxCollider.cpp" />
+    <ClCompile Include="src\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="src\Rendering\ShadowMap.cpp" />
     <ClCompile Include="src\Components\DirectionalLight.cpp" />
-    <ClCompile Include="src\Components\Collider.cpp" />
+    <ClCompile Include="src\Components\Colliders\Collider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -545,7 +545,7 @@
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\configuration.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\decimal.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\reactphysics3d.h" />
-    <ClInclude Include="src\Components\BoxCollider.h" />
+    <ClInclude Include="src\Components\Colliders\BoxCollider.h" />
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3.h" />
     <ClInclude Include="Dependencies\GLFW\include\GLFW\glfw3native.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h" />
@@ -836,7 +836,8 @@
     <ClInclude Include="Dependencies\glm\vector_relational.hpp" />
     <ClInclude Include="src\Rendering\ShadowMap.h" />
     <ClInclude Include="src\Components\DirectionalLight.h" />
-    <ClInclude Include="src\Components\Collider.h" />
+    <ClInclude Include="src\Components\Colliders\Collider.h" />
+    <ClInclude Include="src\Tools\SavingLoading.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

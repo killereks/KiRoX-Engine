@@ -161,11 +161,11 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Components\Collider.cpp" />
+    <ClCompile Include="src\Components\Colliders\Collider.cpp" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="src\Components\DirectionalLight.cpp" />
     <ClCompile Include="src\Rendering\ShadowMap.cpp" />
-    <ClCompile Include="src\Components\BoxCollider.cpp" />
+    <ClCompile Include="src\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="Dependencies\physics\src\body\CollisionBody.cpp" />
     <ClCompile Include="Dependencies\physics\src\body\RigidBody.cpp" />
     <ClCompile Include="Dependencies\physics\src\collision\broadphase\DynamicAABBTree.cpp" />
@@ -316,7 +316,7 @@
     <ClCompile Include="src\Components\TestComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Components\Collider.h" />
+    <ClInclude Include="src\Components\Colliders\Collider.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\glew.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\glxew.h" />
@@ -607,7 +607,7 @@
     <ClInclude Include="Dependencies\glm\vector_relational.hpp" />
     <ClInclude Include="src\Components\DirectionalLight.h" />
     <ClInclude Include="src\Rendering\ShadowMap.h" />
-    <ClInclude Include="src\Components\BoxCollider.h" />
+    <ClInclude Include="src\Components\Colliders\BoxCollider.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\body\CollisionBody.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\body\RigidBody.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\collision\broadphase\DynamicAABBTree.h" />
@@ -987,6 +987,7 @@
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Assets\Shader.h" />
     <ClInclude Include="src\Macros.h" />
+    <ClInclude Include="src\Tools\SavingLoading.h" />
     <ClInclude Include="src\Tools\Serialization.h" />
     <ClInclude Include="src\Tools\Stopwatch.h" />
     <ClInclude Include="src\Assets\Texture.h" />

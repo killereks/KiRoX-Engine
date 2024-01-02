@@ -57,96 +57,26 @@ public:
 		return instance;
 	}
 
-    void AddCallback_OnLoaded(std::string assetName, std::function<void()> callback)
-    {
-        if (assets.find(assetName) != assets.end())
-        {
-            if (assets[assetName]->IsLoaded())
-            {
-                callback();
-            }
-            else
-            {
-                onLoadedCallbacks[assetName].push_back(callback);
-            }
-        }
-        else
-        {
-            onLoadedCallbacks[assetName].push_back(callback);
-        }
-    }
+    void AddCallback_OnLoaded(std::string assetName, std::function<void()> callback);
 
     size_t NumberOfAssetsLoading() { return loadingCoroutines.size(); }
 
-    AssetManager(std::filesystem::path path) {
-        projectPath = path.string();
+    AssetManager(std::filesystem::path path);
 
-        LoadAllAssets();
-
-		folderWatcher.watchFolder(path.c_str());
-        //folderWatcher.OnFileChanged = OnFileChanged;
-        folderWatcher.OnFileChanged = [this](std::wstring_view filename, FolderWatcher::Action action)
-        {
-            OnFileChanged(filename, action);
-        };
-
-        instance = this;
-
-        textureTypeLookup = {
-            {"Scene", "scene.png"},
-            {"MeshFilter", "mesh.png"},
-            {"Shader", "layers.png"},
-            {"ComputeShader","computeshader.png"}
-        };
-    }
-
-    void LoadUUID();
-    void SaveUUID();
+    void LoadAllMetaFiles();
+    void LoadOrCreateMetaFile(const std::string& filePath);
 
     const std::string GetUUID(const std::string& filePath);
 
-    ~AssetManager() {
-        for (auto& asset : assets) {
-			delete asset.second;
-		}
+    ~AssetManager();
 
-        SaveUUID();
-	}
+    void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action);
 
-	void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action)
-	{
-        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-        std::wstring wstr = std::wstring(filename);
-        std::string filenameStr = converter.to_bytes(wstr);
-
-        if (action == FolderWatcher::Action::Modified) {
-            // reload this asset, delete and create new one
-            std::string fileAssetName = filenameStr.substr(filenameStr.find_last_of("\\") + 1);
-            std::string extension = fileAssetName.substr(fileAssetName.find_last_of("."));
-
-            if (extension == ".shader") {
-                Get<Shader>(fileAssetName)->Recompile();
-            }
-
-        }
-	}
-
-    void Update()
-    {
-        folderWatcher.update();
-        AsyncUpdate();
-    }
+    void Update();
 
     void DrawInspector();
 
-    void UnloadAsset(const std::string& name)
-    {
-        if (assets.find(name) != assets.end())
-        {
-			delete assets[name];
-			assets.erase(name);
-		}
-	}
+    void UnloadAsset(const std::string& name);
 
 	template <typename T>
 	void Load(const std::string& name, const std::string& filePath)
@@ -175,15 +105,7 @@ public:
 		Console::Write("Loading asset: " + name, ImVec4(0.278f, 0.722f, 1.0f, 1.0f));
 	}
 
-    void InvokeLoadedCallbacks(std::string& assetName)
-    {
-        std::vector<std::function<void()>> callbacks = onLoadedCallbacks[assetName];
-
-        for (std::function<void()>& callback : callbacks)
-        {
-            callback();
-        }
-    }
+    void InvokeLoadedCallbacks(std::string& assetName);
 
 public:
     template <typename T>
@@ -201,60 +123,7 @@ public:
         return nullptr;
     }
 
-    void AsyncUpdate()
-    {
-        for (size_t i = 0; i < loadingCoroutines.size(); ++i)
-        {
-            loadingCoroutines[i].resume();
-			if (loadingCoroutines[i].status() == co::Dead)
-			{
-                Asset* asset = (Asset*)loadingCoroutines[i].getUserData();
-                //std::cout << asset->filePath << " has loaded\n";
+    void AsyncUpdate();
 
-                std::swap(loadingCoroutines[i], loadingCoroutines.back());
-                loadingCoroutines.pop_back();
-				--i;
-
-				asset->loaded = true;
-				InvokeLoadedCallbacks(asset->fileName);
-			}
-        }
-    }
-
-    void LoadAllAssets() {
-        PROFILE_FUNCTION()
-
-        LoadUUID();
-
-        Console::Write("Loading all assets at: "+projectPath);
-
-        const std::filesystem::path assetsPath = projectPath;
-
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(assetsPath)) {
-            const auto& path = entry.path();
-            const auto& extension = path.extension();
-
-            std::string fileName = path.filename().string();
-            std::string fullPath = path.string();
-
-			if (extension == ".png" || extension == ".jpeg" || extension == ".jpg")
-			{
-				Load<Texture>(fileName, fullPath);
-			}
-			else if (extension == ".shader")
-			{
-			    Load<Shader>(fileName, fullPath);
-			}
-            else if (extension == ".fbx" || extension == ".obj")
-            {
-                Load<MeshFilter>(fileName, fullPath);
-            }
-            else if (extension == ".scene") {
-                Load<Scene>(fileName, fullPath);
-            }
-            else if (extension == ".computeshader") {
-                Load<ComputeShader>(fileName, fullPath);
-            }
-        }
-    }
+    void LoadAllAssets();
 };
