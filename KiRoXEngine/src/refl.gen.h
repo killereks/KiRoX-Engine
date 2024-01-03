@@ -9,6 +9,9 @@
 #include <sstream>
 
 #include "Assets/Asset.h"
+#include "Assets/Material.h"
+#include "Assets/MeshFilter.h"
+#include "Assets/Shader.h"
 #include "Assets/Texture.h"
 #include "Components/CameraComponent.h"
 #include "Components/Colliders/BoxCollider.h"
@@ -75,9 +78,22 @@ registration::class_<Asset>("Asset")
 .property("uuid", &Asset::uuid)
 ;
 
+registration::class_<Material>("Material")
+.constructor<>()
+.property("shader", &Material::shader)
+.property("mainTexture", &Material::mainTexture)
+;
+
+registration::class_<MeshFilter>("MeshFilter")
+.constructor<>()
+;
+
+registration::class_<Shader>("Shader")
+.constructor<>()
+;
+
 registration::class_<Texture>("Texture")
 .constructor<>()
-.property("testWrapProp", &Texture::testWrapProp)
 ;
 
 registration::class_<CameraComponent>("CameraComponent")
@@ -185,6 +201,18 @@ return dynamic_cast<TransformComponent*>(comp);
 }
 
 static const rttr::type GetType(const std::string& name){
+if (name == "Material"){
+return rttr::type::get<Material*>();
+}
+if (name == "MeshFilter"){
+return rttr::type::get<MeshFilter*>();
+}
+if (name == "Shader"){
+return rttr::type::get<Shader*>();
+}
+if (name == "Texture"){
+return rttr::type::get<Texture*>();
+}
 if (name == "CameraComponent"){
 return rttr::type::get<CameraComponent*>();
 }
@@ -206,7 +234,8 @@ return rttr::type::get<TestComponent*>();
 if (name == "TransformComponent"){
 return rttr::type::get<TransformComponent*>();
 }
-throw std::runtime_error("No type found for " + name);
+std::cout << "No type found for " << name << "\n";
+return rttr::type::get<void>();
 }
 
 static Component* CreateComponent(const std::string& name){

@@ -4,13 +4,15 @@
 #include <rttr/registration.h>
 #include <yaml-cpp/yaml.h>
 
+#include <fstream>
+
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
 namespace SavingLoading {
 
-	std::string SaveYAML(rttr::variant& var) {
+	inline std::string SaveYAML(rttr::variant& var) {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 
@@ -19,7 +21,7 @@ namespace SavingLoading {
 		for (auto prop : type.get_properties()) {
 			std::string name = prop.get_name();
 
-			std::cout << "Property: " << name << std::endl;
+			std::cout << "Found property: " << name << "on object: " << type.get_name().c_str() << "\n";
 
 			out << YAML::Key << name;
 
@@ -53,26 +55,13 @@ namespace SavingLoading {
 		return out.c_str();
 	}
 
-	template<typename T>
-	T LoadYAMLFile(const std::string& filePath) {
-		std::ifstream file(filePath);
-		std::string bufferData((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+	inline void LoadYAMLObject(const std::string& path, rttr::variant& obj) {
+		YAML::Node data = YAML::LoadFile(path);
 
-		return LoadYAML<T>(bufferData);
-	}
-
-	template<typename T>
-	T LoadYAML(const std::string bufferData) {
-		YAML::Node data = YAML::Load(bufferData);
-
-		T obj;
-
-		const rttr::type& type = rttr::type::get<T>();
+		const rttr::type& type = obj.get_type();
 
 		for (auto prop : type.get_properties()) {
 			std::string name = prop.get_name();
-
-			std::cout << "Attempting to load property: " << name << "\n";
 
 			YAML::Node propData = data[name];
 			if (!propData) continue;
@@ -110,6 +99,33 @@ namespace SavingLoading {
 				prop.set_value(obj, value);
 			}
 		}
+	}
+
+	inline void SaveYAMLFile(const std::string& filePath, rttr::variant& var) {
+		std::string data = SaveYAML(var);
+
+		std::ofstream file(filePath);
+		file << data;
+		file.close();
+	}
+
+	template<typename T>
+	T LoadYAMLFile(const std::string& filePath) {
+		std::ifstream file(filePath);
+		std::string bufferData((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+		return LoadYAML<T>(bufferData);
+	}
+
+	template<typename T>
+	T LoadYAML(const std::string bufferData) {
+		YAML::Node data = YAML::Load(bufferData);
+
+		T obj;
+
+		const rttr::type& type = rttr::type::get<T>();
+
+		LoadYAMLObject(obj);
 
 		return obj;
 	}

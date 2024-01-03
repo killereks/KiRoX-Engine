@@ -170,6 +170,8 @@ void Engine::RenderScene(Shader* shader)
 void Engine::RenderEditorUI()
 {
 	assetManager.get()->DrawInspector();
+	assetManager.get()->DrawImportSettings();
+
 	Console::GetInstance()->Draw();
 
 	activeScene.get()->DrawHierarchy();
@@ -319,7 +321,7 @@ void Engine::RenderGameWindow()
 {
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 
-	ImGui::Begin("Game");
+	ImGui::Begin(ICON_FA_GAMEPAD " Game");
 	ImVec2 size = ImGui::GetContentRegionAvail();
 	if (gameCamera == nullptr)
 	{

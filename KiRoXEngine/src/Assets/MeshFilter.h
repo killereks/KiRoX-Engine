@@ -2,6 +2,9 @@
 
 #include <string>
 #include <iostream>
+#include <Macros.h>
+
+#include <GL/glew.h>
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -42,7 +45,9 @@ public:
 	}
 };
 
+CLASS()
 class MeshFilter : public Asset {
+	REFLECT(Asset)
 
 	std::vector<glm::vec3> vertices;
 	std::vector<unsigned int> indices;

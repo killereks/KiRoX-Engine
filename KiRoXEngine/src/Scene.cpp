@@ -58,7 +58,7 @@ co::Coro Scene::BeginLoading()
 
 void Scene::DrawHierarchy()
 {
-	ImGui::Begin("Hierarchy");
+	ImGui::Begin(ICON_FA_SITEMAP " Hierarchy");
 
 	if (ImGui::IsMouseReleased(1)) {
 		if (ImGui::IsWindowHovered()) {
@@ -217,7 +217,7 @@ void Scene::DrawEntity(Entity* entity)
 
 void Scene::DrawInspector()
 {
-	ImGui::Begin("Inspector");
+	ImGui::Begin(ICON_FA_BINOCULARS " Inspector");
 
 	if (selectedEntity == nullptr) {
 		ImGui::Text("Select an entity!");
@@ -298,7 +298,7 @@ void Scene::DrawInspector()
 					std::string name = prop.get_name();
 					if (name == "") continue;
 
-					PropertyDrawer::DrawProperty(prop, var);
+					bool _ = PropertyDrawer::DrawProperty(prop, var);
 				}
 			}
 

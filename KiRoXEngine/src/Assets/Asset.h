@@ -35,6 +35,9 @@ public:
 	Asset() = default;
 	Asset(const Asset& other) = default;
 
+	void SaveMetaFile();
+	void LoadMetaFile();
+
 	virtual ~Asset() {}
 
 	virtual const char* GetTypeName() {

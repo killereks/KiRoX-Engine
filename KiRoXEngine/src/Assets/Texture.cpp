@@ -15,6 +15,15 @@ Texture::Texture()
 	
 }
 
+Texture& Texture::operator=(const Texture& other)
+{
+	width = other.width;
+	height = other.height;
+	pixels = other.pixels;
+
+	return *this;
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures(1, &textureID);

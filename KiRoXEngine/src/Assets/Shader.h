@@ -10,11 +10,16 @@
 #include <iostream>
 #include "../Editor/Console.h"
 
+#include <Macros.h>
+
 #include <unordered_map>
 
 #include "Asset.h"
 
+CLASS()
 class Shader : public Asset {
+	REFLECT(Asset)
+
 public:
 	unsigned int ID;
 
@@ -59,6 +64,13 @@ public:
 
 	Shader()
 	{
+	}
+
+	Shader& operator=(const Shader& other)
+	{
+		uuid = other.uuid;
+		ID = other.ID;
+		return *this;
 	}
 
 	void Recompile()

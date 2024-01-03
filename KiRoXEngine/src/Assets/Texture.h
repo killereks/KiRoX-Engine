@@ -23,10 +23,8 @@ private:
 public:
 	Texture();
 	Texture(const Texture& other) : Asset(other) {}
+	Texture& operator=(const Texture& other);
 	~Texture();
-
-	PROPERTY()
-	int testWrapProp;
 
 	unsigned int GetTextureID() const { return textureID; }
 

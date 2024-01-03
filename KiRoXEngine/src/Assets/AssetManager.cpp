@@ -3,6 +3,9 @@
 
 #include "../Math/Mathf.h"
 #include "../Math/ImGuiExtensions.h"
+#include <Tools/SavingLoading.h>
+
+#include <Reflection/PropertyDrawer.h>
 
 AssetManager* AssetManager::instance = nullptr;
 
@@ -29,8 +32,11 @@ AssetManager::AssetManager(std::filesystem::path path)
 {
     projectPath = path.string();
 
-    LoadAllMetaFiles();
     LoadAllAssets();
+    LoadAllMetaFiles();
+
+    Get<Material>("testMaterial.mat")->shader = Get<Shader>("TestShader.shader");
+    Get<Material>("testMaterial.mat")->mainTexture = Get<Texture>("bojovnikDiffuseMap.jpg");
 
     folderWatcher.watchFolder(path.c_str());
     //folderWatcher.OnFileChanged = OnFileChanged;
@@ -45,7 +51,8 @@ AssetManager::AssetManager(std::filesystem::path path)
         {"Scene", "scene.png"},
         {"MeshFilter", "mesh.png"},
         {"Shader", "layers.png"},
-        {"ComputeShader","computeshader.png"}
+        {"ComputeShader","computeshader.png"},
+        {"Material", "sphere.png"}
     };
 }
 
@@ -66,47 +73,24 @@ void AssetManager::LoadAllMetaFiles()
         }
     }
 
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
-        std::string path = entry.path().string();
-        if (std::filesystem::is_directory(path)) {
-            continue;
-        }
-
-        std::string extension = entry.path().extension().string();
-
-        if (extension == ".meta") continue;
-
-        LoadOrCreateMetaFile(path);
-	}
-}
-
-void AssetManager::LoadOrCreateMetaFile(const std::string& filePath)
-{
-    std::string metaFilePath = filePath + ".meta";
-
-    if (!std::filesystem::exists(metaFilePath)) {
-        // we create the .meta file
-        std::ofstream file(metaFilePath);
-        file.close();
-
-        std::cout << "Created meta file: " << metaFilePath << std::endl;
-    }
-    else {
-        std::cout << "Loading meta file: " << metaFilePath << std::endl;
+    for (auto asset : assets) {
+        LoadOrCreateMetaFile(*asset.second);
     }
 }
 
-const std::string AssetManager::GetUUID(const std::string& filePath)
+void AssetManager::LoadOrCreateMetaFile(Asset& asset)
 {
-    // create new UUID
-    UUIDv4::UUID uuid = UUIDv4::UUIDGenerator<std::mt19937_64>().getUUID();
-    std::string uuidString = uuid.str();
+    std::string path = asset.filePath + ".meta";
 
-    std::string assetName = filePath.substr(filePath.find_last_of("\\") + 1);
+    if (!std::filesystem::exists(path)) {
+        asset.SaveMetaFile();
+    }
 
-    uuidToAssetName[uuidString] = assetName;
+    asset.LoadMetaFile();
 
-    return uuidString;
+    std::cout << "Loaded " << asset.filePath << " with UUID: " << asset.uuid << "\n";
+
+    uuidToAssetName[asset.uuid] = asset.fileName;
 }
 
 AssetManager::~AssetManager()
@@ -122,16 +106,27 @@ void AssetManager::OnFileChanged(std::wstring_view filename, FolderWatcher::Acti
     std::wstring wstr = std::wstring(filename);
     std::string filenameStr = converter.to_bytes(wstr);
 
+    std::cout << "Detected change in file: " << filenameStr << "\n";
+
     if (action == FolderWatcher::Action::Modified) {
         // reload this asset, delete and create new one
         std::string fileAssetName = filenameStr.substr(filenameStr.find_last_of("\\") + 1);
-        std::string extension = fileAssetName.substr(fileAssetName.find_last_of("."));
 
-        if (extension == ".shader") {
-            Get<Shader>(fileAssetName)->Recompile();
+        if (filenameStr.find(".") != std::string::npos) {
+            std::string extension = filenameStr.substr(filenameStr.find_last_of("."));
+
+            std::cout << "File " << fileAssetName << " has been modified\n";
+
+            if (extension == ".shader") {
+                Get<Shader>(fileAssetName)->Recompile();
+            }
         }
-
     }
+    else if (action == FolderWatcher::Action::Created) {
+        LoadAsset(filenameStr);
+    }
+
+    // TODO: Handle renaming
 }
 
 void AssetManager::Update()
@@ -258,8 +253,7 @@ void AssetManager::DrawInspector()
 
                 if (texture == nullptr) {
                     if (asset != nullptr) {
-                        std::string name = textureTypeLookup[asset->GetTypeName()];
-                        texture = Get<Texture>(name);
+                        texture = GetEditorIcon(asset->GetTypeName());
                     }
                 }
 
@@ -272,6 +266,12 @@ void AssetManager::DrawInspector()
                     }
                     else {
                         ImGui::Image((void*)texture->GetTextureID(), size);
+                    }
+
+                    bool isDragging = ImGui::IsMouseDragging(ImGuiMouseButton_Left);
+
+                    if (!isDragging && ImGui::IsItemHovered() && ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
+                        selectedAsset = asset;
                     }
                 }
                 else
@@ -313,6 +313,26 @@ void AssetManager::DrawInspector()
     ImGui::End();
 }
 
+void AssetManager::DrawImportSettings()
+{
+    ImGui::Begin(ICON_FA_GEARS" Import Settings");
+
+    if (selectedAsset == nullptr) {
+        ImGui::Text("No asset selected!");
+    }
+    else {
+        ImGui::Text("Import Settings for %s", selectedAsset->fileName.c_str());
+
+        rttr::variant var = selectedAsset;
+        const rttr::type type = Reflection::GetType(selectedAsset->GetTypeName());
+        var.convert(type);
+
+        PropertyDrawer::DrawObject(var);
+    }
+
+    ImGui::End();
+}
+
 void AssetManager::UnloadAsset(const std::string& name)
 {
     if (assets.find(name) != assets.end())
@@ -320,6 +340,14 @@ void AssetManager::UnloadAsset(const std::string& name)
         delete assets[name];
         assets.erase(name);
     }
+}
+
+Texture* AssetManager::GetEditorIcon(const std::string& type)
+{
+    if (textureTypeLookup.find(type) == textureTypeLookup.end()) return nullptr;
+
+    std::string name = textureTypeLookup[type];
+    return Get<Texture>(name);
 }
 
 void AssetManager::InvokeLoadedCallbacks(std::string& assetName)
@@ -360,28 +388,35 @@ void AssetManager::LoadAllAssets()
 
     for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
         const auto& path = entry.path();
-        const auto& extension = path.extension();
-
-        std::string fileName = path.filename().string();
         std::string fullPath = path.string();
 
-        if (extension == ".png" || extension == ".jpeg" || extension == ".jpg")
-        {
-            Load<Texture>(fileName, fullPath);
-        }
-        else if (extension == ".shader")
-        {
-            Load<Shader>(fileName, fullPath);
-        }
-        else if (extension == ".fbx" || extension == ".obj")
-        {
-            Load<MeshFilter>(fileName, fullPath);
-        }
-        else if (extension == ".scene") {
-            Load<Scene>(fileName, fullPath);
-        }
-        else if (extension == ".computeshader") {
-            Load<ComputeShader>(fileName, fullPath);
-        }
+        LoadAsset(fullPath);
+    }
+}
+
+void AssetManager::LoadAsset(std::string& fullPath){
+    std::string extension = fullPath.substr(fullPath.find_last_of(".") + 1);
+    std::string fileName = fullPath.substr(fullPath.find_last_of("\\") + 1);
+
+    if (extension == "png" || extension == "jpeg" || extension == "jpg")
+    {
+        Load<Texture>(fileName, fullPath);
+    }
+    else if (extension == "shader")
+    {
+        Load<Shader>(fileName, fullPath);
+    }
+    else if (extension == "fbx" || extension == "obj")
+    {
+        Load<MeshFilter>(fileName, fullPath);
+    }
+    else if (extension == "scene") {
+        Load<Scene>(fileName, fullPath);
+    }
+    else if (extension == "computeshader") {
+        Load<ComputeShader>(fileName, fullPath);
+    }
+    else if (extension == "mat") {
+        Load<Material>(fileName, fullPath);
     }
 }

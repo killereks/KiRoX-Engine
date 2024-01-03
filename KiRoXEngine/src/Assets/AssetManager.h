@@ -51,6 +51,8 @@ private:
     float fileViewSize = 100.0f;
     std::vector<std::filesystem::directory_entry> cachedPaths;
 
+    Asset* selectedAsset = nullptr;
+
 public:
 	static AssetManager* GetInstance()
 	{
@@ -64,9 +66,7 @@ public:
     AssetManager(std::filesystem::path path);
 
     void LoadAllMetaFiles();
-    void LoadOrCreateMetaFile(const std::string& filePath);
-
-    const std::string GetUUID(const std::string& filePath);
+    void LoadOrCreateMetaFile(Asset& asset);
 
     ~AssetManager();
 
@@ -75,8 +75,11 @@ public:
     void Update();
 
     void DrawInspector();
+    void DrawImportSettings();
 
     void UnloadAsset(const std::string& name);
+
+    Texture* GetEditorIcon(const std::string& type);
 
 	template <typename T>
 	void Load(const std::string& name, const std::string& filePath)
@@ -92,7 +95,6 @@ public:
 
         asset->filePath = filePath;
         asset->fileName = name;
-        asset->uuid = GetUUID(name);
 
         assets[name] = asset;
 
@@ -110,6 +112,10 @@ public:
 public:
     template <typename T>
     T* Get(const std::string& name) {
+        if (assets.find(name) == assets.end()) {
+			std::cout << "Error, no asset found with name: " << name << "\n";
+			return nullptr;
+		}
         return dynamic_cast<T*>(assets[name]);
     }
 
@@ -119,11 +125,12 @@ public:
 			return Get<T>(uuidToAssetName[uuid]);
 		}
 
-        std::cout << "ERROR!\n";
+        std::cout << "Error, no asset found with uuid: " << uuid << "\n";
         return nullptr;
     }
 
     void AsyncUpdate();
 
     void LoadAllAssets();
+    void LoadAsset(std::string& fullpath);
 };
