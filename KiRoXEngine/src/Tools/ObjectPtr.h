@@ -1,43 +1,43 @@
 #pragma once
 
 #include <Macros.h>
-
 #include <string>
-
 #include <Assets/AssetManager.h>
 
-template<typename T>
+CLASS()
 class ObjectPtr {
+	REFLECT()
 
+	PROPERTY()
 	std::string uuid;
 
-	T* ptr = nullptr;
+	void* ptr;
 
+	void FindAsset();
 public:
-	ObjectPtr() = default;
-	ObjectPtr(T* ptr) : ptr(ptr) {}
+	ObjectPtr() {
+		uuid = "";
+		ptr = nullptr;
+	}
 
+	void Clear();
+
+	template<typename T>
 	T* Get() {
 		if (ptr == nullptr) {
-			ptr = AssetManager::GetInstance()->GetByUUID<T>(uuid);
+			FindAsset();
 
 			if (ptr == nullptr) {
 				std::cout << "Error, no asset found with uuid: " << uuid << "\n";
 			}
 		}
 
-		return ptr;
+		return (T*) ptr;
 	}
 
-	void SetUUID(const std::string& uuid) {
-		this->uuid = uuid;
-		ptr = nullptr;
-	}
+	bool HasValue();
 
-	T* operator->() const { return ptr; }
-	T& operator*() const { return *ptr; }
-
-	bool operator==(const ObjectPtr<T>& other) const { return ptr == other.ptr; }
-	bool operator!=(const ObjectPtr<T>& other) const { return ptr != other.ptr; }
+	void SetUUID(const std::string& uuid);
+	std::string GetUUID();
 };
 

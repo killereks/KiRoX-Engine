@@ -30,13 +30,12 @@ void AssetManager::AddCallback_OnLoaded(std::string assetName, std::function<voi
 
 AssetManager::AssetManager(std::filesystem::path path)
 {
+    instance = this;
+
     projectPath = path.string();
 
     LoadAllAssets();
     LoadAllMetaFiles();
-
-    Get<Material>("testMaterial.mat")->shader = Get<Shader>("TestShader.shader");
-    Get<Material>("testMaterial.mat")->mainTexture = Get<Texture>("bojovnikDiffuseMap.jpg");
 
     folderWatcher.watchFolder(path.c_str());
     //folderWatcher.OnFileChanged = OnFileChanged;
@@ -44,8 +43,6 @@ AssetManager::AssetManager(std::filesystem::path path)
         {
             OnFileChanged(filename, action);
         };
-
-    instance = this;
 
     textureTypeLookup = {
         {"Scene", "scene.png"},
@@ -87,8 +84,6 @@ void AssetManager::LoadOrCreateMetaFile(Asset& asset)
     }
 
     asset.LoadMetaFile();
-
-    std::cout << "Loaded " << asset.filePath << " with UUID: " << asset.uuid << "\n";
 
     uuidToAssetName[asset.uuid] = asset.fileName;
 }
@@ -327,7 +322,9 @@ void AssetManager::DrawImportSettings()
         const rttr::type type = Reflection::GetType(selectedAsset->GetTypeName());
         var.convert(type);
 
-        PropertyDrawer::DrawObject(var);
+        if (PropertyDrawer::DrawObject(var)) {
+            selectedAsset->SaveMetaFile();
+        }
     }
 
     ImGui::End();

@@ -6,6 +6,10 @@ void Asset::SaveMetaFile()
 {
 	rttr::variant var(this);
 
+	if (uuid.empty()) {
+		uuid = AssetManager::GenerateUUID();
+	}
+
 	const rttr::type type = Reflection::GetType(GetTypeName());
 	if (type != rttr::type::get<void>()) {
 		if (!var.convert(type)) {
@@ -33,10 +37,13 @@ void Asset::LoadMetaFile()
 		}
 		else {
 			SavingLoading::LoadYAMLObject(path, var);
+
+			if (uuid.empty()) {
+				uuid = AssetManager::GenerateUUID();
+			}
 		}
 	}
 	else {
 		std::cout << "No type found for: " << GetTypeName() << "\n";
 	}
-
 }

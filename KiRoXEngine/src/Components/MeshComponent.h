@@ -10,6 +10,8 @@
 #include "../Tools/Bounds.h"
 #include "icons/IconsFontAwesome6.h"
 
+#include <Tools/ObjectPtr.h>
+
 CLASS()
 class MeshComponent : public Component
 {
@@ -21,11 +23,12 @@ class MeshComponent : public Component
 	int projectionMatrixLocation = -1;
 
 	PROPERTY()
-	std::string meshUUID;
+	ObjectPtr* mesh;
+
+	PROPERTY()
+	ObjectPtr* material;
 
 	Shader* shader;
-
-	MeshFilter* meshFilter;
 
 	Bounds* boundsRotated;
 
@@ -33,19 +36,15 @@ class MeshComponent : public Component
 		MeshComponent();
 		~MeshComponent();
 
-		MeshFilter* GetMeshFilter() const { return meshFilter; }
-
-		bool DrawInspector() override;
-
-		void SetMeshUUID(std::string uuid);
-		FUNCTION()
-		void UpdateUUID();
+		MeshFilter* GetMeshFilter() const { 
+			return mesh->Get<MeshFilter>();
+		}
 
 		Bounds* GetBounds();
 
 		const int GetVertexCount() const {
-			if (meshFilter != nullptr) {
-				return meshFilter->GetVertices().size();
+			if (GetMeshFilter() != nullptr) {
+				return GetMeshFilter()->GetVertices().size();
 			}
 
 			return 0;
@@ -53,9 +52,9 @@ class MeshComponent : public Component
 
 		const size_t GetTriangleCount() const
 		{
-			if (meshFilter != nullptr)
+			if (GetMeshFilter() != nullptr)
 			{
-				return meshFilter->GetIndices().size() / 3;
+				return GetMeshFilter()->GetIndices().size() / 3;
 			}
 
 			return 0;

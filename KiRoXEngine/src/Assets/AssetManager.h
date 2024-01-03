@@ -59,6 +59,13 @@ public:
 		return instance;
 	}
 
+    static std::string GenerateUUID() {
+        UUIDv4::UUIDGenerator<std::mt19937_64> uuidGenerator;
+        UUIDv4::UUID uuid = uuidGenerator.getUUID();
+
+        return uuid.str();
+    }
+
     void AddCallback_OnLoaded(std::string assetName, std::function<void()> callback);
 
     size_t NumberOfAssetsLoading() { return loadingCoroutines.size(); }

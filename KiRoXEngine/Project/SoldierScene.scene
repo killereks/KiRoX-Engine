@@ -1,16 +1,17 @@
 Entities:
   - Entity: Root
-    UUID: 5612e028-04c6-42b1-990f-5d2dcfafe1d2
+    UUID: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
   - Entity: Mesh
-    UUID: e6166162-3175-4ae0-90f7-67f5ab1e0663
-    Parent: 5612e028-04c6-42b1-990f-5d2dcfafe1d2
+    UUID: 1c8cd0d7-4ec9-4206-a33c-2c0cbcf16726
+    Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
       position: [0, 0, 0]
-      rotation: [0.723314226, -0.202785328, -0.119556233, 0.649154127]
-      scale: [0.999999166, 1.00000978, 1.00000644]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
     MeshComponent:
-      meshUUID: a9a9fb91-c82a-4231-82a7-cdc330355de0
+      mesh: 305e9895-69de-468d-9879-63ae350403eb
+      material: 549e5c09-2cae-4678-a841-a1be17df241e

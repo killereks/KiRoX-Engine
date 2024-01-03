@@ -15,7 +15,8 @@
 
 MeshComponent::MeshComponent()
 {
-	
+	mesh = new ObjectPtr();
+	material = new ObjectPtr();
 }
 
 MeshComponent::~MeshComponent()
@@ -23,78 +24,14 @@ MeshComponent::~MeshComponent()
 	
 }
 
-bool MeshComponent::DrawInspector()
-{	
-	ImGui::PushItemWidth(-1);
-	if (meshFilter == nullptr)
-	{
-		ImGui::Text("No mesh asset...");
-	}
-	else
-	{
-		ImGui::Text(meshFilter->fileName.c_str());
-	}
-	ImGui::PopItemWidth();
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET"))
-		{
-			MeshFilter* draggedMeshFilter = dynamic_cast<MeshFilter*>(*(Asset**)payload->Data);
-
-			if (draggedMeshFilter != nullptr)
-			{
-				SetMeshUUID(draggedMeshFilter->uuid);
-			}
-		}
-		ImGui::EndDragDropTarget();
-	}
-
-	//PropertyDrawer::DrawAssetDragDrop<Shader>(shader);
-
-	if (ImGui::BeginTable("Mesh Info", 2, ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable)) {
-		ImGui::TableNextRow();
-		ImGui::TableNextColumn();
-		ImGui::Text("Vertex Count:");
-		ImGui::TableNextColumn();
-		ImGui::Text("%d", GetVertexCount());
-
-		ImGui::TableNextRow();
-		ImGui::TableNextColumn();
-		ImGui::Text("Triangle Count:");
-		ImGui::TableNextColumn();
-		ImGui::Text("%d", GetTriangleCount());
-		ImGui::EndTable();
-	}
-
-	return true;
-}
-
-void MeshComponent::SetMeshUUID(std::string uuid)
-{
-	meshUUID = uuid;
-	UpdateUUID();
-}
-
-void MeshComponent::UpdateUUID()
-{
-	if (meshUUID != "")
-	{
-		meshFilter = AssetManager::GetInstance()->GetByUUID<MeshFilter>(meshUUID);
-	}
-	else
-	{
-		meshFilter = nullptr;
-	}
-}
-
 Bounds* MeshComponent::GetBounds()
 {
-	if (meshFilter == nullptr)
+	if (GetMeshFilter() == nullptr)
 	{
 		return nullptr;
 	}
 
-	Bounds* bounds = meshFilter->GetBounds();
+	Bounds* bounds = GetMeshFilter()->GetBounds();
 	TransformComponent& transform = owner->GetTransform();
 
 	const glm::vec3 globalCenter = transform.GetModelMatrix() * glm::vec4(bounds->GetCenter(), 1.0f);
@@ -126,7 +63,7 @@ void MeshComponent::SimpleDraw(Shader* shader)
 {
 	shader->setMat4("modelMatrix", owner->GetTransform().GetModelMatrix());
 
-	if (meshFilter != nullptr)
+	if (GetMeshFilter() != nullptr)
 	{
 		//Bounds* bounds = GetBounds();
 		//if (bounds != nullptr)
@@ -137,9 +74,6 @@ void MeshComponent::SimpleDraw(Shader* shader)
 		//	//shader->setVec3("boundingBoxMax", bounds->GetMax());
 		//}
 
-		meshFilter->DrawCall();
-	}
-	else {
-		UpdateUUID();
+		GetMeshFilter()->DrawCall();
 	}
 }

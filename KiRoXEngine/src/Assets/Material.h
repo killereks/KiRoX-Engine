@@ -13,10 +13,10 @@ class Material : public Asset {
 
 public:
 	PROPERTY()
-	Shader* shader;
+	ObjectPtr* shader;
 
 	PROPERTY()
-	Texture* mainTexture;
+	ObjectPtr* mainTexture;
 
 	void Bind();
 

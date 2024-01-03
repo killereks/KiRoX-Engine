@@ -4,6 +4,8 @@
 #include <rttr/registration.h>
 #include <yaml-cpp/yaml.h>
 
+#include <Tools/ObjectPtr.h>
+
 #include <fstream>
 
 #include <vector>
@@ -43,6 +45,10 @@ namespace SavingLoading {
 			}
 			else if (prop.get_value(var).get_type() == rttr::type::get<std::string>()) {
 				std::string value = prop.get_value(var).get_value<std::string>();
+				out << YAML::Value << value;
+			}
+			else if (prop.get_value(var).get_type() == rttr::type::get<ObjectPtr*>()) {
+				std::string value = prop.get_value(var).get_value<ObjectPtr*>()->GetUUID();
 				out << YAML::Value << value;
 			}
 			else {
@@ -97,6 +103,11 @@ namespace SavingLoading {
 			else if (prop.get_value(obj).get_type() == rttr::type::get<bool>()) {
 				bool value = data[name].as<bool>();
 				prop.set_value(obj, value);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<ObjectPtr*>()) {
+				ObjectPtr* value = prop.get_value(obj).get_value<ObjectPtr*>();
+				std::string uuid = data[name].as<std::string>();
+				value->SetUUID(uuid);
 			}
 		}
 	}

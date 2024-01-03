@@ -544,6 +544,10 @@ void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
 				glm::quat value = prop.get_value(comp).get_value<glm::quat>();
 				out << YAML::Value << value;
 			}
+			else if (prop.get_value(comp).get_type() == rttr::type::get<ObjectPtr*>()) {
+				std::string value = prop.get_value(comp).get_value<ObjectPtr*>()->GetUUID();
+				out << YAML::Value << value;
+			}
 			else {
 				out << YAML::Value << prop.get_value(comp).to_string();
 			}
@@ -596,7 +600,6 @@ void Scene::CubeScene()
 				ent->AddComponent<BoxCollider>();
 
 				MeshComponent* meshComponent = ent->AddComponent<MeshComponent>();
-				meshComponent->SetMeshUUID("6f96cb9a-ad5a-4a5b-bc26-c7ebf27fb931");
 			}
 		}
 	}
@@ -710,6 +713,11 @@ void Scene::LoadScene(std::string path)
 				}
 				else if (propType == rttr::type::get<glm::quat>()) {
 					currentProperty.set_value(var, propData.as<glm::quat>());
+				}
+				else if (propType == rttr::type::get<ObjectPtr*>()) {
+					std::string uuid = propData.as<std::string>();
+					ObjectPtr* ptr = currentProperty.get_value(var).get_value<ObjectPtr*>();
+					ptr->SetUUID(uuid);
 				}
 			}
 

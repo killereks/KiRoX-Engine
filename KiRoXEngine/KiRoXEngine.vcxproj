@@ -291,6 +291,7 @@
     <ClCompile Include="Dependencies\yaml\src\tag.cpp" />
     <ClCompile Include="src\Assets\AssetManager.cpp" />
     <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
+    <ClCompile Include="src\Tools\ObjectPtr.cpp" />
     <ClCompile Include="src\Tools\RenderTexture.cpp" />
     <ClCompile Include="src\Editor\Gizmos.cpp" />
     <ClCompile Include="src\Tools\Input.cpp" />
@@ -963,6 +964,7 @@
     <ClInclude Include="src\Assets\MeshFilter.h" />
     <ClInclude Include="src\Math\Mathf.h" />
     <ClInclude Include="src\Tools\MeshSimplifier.h" />
+    <ClInclude Include="src\Tools\ObjectPtr.h" />
     <ClInclude Include="src\Tools\RenderTexture.h" />
     <ClInclude Include="src\Tools\FolderWatcher.h" />
     <ClInclude Include="src\Editor\Gizmos.h" />

@@ -158,6 +158,7 @@
     <ClCompile Include="src\Components\DirectionalLight.cpp" />
     <ClCompile Include="src\Components\Colliders\Collider.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
+    <ClCompile Include="src\Tools\ObjectPtr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -840,6 +841,7 @@
     <ClInclude Include="src\Components\Colliders\Collider.h" />
     <ClInclude Include="src\Tools\SavingLoading.h" />
     <ClInclude Include="src\Assets\Material.h" />
+    <ClInclude Include="src\Tools\ObjectPtr.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

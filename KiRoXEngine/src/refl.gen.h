@@ -22,6 +22,7 @@
 #include "Components/Rigidbody.h"
 #include "Components/TestComponent.h"
 #include "Components/TransformComponent.h"
+#include "Tools/ObjectPtr.h"
 using namespace rttr;
 
 inline std::string glm_vec2_to_string(const glm::vec2& vec, bool& ok){
@@ -128,8 +129,8 @@ registration::class_<DirectionalLight>("DirectionalLight")
 
 registration::class_<MeshComponent>("MeshComponent")
 .constructor<>()
-.property("meshUUID", &MeshComponent::meshUUID)
-.method("UpdateUUID", &MeshComponent::UpdateUUID)
+.property("mesh", &MeshComponent::mesh)
+.property("material", &MeshComponent::material)
 ;
 
 registration::class_<Rigidbody>("Rigidbody")
@@ -149,6 +150,11 @@ registration::class_<TransformComponent>("TransformComponent")
 .property("position", &TransformComponent::position)
 .property("rotation", &TransformComponent::rotation)
 .property("scale", &TransformComponent::scale)
+;
+
+registration::class_<ObjectPtr>("ObjectPtr")
+.constructor<>()
+.property("uuid", &ObjectPtr::uuid)
 ;
 
 }
@@ -233,6 +239,9 @@ return rttr::type::get<TestComponent*>();
 }
 if (name == "TransformComponent"){
 return rttr::type::get<TransformComponent*>();
+}
+if (name == "ObjectPtr"){
+return rttr::type::get<ObjectPtr*>();
 }
 std::cout << "No type found for " << name << "\n";
 return rttr::type::get<void>();

@@ -7,6 +7,7 @@
 #include <Assets/AssetManager.h>
 
 class Asset;
+class ObjectPtr;
 
 class PropertyDrawer
 {
@@ -18,6 +19,8 @@ public:
 	static void DrawFunction(rttr::method& method, rttr::variant& objInstance);
 
 	static bool DrawObject(rttr::variant& objInstance);
+	
+	static bool DrawObjectPtrDragDrop(std::string label, ObjectPtr& objectPtr);
 
 	template<typename T>
 	requires std::is_base_of<Asset, T>::value
