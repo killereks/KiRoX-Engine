@@ -18,6 +18,16 @@ public:
 	PROPERTY()
 	ObjectPtr* mainTexture;
 
+	PROPERTY()
+	ObjectPtr* normalMap;
+
+	PROPERTY()
+	ObjectPtr* metallicMap;
+
+	Shader* GetShader() const {
+		return shader->Get<Shader>();
+	}
+
 	void Bind();
 
 	Material();

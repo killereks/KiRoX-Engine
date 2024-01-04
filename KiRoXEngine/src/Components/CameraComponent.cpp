@@ -5,6 +5,7 @@
 #include "../Tools/Stopwatch.h"
 #include "../Editor/Gizmos.h"
 #include "../Assets/AssetManager.h"
+#include <Assets/Material.h>
 
 CameraComponent::CameraComponent()
 {
@@ -249,11 +250,47 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 	// render
 	for (MeshComponent* meshComp : meshes)
 	{
+		Material* material = meshComp->GetMaterial();
+
 		Bounds* bounds = meshComp->GetBounds();
 		if (bounds != nullptr && !IsInFrustum(*bounds)) {
 			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
 			continue;
 		}
+
+		meshComp->SimpleDraw(shader);
+	}
+}
+
+void CameraComponent::RenderUsingMaterials(std::vector<MeshComponent*>& meshes)
+{
+	glm::mat4 viewMatrix = GetViewMatrix();
+	glm::mat4 projectionMatrix = GetProjectionMatrix();
+
+	for (MeshComponent* meshComp : meshes) {
+		Material* material = meshComp->GetMaterial();
+
+		if (material == nullptr) {
+			// some default material
+			continue;
+		}
+
+		Bounds* bounds = meshComp->GetBounds();
+		if (bounds != nullptr && !IsInFrustum(*bounds)) {
+			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
+			continue;
+		}
+
+		material->Bind();
+		Shader* shader = material->GetShader();
+
+		if (shader == nullptr) {
+			// some default shader
+			continue;
+		}
+
+		shader->setMat4("perspectiveMatrix", projectionMatrix);
+		shader->setMat4("viewMatrix", viewMatrix);
 
 		meshComp->SimpleDraw(shader);
 	}

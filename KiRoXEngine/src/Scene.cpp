@@ -85,6 +85,14 @@ void Scene::DrawHierarchy()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Light")) {
+			if (ImGui::MenuItem("Directional")) {
+				Entity* ent = CreateEntity("Directional Light");
+				ent->AddComponent<DirectionalLight>();
+			}
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndPopup();
 	}
 

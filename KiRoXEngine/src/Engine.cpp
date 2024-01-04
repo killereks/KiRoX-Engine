@@ -143,10 +143,14 @@ void Engine::RenderScene(Shader* shader)
 	if (dirLight != nullptr) {
 		dirLight->BindShadowMap(1);
 		shader->setMat4("lightSpaceMatrix", dirLight->GetLightSpaceMatrix());
+		shader->setVec3("lightDir", dirLight->GetOwner()->GetTransform().GetForward());
 	}
+	shader->setVec3("viewPos", sceneCamera->GetTransform().GetWorldPosition());
+	shader->setVec3("viewForward", sceneCamera->GetTransform().GetForward());
+
 	glCullFace(GL_BACK);
 	GetSceneCamera()->PreRender();
-	GetSceneCamera()->Render(meshComponents, shader);
+	GetSceneCamera()->RenderUsingMaterials(meshComponents);
 	GetSceneCamera()->RenderGizmos();
 	GetSceneCamera()->PostRender();
 
@@ -158,9 +162,13 @@ void Engine::RenderScene(Shader* shader)
 		if (dirLight != nullptr) {
 			dirLight->BindShadowMap(1);
 			shader->setMat4("lightSpaceMatrix", dirLight->GetLightSpaceMatrix());
+			shader->setVec3("lightDir", dirLight->GetOwner()->GetTransform().GetForward());
 		}
+		shader->setVec3("viewPos", gameCamera->GetOwner()->GetTransform().GetWorldPosition());
+		shader->setVec3("viewForward", gameCamera->GetOwner()->GetTransform().GetForward());
+
 		gameCamera->PreRender();
-		gameCamera->Render(meshComponents, shader);
+		gameCamera->RenderUsingMaterials(meshComponents);
 		gameCamera->PostRender();
 	}
 

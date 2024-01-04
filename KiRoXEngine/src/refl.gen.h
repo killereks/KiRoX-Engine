@@ -83,6 +83,8 @@ registration::class_<Material>("Material")
 .constructor<>()
 .property("shader", &Material::shader)
 .property("mainTexture", &Material::mainTexture)
+.property("normalMap", &Material::normalMap)
+.property("metallicMap", &Material::metallicMap)
 ;
 
 registration::class_<MeshFilter>("MeshFilter")

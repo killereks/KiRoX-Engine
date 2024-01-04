@@ -108,6 +108,8 @@ public:
 	}
 
 	void Render(std::vector<MeshComponent*>& meshes, Shader* shader);
+	void RenderUsingMaterials(std::vector<MeshComponent*>& meshes);
+
 	void Resize(int width, int height);
 
 	glm::mat4 GetViewMatrix() {

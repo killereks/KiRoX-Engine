@@ -54,6 +54,9 @@ class MeshFilter : public Asset {
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
 
+	std::vector<glm::vec3> tangents;
+	std::vector<glm::vec3> bitangents;
+
 	// BASICS:
 	// Vertices
 	// Indices
@@ -64,13 +67,16 @@ class MeshFilter : public Asset {
 	// tangents
 	// bitangents
 
+	unsigned int VAO; // vertex array object
+
 	unsigned int VBO; // vertices
 	unsigned int IBO; // indices
 
 	unsigned int NBO; // normals
 	unsigned int TBO; // texture coords
 
-	unsigned int VAO; // vertex array object
+	unsigned int TANBO; // tangents
+	unsigned int BTANBO; // bitangents
 
 	bool fullyUploaded = false;
 
@@ -99,6 +105,9 @@ public:
 		glGenBuffers(1, &NBO);
 		glGenBuffers(1, &TBO);
 
+		glGenBuffers(1, &TANBO);
+		glGenBuffers(1, &BTANBO);
+
 		glGenVertexArrays(1, &VAO);
 	}
 
@@ -108,6 +117,9 @@ public:
 		glDeleteBuffers(1, &IBO);
 		glDeleteBuffers(1, &NBO);
 		glDeleteBuffers(1, &TBO);
+
+		glDeleteBuffers(1, &TANBO);
+		glDeleteBuffers(1, &BTANBO);
 
 		glDeleteVertexArrays(1, &VAO);
 
@@ -148,6 +160,26 @@ public:
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
+		// TANGENTS
+		if (tangents.size() > 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, TANBO);
+			glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(glm::vec3), nullptr, GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(3);
+			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
+		// BITANGENTS
+		if (bitangents.size() > 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, BTANBO);
+			glBufferData(GL_ARRAY_BUFFER, bitangents.size() * sizeof(glm::vec3), nullptr, GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(4);
+			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -155,6 +187,8 @@ public:
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
+		glDisableVertexAttribArray(4);
 	}
 
 	bool AsyncUpload()
@@ -192,6 +226,22 @@ public:
 		{
 			size_t amount = std::min(chunkSize, uvs.size() - bufferUploadOffset);
 			glBufferSubData(GL_ARRAY_BUFFER, bufferUploadOffset * sizeof(glm::vec2), amount * sizeof(glm::vec2), &uvs[bufferUploadOffset]);
+			allDone = false;
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, TANBO);
+		if (bufferUploadOffset < tangents.size())
+		{
+			size_t amount = std::min(chunkSize, tangents.size() - bufferUploadOffset);
+			glBufferSubData(GL_ARRAY_BUFFER, bufferUploadOffset * sizeof(glm::vec3), amount * sizeof(glm::vec3), &tangents[bufferUploadOffset]);
+			allDone = false;
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, BTANBO);
+		if (bufferUploadOffset < bitangents.size())
+		{
+			size_t amount = std::min(chunkSize, bitangents.size() - bufferUploadOffset);
+			glBufferSubData(GL_ARRAY_BUFFER, bufferUploadOffset * sizeof(glm::vec3), amount * sizeof(glm::vec3), &bitangents[bufferUploadOffset]);
 			allDone = false;
 		}
 
@@ -286,37 +336,64 @@ public:
 
 		bounds->Clear();
 
-		//for (int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
-			//aiMesh* mesh = scene->mMeshes[meshIndex];
-
 		aiMesh* mesh = scene->mMeshes[0];
 
-			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+		{
+			glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+
+			bounds->InsertPoint(vertex);
+			vertices.emplace_back(vertex);
+
+			if (mesh->HasNormals())
 			{
-				glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-
-				bounds->InsertPoint(vertex);
-				vertices.emplace_back(vertex);
-
-				if (mesh->HasNormals())
-				{
-					normals.emplace_back(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
-				}
-				if (mesh->HasTextureCoords(0))
-				{
-					uvs.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, 1.0 - mesh->mTextureCoords[0][i].y));
-				}
+				normals.emplace_back(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
 			}
-
-			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+			if (mesh->HasTextureCoords(0))
 			{
-				aiFace face = mesh->mFaces[i];
-				for (unsigned int j = 0; j < face.mNumIndices; j++)
-				{
-					indices.emplace_back(face.mIndices[j]);
-				}
+				uvs.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, 1.0 - mesh->mTextureCoords[0][i].y));
 			}
-		//}
+		}
+
+		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+		{
+			aiFace face = mesh->mFaces[i];
+			for (unsigned int j = 0; j < face.mNumIndices; j++)
+			{
+				indices.emplace_back(face.mIndices[j]);
+			}
+		}
+
+		// work out tangents and bitangents
+		for (unsigned int i = 0; i < indices.size(); i += 3)
+		{
+			const glm::vec3& v0 = vertices[indices[i]];
+			const glm::vec3& v1 = vertices[indices[i + 1]];
+			const glm::vec3& v2 = vertices[indices[i + 2]];
+
+			const glm::vec2& uv0 = uvs[indices[i]];
+			const glm::vec2& uv1 = uvs[indices[i + 1]];
+			const glm::vec2& uv2 = uvs[indices[i + 2]];
+
+			const glm::vec3 deltaPos1 = v1 - v0;
+			const glm::vec3 deltaPos2 = v2 - v0;
+
+			const glm::vec2 deltaUV1 = uv1 - uv0;
+			const glm::vec2 deltaUV2 = uv2 - uv0;
+
+			const float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+
+			const glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+			const glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+			tangents.push_back(tangent);
+			tangents.push_back(tangent);
+			tangents.push_back(tangent);
+
+			bitangents.push_back(bitangent);
+			bitangents.push_back(bitangent);
+			bitangents.push_back(bitangent);
+		}
 
 		//if (indices.size() / 3 >= 25000) {
 		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);

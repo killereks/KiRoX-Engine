@@ -10,6 +10,8 @@
 #include "../Tools/Bounds.h"
 #include "icons/IconsFontAwesome6.h"
 
+#include <Assets/Material.h>
+
 #include <Tools/ObjectPtr.h>
 
 CLASS()
@@ -41,6 +43,10 @@ class MeshComponent : public Component
 		}
 
 		Bounds* GetBounds();
+
+		Material* GetMaterial() const {
+			return material->Get<Material>();
+		}
 
 		const int GetVertexCount() const {
 			if (GetMeshFilter() != nullptr) {

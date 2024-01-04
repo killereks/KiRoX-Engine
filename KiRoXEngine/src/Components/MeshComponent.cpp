@@ -12,6 +12,7 @@
 #include "../Tools/StatsCounter.h"
 
 #include "../Reflection/PropertyDrawer.h"
+#include <Assets/Material.h>
 
 MeshComponent::MeshComponent()
 {
