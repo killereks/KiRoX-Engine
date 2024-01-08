@@ -86,8 +86,8 @@ void Engine::Update()
 	shader = assetManager->Get<Shader>("TestShader.shader");
 
 	SceneControls();
-	RenderEditorUI();
 	RenderScene(shader);
+	RenderEditorUI();
 
 	if (currentSceneState == SceneState::Playing)
 	{
@@ -112,21 +112,9 @@ void Engine::Update()
 
 void Engine::RenderScene(Shader* shader)
 {
-	switch (currentRenderMode) {
-		case RenderMode::Lit:
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			break;
-		}
-		case RenderMode::Wireframe:
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			break;
-		}
-	}
-
 	std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
 	DirectionalLight* dirLight = activeScene.get()->FindComponentOfType<DirectionalLight>();
+	Volume* volume = activeScene.get()->FindComponentOfType<Volume>();
 
 	StatsCounter::GetInstance()->SetCounter("meshEntities", meshComponents.size());
 
@@ -151,9 +139,13 @@ void Engine::RenderScene(Shader* shader)
 	glCullFace(GL_BACK);
 
 	GetSceneCamera()->PreRender();
+	TryRenderSelectedEntity();
 	GetSceneCamera()->RenderUsingMaterials(meshComponents);
 	GetSceneCamera()->RenderGizmos();
 	GetSceneCamera()->PostRender();
+	if (volume != nullptr) {
+		volume->Apply(GetSceneCamera()->GetRenderTextureID(), GetSceneCamera()->GetScreenWidth(), GetSceneCamera()->GetScreenHeight());
+	}
 
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)
@@ -171,9 +163,39 @@ void Engine::RenderScene(Shader* shader)
 		gameCamera->PreRender();
 		gameCamera->RenderUsingMaterials(meshComponents);
 		gameCamera->PostRender();
+
+		if (volume != nullptr) {
+			volume->Apply(gameCamera->GetRenderTextureID(), gameCamera->GetScreenWidth(), gameCamera->GetScreenHeight());
+		}
 	}
 
 	Gizmos::GetInstance()->Clear();
+}
+
+void Engine::TryRenderSelectedEntity()
+{
+	Entity* selectedEntity = activeScene.get()->GetSelectedEntity();
+
+	if (selectedEntity == nullptr) return;
+
+	MeshComponent* meshComp = selectedEntity->GetComponent<MeshComponent>();
+
+	if (meshComp == nullptr) return;
+
+	Shader* outlineShader = assetManager->Get<Shader>("Outline.shader");
+
+	outlineShader->use();
+
+	outlineShader->setMat4("viewMatrix", GetSceneCamera()->GetViewMatrix());
+	outlineShader->setMat4("projectionMatrix", GetSceneCamera()->GetProjectionMatrix());
+
+	glLineWidth(5.0f);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glCullFace(GL_FRONT);
+	meshComp->SimpleDraw(outlineShader);
+	glCullFace(GL_BACK);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glLineWidth(1.0f);
 }
 
 void Engine::RenderEditorUI()
@@ -323,7 +345,7 @@ void Engine::RenderSceneWindow()
 
 	RenderStatistics();
 
-	if (ImGui::IsItemHovered() && Input::GetMouseButtonDown(0)) {
+	if (ImGui::IsItemHovered() && Input::GetMouseButtonDown(0) && !ImGuizmo::IsUsing()) {
 		ImVec2 windowSize = ImGui::GetWindowSize();
 		ImVec2 windowPos = ImGui::GetWindowPos();
 
@@ -526,19 +548,6 @@ void Engine::RenderToolbar()
 		if (ImGui::Button(ICON_FA_VECTOR_SQUARE " Local"))
 		{
 			currentGizmoMode = ImGuizmo::MODE::WORLD;
-		}
-	}
-
-	// RENDER MODE
-	ImGui::SameLine();
-	if (currentRenderMode == RenderMode::Lit) {
-		if (ImGui::Button("Lit Mode")) {
-			currentRenderMode = RenderMode::Wireframe;
-		}
-	}
-	else {
-		if (ImGui::Button("Wireframe Mode")) {
-			currentRenderMode = RenderMode::Lit;
 		}
 	}
 

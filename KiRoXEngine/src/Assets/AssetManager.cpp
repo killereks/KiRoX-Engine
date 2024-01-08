@@ -115,6 +115,9 @@ void AssetManager::OnFileChanged(std::wstring_view filename, FolderWatcher::Acti
             if (extension == ".shader") {
                 Get<Shader>(fileAssetName)->Recompile();
             }
+            else if (extension == ".computeshader") {
+                Get<ComputeShader>(fileAssetName)->Recompile();
+            }
         }
     }
     else if (action == FolderWatcher::Action::Created) {
@@ -134,7 +137,11 @@ void AssetManager::DrawInspector()
 {
     ImGui::Begin("Assets");
 
-    ImGui::Text("Loading %i assets...", NumberOfAssetsLoading());
+    if (loadedAssets < totalAssets) {
+        ImGui::Text("Loading %i / %i assets...", loadedAssets, totalAssets);
+        ImGui::SameLine();
+        ImGui::ProgressBar((float)loadedAssets / (float)totalAssets, ImVec2(0.0f, 0.0f));
+    }
 
     ////////////////////
     // Drawing Bread crumbs
@@ -336,6 +343,7 @@ void AssetManager::UnloadAsset(const std::string& name)
     {
         delete assets[name];
         assets.erase(name);
+        loadedAssets--;
     }
 }
 
@@ -370,6 +378,8 @@ void AssetManager::AsyncUpdate()
             std::swap(loadingCoroutines[i], loadingCoroutines.back());
             loadingCoroutines.pop_back();
             --i;
+
+            loadedAssets++;
 
             asset->loaded = true;
             InvokeLoadedCallbacks(asset->fileName);

@@ -13,22 +13,62 @@ void ComputeShader::CreateBuffer(unsigned int index)
 	glGenBuffers(1, &buffers[index]);
 }
 
+void ComputeShader::CheckCompileErrors(unsigned int shader, std::string type)
+{
+	GLint success;
+	GLchar infoLog[1024];
+	if (type != "PROGRAM")
+	{
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
+	else
+	{
+		glGetProgramiv(shader, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
+}
+
 ComputeShader::ComputeShader()
 {
+	
+}
+
+ComputeShader::~ComputeShader()
+{
+	glDeleteShader(computeShaderID);
+
 	for (unsigned int i = 0; i < buffers.size(); i++)
 	{
 		glDeleteBuffers(1, &buffers[i]);
 	}
 }
 
-ComputeShader::~ComputeShader()
+void ComputeShader::Bind()
 {
-	glDeleteShader(computeShaderID);
+	glUseProgram(computeShaderID);
+}
+
+void ComputeShader::Unbind()
+{
+	glUseProgram(0);
+}
+
+void ComputeShader::Recompile()
+{
+	LoadShader();
 }
 
 void ComputeShader::Dispatch(unsigned int x, unsigned int y, unsigned int z)
 {
-	glUseProgram(computeShaderID);
 	glDispatchCompute(x, y, z);
 	glMemoryBarrier(GL_ALL_BARRIER_BITS);
 }
@@ -47,14 +87,17 @@ void ComputeShader::SetData(unsigned int index, void* data, unsigned int size)
 
 void ComputeShader::SetBool(const std::string& name, bool value) const
 {
+	glUniform1d(glGetUniformLocation(computeShaderID, name.c_str()), (int)value);
 }
 
 void ComputeShader::SetInt(const std::string& name, int value) const
 {
+	glUniform1i(glGetUniformLocation(computeShaderID, name.c_str()), value);
 }
 
 void ComputeShader::SetFloat(const std::string& name, float value) const
 {
+	glUniform1f(glGetUniformLocation(computeShaderID, name.c_str()), value);
 }
 
 void ComputeShader::LoadShader()
@@ -74,51 +117,39 @@ void ComputeShader::LoadShader()
 
 	const char* shaderCodeCStr = shaderCode.c_str();
 
-	computeShaderID = glCreateShader(GL_COMPUTE_SHADER);
-	glShaderSource(computeShaderID, 1, &shaderCodeCStr, NULL);
-	glCompileShader(computeShaderID);
+	unsigned int compute;
 
-	int success;
+	compute = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(compute, 1, &shaderCodeCStr, NULL);
+	glCompileShader(compute);
+	CheckCompileErrors(compute, "COMPUTE_SHADER");
 
-	glGetShaderiv(computeShaderID, GL_COMPILE_STATUS, &success);
+	computeShaderID = glCreateProgram();
+	glAttachShader(computeShaderID, compute);
+	glLinkProgram(computeShaderID);
+	CheckCompileErrors(computeShaderID, "PROGRAM");
 
-	if (!success)
-	{
-		char infoLog[512];
-		glGetShaderInfoLog(computeShaderID, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::COMPUTE SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
-
-		loaded = true;
-
-		shaderFile.close();
-		return;
-	}
-
-	unsigned int computeProgram = glCreateProgram();
-	glAttachShader(computeProgram, computeShaderID);
-	glLinkProgram(computeProgram);
-
-	glGetProgramiv(computeProgram, GL_LINK_STATUS, &success);
-
-	if (!success)
-	{
-		char infoLog[512];
-		glGetProgramInfoLog(computeProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::COMPUTE SHADER::LINKING_FAILED\n" << infoLog << std::endl;
-
-		loaded = true;
-
-		shaderFile.close();
-		return;
-	}
-
-	loaded = true;
+	glDeleteShader(compute);
 
 	shaderFile.close();
+
+	loaded = true;
 }
 
 void ComputeShader::SetVec2(const std::string& name, const glm::vec2& value) const
 {
+	glUniform2fv(glGetUniformLocation(computeShaderID, name.c_str()), 1, &value[0]);
+}
+
+void ComputeShader::SetTexture(unsigned int textureID, unsigned int slot)
+{
+	glActiveTexture(GL_TEXTURE0 + slot);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+}
+
+void ComputeShader::SetTextureLayout(unsigned int textureID, unsigned int slot)
+{
+	glBindImageTexture(slot, textureID, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 }
 
 co::Coro ComputeShader::BeginLoading()

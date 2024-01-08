@@ -53,6 +53,9 @@ private:
 
     Asset* selectedAsset = nullptr;
 
+    int totalAssets = 0;
+    int loadedAssets = 0;
+
 public:
 	static AssetManager* GetInstance()
 	{
@@ -95,8 +98,6 @@ public:
 	template <typename T>
 	void Load(const std::string& name, const std::string& filePath)
 	{
-        //std::cout << "Loading " << name << "\n";
-
 		if (assets.find(name) != assets.end())
 		{
 			delete assets[name];
@@ -114,6 +115,10 @@ public:
         {
 			loadingCoroutines.emplace_back(std::move(coroutine));
         }
+        else {
+            loadedAssets++;
+        }
+        totalAssets++;
 
 		Console::Write("Loading asset: " + name, ImVec4(0.278f, 0.722f, 1.0f, 1.0f));
 	}

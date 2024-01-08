@@ -22,9 +22,15 @@ Entities:
       position: [0, 0, 0]
       rotation: [0.707106829, 0, 0, 0.707106709]
       scale: [34.7938423, 34.7987061, 2.43977642]
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
     MeshComponent:
       mesh: 305e9895-69de-468d-9879-63ae350403eb
       material: cd93cc52-4012-471f-99b2-3f2f1e4f571a
+    Rigidbody:
+      isStatic: true
   - Entity: Directional Light
     UUID: 980a99ef-5221-4d69-847a-dd5502752b3c
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
@@ -51,3 +57,12 @@ Entities:
       bottom: -10
       orthoNear: 1
       orthoFar: 100
+  - Entity: Volume
+    UUID: 93fcd658-bb30-44d4-ba84-864ed0127f06
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    Volume:
+      testProcess: 587fc6b9-d113-402b-bdbb-fce3324d0640

@@ -8,6 +8,8 @@ void Material::Bind()
 
 	Shader* shader = this->shader->Get<Shader>();
 
+	shader->use();
+
 	if (this->mainTexture->HasValue()) {
 		Texture* texture = this->mainTexture->Get<Texture>();
 

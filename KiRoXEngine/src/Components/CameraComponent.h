@@ -112,6 +112,9 @@ public:
 
 	void Resize(int width, int height);
 
+	int GetScreenWidth() const { return width; }
+	int GetScreenHeight() const { return height; }
+
 	glm::mat4 GetViewMatrix() {
 		return owner->GetTransform().GetViewMatrix();
 	}

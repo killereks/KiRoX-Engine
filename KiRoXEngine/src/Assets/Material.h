@@ -5,8 +5,6 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#include "coroutines/CoroExtensions.h"
-
 #include <Tools/ObjectPtr.h>
 
 CLASS()

@@ -19,17 +19,10 @@ enum class SceneState
 	Editor, Playing, Paused, OneTick
 };
 
-enum class RenderMode {
-	Lit,
-	Wireframe
-};
-
 class Engine
 {
 	ImGuizmo::OPERATION currentOperation;
 	ImGuizmo::MODE currentGizmoMode = ImGuizmo::MODE::WORLD;
-
-	RenderMode currentRenderMode = RenderMode::Lit;
 
 	SceneState currentSceneState = SceneState::Editor;
 
@@ -109,6 +102,7 @@ public:
 	void Update();
 
 	void RenderScene(Shader* shader);
+	void TryRenderSelectedEntity();
 
 	void RenderEditorUI();
 
