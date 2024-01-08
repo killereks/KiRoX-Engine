@@ -12,6 +12,7 @@
 #include "refl.gen.h"
 
 #include "Physics.h"
+#include <Editor/MouseSelecting.h>
 
 enum class SceneState
 {
@@ -33,6 +34,8 @@ class Engine
 	SceneState currentSceneState = SceneState::Editor;
 
 	Physics* physics;
+
+	MouseSelecting mouseSelecting;
 
 	std::string projectPath;
 

@@ -50,6 +50,24 @@ Scene::~Scene()
 	delete rootEntity;
 }
 
+void Scene::SelectEntityByIndex(unsigned int index)
+{
+	if (index == 0) {
+		selectedEntity = nullptr;
+		return;
+	}
+
+	// since 0 is background
+	index--;
+
+	std::vector<MeshComponent*> meshes = FindComponentsOfType<MeshComponent>();
+
+	if (index < meshes.size()) {
+		selectedEntity = meshes[index]->GetOwner();
+		return;
+	}
+}
+
 co::Coro Scene::BeginLoading()
 {
 	this->loaded = true;

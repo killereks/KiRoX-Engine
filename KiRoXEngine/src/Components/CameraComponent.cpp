@@ -157,6 +157,7 @@ void CameraComponent::RenderGizmos()
 void CameraComponent::PreRender()
 {
 	Bind();
+	glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
 	Clear();
 	glViewport(0, 0, width, height);
 }

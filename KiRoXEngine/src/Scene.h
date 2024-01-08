@@ -19,6 +19,7 @@ public:
 	Scene();
 	~Scene();
 
+	void SelectEntityByIndex(unsigned int index);
 	Entity* GetSelectedEntity() { return selectedEntity; }
 
 	virtual co::Coro BeginLoading() override;

@@ -61,6 +61,7 @@ in vec4 FragPosLightSpace;
 out vec4 FragColor;
 
 uniform bool hasNormalMap;
+uniform bool hasMetallicMap;
 
 uniform sampler2D shadowMap;
 
@@ -109,8 +110,12 @@ void main(){
 		normals = normalize(TBN * normalize(texture(normalMap, UV).rgb * 2.0 - 1.0));
 	}
 
+	float metallic = 1.0;
+	if (hasMetallicMap){
+		metallic = texture(metallicMap, UV).r;
+	}
+
 	vec3 albedo = texture(albedoMap, UV).rgb;
-	float metallic = texture(metallicMap, UV).r;
 
 	float shadow = softShadows(dot(lightDir, normals));
 
@@ -120,7 +125,6 @@ void main(){
 
 	float diffuse = max(dot(normals, -lightDir), 0.0);
 
-	//vec3 col = albedo * (diffuse + specular) * shadow;
 	vec3 col = albedo * (metallic * diffuse + metallic * specular) * shadow;
 
 	FragColor = vec4(col, 1.0);

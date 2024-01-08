@@ -54,7 +54,13 @@ void ShadowMap::Resize(unsigned int width, unsigned int height)
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 
-	glBindBuffer(GL_FRAMEBUFFER, 0);
+	// check for errors
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "[ShadowMap] Framebuffer not complete!" << std::endl;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void ShadowMap::Render(std::vector<MeshComponent*>& meshes, glm::mat4 lightMatrix)

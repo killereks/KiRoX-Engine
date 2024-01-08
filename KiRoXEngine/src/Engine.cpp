@@ -149,6 +149,7 @@ void Engine::RenderScene(Shader* shader)
 	shader->setVec3("viewForward", sceneCamera->GetTransform().GetForward());
 
 	glCullFace(GL_BACK);
+
 	GetSceneCamera()->PreRender();
 	GetSceneCamera()->RenderUsingMaterials(meshComponents);
 	GetSceneCamera()->RenderGizmos();
@@ -321,6 +322,20 @@ void Engine::RenderSceneWindow()
 	}
 
 	RenderStatistics();
+
+	if (ImGui::IsItemHovered() && Input::GetMouseButtonDown(0)) {
+		ImVec2 windowSize = ImGui::GetWindowSize();
+		ImVec2 windowPos = ImGui::GetWindowPos();
+
+		mouseSelecting.Resize(windowSize.x, windowSize.y);
+
+		glm::vec2 mousePosRelative = glm::vec2(ImGui::GetMousePos().x - windowPos.x, ImGui::GetMousePos().y - windowPos.y);
+		std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
+
+		glm::vec3 color = mouseSelecting.MouseClicked(meshComponents, GetSceneCamera(), mousePosRelative);
+
+		activeScene.get()->SelectEntityByIndex(color.x);
+	}
 
 	ImGui::End();
 }

@@ -3,6 +3,11 @@
 #include "GL/glew.h"
 #include <string>
 #include "../Editor/Console.h"
+#include <iostream>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "image/stb_image_write.h"
+
+#include <fstream>
 
 void CheckOpenGLError(const char* stmt, const char* fname, int line)
 {
@@ -28,6 +33,30 @@ RenderTexture::RenderTexture(int width, int height)
 	Resize(width, height);
 }
 
+glm::vec3 RenderTexture::GetPixel(int x, int y)
+{
+	if (x < 0 || x > width || y < 0 || y > height) return glm::vec3(0.0f);
+
+	glm::vec3 pixel = glm::vec3(0.0f);
+
+	y = height - y;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+	unsigned int* pixels = new unsigned int[3];
+	glReadPixels(x, y, 1, 1, GL_RGB_INTEGER, GL_UNSIGNED_INT, pixels);
+
+	pixel = glm::vec3(pixels[0], pixels[1], pixels[2]);
+
+	delete[] pixels;
+
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return pixel;
+}
+
 void RenderTexture::Bind()
 {
 	glActiveTexture(GL_TEXTURE0);
@@ -44,8 +73,6 @@ void RenderTexture::Unbind()
 void RenderTexture::Resize(int width, int height)
 {
 	if (this->width == width && this->height == height) return;
-
-	Console::Write("Window size changed from " + std::to_string(this->width) + "x" + std::to_string(this->height) + " to " + std::to_string(width) + "x" + std::to_string(height));
 
 	if (FBO != 0)
 	{
@@ -64,26 +91,31 @@ void RenderTexture::Resize(int width, int height)
 	glGenTextures(1, &colorTexture);
 	glBindTexture(GL_TEXTURE_2D, colorTexture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+	if (useInts) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32UI, width, height, 0, GL_RGB_INTEGER, GL_UNSIGNED_INT, 0);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+	else {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
 
-	glBindTexture(GL_TEXTURE_2D, colorTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
 
 	// DEPTH TEXTURE
 	glGenTextures(1, &depthTexture);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// ATTACH TEXTURE TO FRAMEBUFFER
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -92,6 +124,7 @@ void RenderTexture::Resize(int width, int height)
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void RenderTexture::Clear()

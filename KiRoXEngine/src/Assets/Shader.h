@@ -177,6 +177,11 @@ public:
 		glUniform1i(getLocation(name), value);
 	}
 	// ------------------------------------------------------------------------
+	void setUInt(const std::string& name, unsigned int value)
+	{
+		glUniform1ui(getLocation(name), value);
+	}
+	// ------------------------------------------------------------------------
 	void setFloat(const std::string& name, float value)
 	{
 		glUniform1f(getLocation(name), value);

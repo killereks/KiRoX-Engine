@@ -22,6 +22,7 @@
 #include "Components/Rigidbody.h"
 #include "Components/TestComponent.h"
 #include "Components/TransformComponent.h"
+#include "Components/Volume.h"
 #include "Tools/ObjectPtr.h"
 using namespace rttr;
 
@@ -145,6 +146,7 @@ registration::class_<TestComponent>("TestComponent")
 .property("a", &TestComponent::a)
 .property("time", &TestComponent::time)
 .property("name", &TestComponent::name)
+.property("numbers", &TestComponent::numbers)
 ;
 
 registration::class_<TransformComponent>("TransformComponent")
@@ -152,6 +154,11 @@ registration::class_<TransformComponent>("TransformComponent")
 .property("position", &TransformComponent::position)
 .property("rotation", &TransformComponent::rotation)
 .property("scale", &TransformComponent::scale)
+;
+
+registration::class_<Volume>("Volume")
+.constructor<>()
+.property("testProcess", &Volume::testProcess)
 ;
 
 registration::class_<ObjectPtr>("ObjectPtr")
@@ -208,6 +215,11 @@ ok = true;
 return dynamic_cast<TransformComponent*>(comp);
 }
 
+inline Volume* converter_Volume(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<Volume*>(comp);
+}
+
 static const rttr::type GetType(const std::string& name){
 if (name == "Material"){
 return rttr::type::get<Material*>();
@@ -242,6 +254,9 @@ return rttr::type::get<TestComponent*>();
 if (name == "TransformComponent"){
 return rttr::type::get<TransformComponent*>();
 }
+if (name == "Volume"){
+return rttr::type::get<Volume*>();
+}
 if (name == "ObjectPtr"){
 return rttr::type::get<ObjectPtr*>();
 }
@@ -271,6 +286,9 @@ return new TestComponent();
 if (name == "TransformComponent"){
 return new TransformComponent();
 }
+if (name == "Volume"){
+return new Volume();
+}
 throw std::runtime_error("No type found for " + name);
 }
 
@@ -282,6 +300,7 @@ rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Rigidbody);
 rttr::type::get<Component*>().register_converter_func(converter_TestComponent);
 rttr::type::get<Component*>().register_converter_func(converter_TransformComponent);
+rttr::type::get<Component*>().register_converter_func(converter_Volume);
 rttr::type::get<glm::vec2>().register_converter_func(glm_vec2_to_string);
 rttr::type::get<glm::vec3>().register_converter_func(glm_vec3_to_string);
 rttr::type::get<glm::vec4>().register_converter_func(glm_vec4_to_string);

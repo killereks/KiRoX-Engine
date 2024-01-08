@@ -16,6 +16,9 @@ class TestComponent : public Component
 	PROPERTY()
 	std::string name;
 
+	PROPERTY()
+	std::vector<int> numbers;
+
 	virtual std::string GetIcon() override;
 };
 

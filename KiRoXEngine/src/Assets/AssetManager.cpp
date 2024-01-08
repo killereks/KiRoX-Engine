@@ -403,7 +403,7 @@ void AssetManager::LoadAsset(std::string& fullPath){
     {
         Load<Shader>(fileName, fullPath);
     }
-    else if (extension == "fbx" || extension == "obj")
+    else if (extension == "fbx" || extension == "obj" || extension == "glb" || extension == "gltf")
     {
         Load<MeshFilter>(fileName, fullPath);
     }

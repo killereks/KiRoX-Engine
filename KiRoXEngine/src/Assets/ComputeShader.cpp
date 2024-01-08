@@ -45,6 +45,18 @@ void ComputeShader::SetData(unsigned int index, void* data, unsigned int size)
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, buffers[index]);
 }
 
+void ComputeShader::SetBool(const std::string& name, bool value) const
+{
+}
+
+void ComputeShader::SetInt(const std::string& name, int value) const
+{
+}
+
+void ComputeShader::SetFloat(const std::string& name, float value) const
+{
+}
+
 void ComputeShader::LoadShader()
 {
 	std::ifstream shaderFile;
@@ -103,6 +115,10 @@ void ComputeShader::LoadShader()
 	loaded = true;
 
 	shaderFile.close();
+}
+
+void ComputeShader::SetVec2(const std::string& name, const glm::vec2& value) const
+{
 }
 
 co::Coro ComputeShader::BeginLoading()

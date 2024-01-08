@@ -16,8 +16,31 @@ bool PropertyDrawer::DrawProperty(rttr::property& prop, rttr::variant& objInstan
 {
 	// TODO: Add array support
 	// TODO: Add enum support
+
 	return DrawSingleProperty(prop, objInstance);
 }
+
+/*bool PropertyDrawer::DrawPropertyEnum(rttr::property& prop, rttr::variant& objInstance) {
+	rttr::enumeration enumType = prop.get_enumeration();
+	std::string enumName = enumType.get_name().c_str();
+
+	int value = prop.get_value(objInstance).to_int();
+	if (ImGui::BeginCombo(prop.get_name().c_str(), enumType.value_to_name(value).c_str())) {
+		for (int i = 0; i < enumType.get_values().size(); i++) {
+			std::string name = enumType.value_to_name(i).c_str();
+			bool isSelected = value == i;
+			if (ImGui::Selectable(name.c_str(), isSelected)) {
+				prop.set_value(objInstance, i);
+			}
+			if (isSelected) {
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+		return true;
+	}
+	return false;
+}*/
 
 bool PropertyDrawer::DrawSingleProperty(rttr::property& prop, rttr::variant& objInstance)
 {

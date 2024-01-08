@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-#include "image_load/stb_image.h"
+#include "image/stb_image.h"
 
 CLASS()
 class Texture : public Asset

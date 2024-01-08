@@ -1,7 +1,7 @@
 #include "Texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "image_load/stb_image.h"
+#include "image/stb_image.h"
 
 #include "../Tools/File.h"
 
@@ -64,7 +64,7 @@ co::Coro Texture::BeginLoading()
 
 			self->UploadToGPU();
 
-			//stbi_image_free(self->pixels);
+			stbi_image_free(self->pixels);
 
 		}, this);
 
@@ -78,6 +78,7 @@ void Texture::Load()
 	if (pixels == nullptr)
 	{
 		std::cout << "Failed to load image: " << filePath << std::endl;
+		stbi_image_free(pixels);
 	}
 }
 

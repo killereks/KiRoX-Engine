@@ -159,6 +159,8 @@
     <ClCompile Include="src\Components\Colliders\Collider.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
     <ClCompile Include="src\Tools\ObjectPtr.cpp" />
+    <ClCompile Include="src\Components\Volume.cpp" />
+    <ClCompile Include="src\Editor\MouseSelecting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -221,7 +223,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Editor\Console.h" />
-    <ClInclude Include="Dependencies\image_load\stb_image.h" />
+    <ClInclude Include="Dependencies\image\stb_image.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Assets\Asset.h" />
     <ClInclude Include="src\Assets\AssetManager.h" />
@@ -842,6 +844,9 @@
     <ClInclude Include="src\Tools\SavingLoading.h" />
     <ClInclude Include="src\Assets\Material.h" />
     <ClInclude Include="src\Tools\ObjectPtr.h" />
+    <ClInclude Include="src\Components\Volume.h" />
+    <ClInclude Include="src\Editor\MouseSelecting.h" />
+    <ClInclude Include="Dependencies\image\stb_image_write.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

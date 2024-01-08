@@ -119,7 +119,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;$(SolutionDir)KiRoXEngine\Dependencies\physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -142,7 +142,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;$(SolutionDir)KiRoXEngine\Dependencies\physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -161,6 +161,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\MouseSelecting.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
     <ClCompile Include="src\Components\Colliders\Collider.cpp" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
@@ -316,8 +317,11 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
     <ClCompile Include="src\Components\TestComponent.cpp" />
+    <ClCompile Include="src\Components\Volume.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\image\stb_image_write.h" />
+    <ClInclude Include="src\Editor\MouseSelecting.h" />
     <ClInclude Include="src\Assets\Material.h" />
     <ClInclude Include="src\Components\Colliders\Collider.h" />
     <ClInclude Include="Dependencies\GLEW\include\GL\eglew.h" />
@@ -976,7 +980,7 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Editor\Console.h" />
-    <ClInclude Include="Dependencies\image_load\stb_image.h" />
+    <ClInclude Include="Dependencies\image\stb_image.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Assets\Asset.h" />
     <ClInclude Include="src\Assets\AssetManager.h" />
@@ -999,6 +1003,7 @@
     <ClInclude Include="src\Tools\StatsCounter.h" />
     <ClInclude Include="src\Components\TestComponent.h" />
     <ClInclude Include="src\Tools\StringTools.h" />
+    <ClInclude Include="src\Components\Volume.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\assimp-vc143-mtd.lib" />

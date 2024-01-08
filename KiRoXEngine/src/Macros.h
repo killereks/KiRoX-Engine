@@ -4,6 +4,8 @@
 
 #define CLASS(...)
 
+#define ENUM(...)
+
 #define REFLECT(X) \
 	RTTR_ENABLE(X) \
 	RTTR_REGISTRATION_FRIEND

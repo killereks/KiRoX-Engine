@@ -66,6 +66,10 @@ public:
         return uuid.str();
     }
 
+    Texture* GetWhiteTexture() {
+        return Get<Texture>("WhiteSquare.png");
+	}
+
     void AddCallback_OnLoaded(std::string assetName, std::function<void()> callback);
 
     size_t NumberOfAssetsLoading() { return loadingCoroutines.size(); }
