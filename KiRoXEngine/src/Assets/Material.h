@@ -24,6 +24,9 @@ public:
 	PROPERTY()
 	ObjectPtr* metallicMap;
 
+	PROPERTY()
+	ObjectPtr* heightMap;
+
 	Shader* GetShader() const {
 		return shader->Get<Shader>();
 	}

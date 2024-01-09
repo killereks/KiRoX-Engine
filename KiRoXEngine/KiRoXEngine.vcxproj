@@ -120,7 +120,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;_CRT_SECURE_NO_WARNINGS;EDITOR</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;$(SolutionDir)KiRoXEngine\Dependencies\physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -162,6 +162,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Rendering\RenderTools.cpp" />
     <ClCompile Include="src\Editor\MouseSelecting.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
     <ClCompile Include="src\Components\Colliders\Collider.cpp" />
@@ -322,6 +323,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\image\stb_image_write.h" />
+    <ClInclude Include="src\Rendering\RenderTools.h" />
     <ClInclude Include="src\Editor\MouseSelecting.h" />
     <ClInclude Include="src\Assets\Material.h" />
     <ClInclude Include="src\Components\Colliders\Collider.h" />

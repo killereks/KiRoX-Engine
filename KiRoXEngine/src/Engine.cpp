@@ -23,15 +23,19 @@
 #include <ShObjIdl.h>
 #include <Components/DirectionalLight.h>
 
+#include <Rendering/RenderTools.h>
+
 #include <Tools/SavingLoading.h>
 
 Engine::Engine()
 {
+	RenderTools::Initialize();
 }
 
 Engine::~Engine()
 {
 	delete sceneCamera;
+	RenderTools::Destroy();
 }
 
 void Engine::OnScenePlay()
@@ -76,6 +80,13 @@ void Engine::Start()
 	gizmosShader = assetManager->Get<Shader>("Gizmos.shader");
 
 	Gizmos::GetInstance()->Init(gizmosShader);
+
+	const std::string scenePath = projectPath + "\\lightTest.scene";
+	LoadScene(scenePath);
+
+#ifndef EDITOR
+	SetSceneState(SceneState::Playing);
+#endif
 }
 
 void Engine::Update()
@@ -85,9 +96,13 @@ void Engine::Update()
 
 	shader = assetManager->Get<Shader>("TestShader.shader");
 
+#if EDITOR
 	SceneControls();
+#endif
 	RenderScene(shader);
+#if EDITOR
 	RenderEditorUI();
+#endif
 
 	if (currentSceneState == SceneState::Playing)
 	{
@@ -105,9 +120,11 @@ void Engine::Update()
 		}
 	}
 
+#if EDITOR
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0));
 	Gizmos::DrawLine(glm::vec3(0.0), glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, 1.0));
+#endif
 }
 
 void Engine::RenderScene(Shader* shader)
@@ -138,6 +155,7 @@ void Engine::RenderScene(Shader* shader)
 
 	glCullFace(GL_BACK);
 
+#if EDITOR
 	GetSceneCamera()->PreRender();
 	TryRenderSelectedEntity();
 	GetSceneCamera()->RenderUsingMaterials(meshComponents);
@@ -146,10 +164,15 @@ void Engine::RenderScene(Shader* shader)
 	if (volume != nullptr) {
 		volume->Apply(GetSceneCamera()->GetRenderTextureID(), GetSceneCamera()->GetScreenWidth(), GetSceneCamera()->GetScreenHeight());
 	}
+#endif
 
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)
 	{
+		#ifndef EDITOR
+		glm::vec2 size = Input::GetInstance()->GetWindowSize();
+		gameCamera->Resize(size.x, size.y);
+		#endif
 		shader->use();
 		shader->setInt("shadowMap", 1);
 		if (dirLight != nullptr) {
@@ -167,6 +190,11 @@ void Engine::RenderScene(Shader* shader)
 		if (volume != nullptr) {
 			volume->Apply(gameCamera->GetRenderTextureID(), gameCamera->GetScreenWidth(), gameCamera->GetScreenHeight());
 		}
+
+		#ifndef EDITOR
+			Shader* quadShader = assetManager->Get<Shader>("Quad.shader");
+			RenderTools::DrawScreenQuad(gameCamera->GetRenderTextureID(), quadShader);
+		#endif
 	}
 
 	Gizmos::GetInstance()->Clear();

@@ -52,6 +52,12 @@ public:
 		}
 	}
 
+	glm::vec2 GetWindowSize() {
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		return glm::vec2(width, height);
+	}
+
 	void Update() {
 		for (int i = 0; i < GLFW_KEY_LAST; ++i) {
 			keysDown[i] = false;

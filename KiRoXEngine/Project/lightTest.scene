@@ -5,41 +5,15 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Car
-    UUID: 1266242a-6109-418c-ac17-1013fb00a239
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [0, 2.33950019, 0]
-      rotation: [-6.02424066e-08, 0.847683847, -6.02424066e-08, -0.530501723]
-      scale: [0.024300959, 0.0243000127, 0.024300959]
-    MeshComponent:
-      mesh: d7746e13-b3d1-4329-aac4-172dfe84c12d
-      material: 466f97dc-8ca0-43a8-ace7-018d190f397d
-  - Entity: Ground
-    UUID: c54343b2-4ad0-4f0d-8350-63a72e1d18d6
+  - Entity: Volume
+    UUID: 93fcd658-bb30-44d4-ba84-864ed0127f06
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
     TransformComponent:
       position: [0, 0, 0]
-      rotation: [0.707106829, 0, 0, 0.707106709]
-      scale: [34.7938423, 34.7987061, 2.43977642]
-    BoxCollider:
-      isTrigger: false
-      offset: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-    MeshComponent:
-      mesh: 305e9895-69de-468d-9879-63ae350403eb
-      material: cd93cc52-4012-471f-99b2-3f2f1e4f571a
-    Rigidbody:
-      isStatic: true
-  - Entity: Directional Light
-    UUID: 980a99ef-5221-4d69-847a-dd5502752b3c
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [3.9436841, 15.2607021, -3.59650278]
-      rotation: [0.123648606, -0.778456867, 0.162140727, 0.593655109]
-      scale: [1.00003755, 0.999999762, 1.00005329]
-    DirectionalLight:
-      {}
+    Volume:
+      testProcess: 587fc6b9-d113-402b-bdbb-fce3324d0640
   - Entity: Camera
     UUID: bc514ac6-a9d8-4198-b0c8-24e28c8bbbcd
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
@@ -57,12 +31,60 @@ Entities:
       bottom: -10
       orthoNear: 1
       orthoFar: 100
-  - Entity: Volume
-    UUID: 93fcd658-bb30-44d4-ba84-864ed0127f06
+  - Entity: Directional Light
+    UUID: 980a99ef-5221-4d69-847a-dd5502752b3c
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [3.9436841, 15.2607021, -3.59650278]
+      rotation: [0.123648606, -0.778456867, 0.162140727, 0.593655109]
+      scale: [1.00003755, 0.999999762, 1.00005329]
+    DirectionalLight:
+      {}
+  - Entity: Ground
+    UUID: c54343b2-4ad0-4f0d-8350-63a72e1d18d6
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
     TransformComponent:
       position: [0, 0, 0]
+      rotation: [0.707106829, 0, 0, 0.707106709]
+      scale: [34.7938423, 34.7987061, 2.43977642]
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 22d565ce-9d67-420b-a538-cc901b226a45
+    Rigidbody:
+      isStatic: true
+  - Entity: Car
+    UUID: 1266242a-6109-418c-ac17-1013fb00a239
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [0, 2.33950019, 0]
+      rotation: [6.02424066e-08, 0.847683847, 6.02424066e-08, -0.530501723]
+      scale: [0.024300959, 0.0243000127, 0.024300959]
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 2, 0]
+      scale: [120, 70, 250]
+    MeshComponent:
+      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
+      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
+    Rigidbody:
+      isStatic: true
+  - Entity: Empty
+    UUID: a1968b3a-57aa-4b29-9e3f-24d8bb0a67ff
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [-1.34363079, 11.0125732, -12.3776999]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-    Volume:
-      testProcess: 587fc6b9-d113-402b-bdbb-fce3324d0640
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: e72da0a5-2c49-47c9-92f0-9d707291cab0
+    Rigidbody:
+      isStatic: false

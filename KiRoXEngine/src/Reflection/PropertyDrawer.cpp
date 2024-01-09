@@ -181,6 +181,11 @@ bool PropertyDrawer::DrawObjectPtrDragDrop(std::string label, ObjectPtr& objectP
 			ImGui::Image((void*)tex->GetTextureID(), ImVec2(20, 20));
 			ImGui::SameLine();
 		}
+		// if can be casted to a texture
+		else if (tex = dynamic_cast<Texture*>(asset)) {
+			ImGui::Image((void*)tex->GetTextureID(), ImVec2(20, 20));
+			ImGui::SameLine();
+		}
 		ImGui::Text(objectPtr.Get<Asset>()->fileName.c_str());
 	}
 	else {

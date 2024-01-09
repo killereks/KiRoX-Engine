@@ -129,7 +129,9 @@ void AssetManager::OnFileChanged(std::wstring_view filename, FolderWatcher::Acti
 
 void AssetManager::Update()
 {
+#if EDITOR
     folderWatcher.update();
+#endif
     AsyncUpdate();
 }
 

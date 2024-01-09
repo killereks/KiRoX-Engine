@@ -86,6 +86,7 @@ registration::class_<Material>("Material")
 .property("mainTexture", &Material::mainTexture)
 .property("normalMap", &Material::normalMap)
 .property("metallicMap", &Material::metallicMap)
+.property("heightMap", &Material::heightMap)
 ;
 
 registration::class_<MeshFilter>("MeshFilter")

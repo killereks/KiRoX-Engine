@@ -43,6 +43,16 @@ void Material::Bind()
 	else {
 		shader->setBool("hasMetallicMap", false);
 	}
+
+	if (this->heightMap->HasValue()) {
+		Texture* heightMap = this->heightMap->Get<Texture>();
+		heightMap->Bind(5);
+		shader->setInt("heightMap", 5);
+		shader->setBool("hasHeightMap", true);
+	}
+	else {
+		shader->setBool("hasHeightMap", false);
+	}
 }
 
 Material::Material()
@@ -51,12 +61,16 @@ Material::Material()
 	mainTexture = new ObjectPtr();
 	normalMap = new ObjectPtr();
 	metallicMap = new ObjectPtr();
+	heightMap = new ObjectPtr();
 }
 
 Material::~Material()
 {
 	delete shader;
 	delete mainTexture;
+	delete normalMap;
+	delete metallicMap;
+	delete heightMap;
 }
 
 co::Coro Material::BeginLoading(){

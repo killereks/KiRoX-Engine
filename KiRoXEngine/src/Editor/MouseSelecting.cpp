@@ -39,7 +39,9 @@ glm::vec3 MouseSelecting::MouseClicked(std::vector<MeshComponent*>& meshes, Came
 		shader->setMat4("PVM", PVM);
 		shader->setUInt("entityIndex", i + 1);
 
-		meshes[i]->GetMeshFilter()->DrawCall();
+		if (meshes[i]->GetMeshFilter() != nullptr) {
+			meshes[i]->GetMeshFilter()->DrawCall();
+		}
 	}
 
 	int readX = static_cast<int>(mousePos.x);

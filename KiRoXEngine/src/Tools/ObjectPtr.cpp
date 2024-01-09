@@ -8,6 +8,9 @@ void ObjectPtr::Clear()
 
 bool ObjectPtr::HasValue()
 {
+	if (ptr == nullptr) {
+		FindAsset();
+	}
 	return ptr != nullptr && !uuid.empty();
 }
 

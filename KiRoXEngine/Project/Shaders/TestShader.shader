@@ -62,12 +62,14 @@ out vec4 FragColor;
 
 uniform bool hasNormalMap;
 uniform bool hasMetallicMap;
+uniform bool hasHeightMap;
 
 uniform sampler2D shadowMap;
 
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
+uniform sampler2D heightMap;
 
 float num(vec4 seed){
 	float dot_product = dot(seed, vec4(12.9898,78.233,45.164,94.673));
@@ -106,16 +108,55 @@ float softShadows(float dotLightNormal){
 
 void main(){
 	vec3 normals = Normal;
+	vec2 UVs = UV;
+
+	// HEIGHT MAP
+	if (hasHeightMap){
+		vec3 viewDir = normalize(viewPos - FragPos);
+		viewDir *= TBN;
+
+		float heightScale = 0.05;
+		const float minLayers = 8.0;
+		const float maxLayers = 64.0;
+
+		float numLayers = mix(minLayers, maxLayers, abs(viewForward.z));
+		float layerDepth = 1.0 / numLayers;
+		
+		float currentLayerDepth = 0.0;
+		vec2 S = viewDir.xy / viewDir.z * heightScale;
+
+		vec2 deltaUVs = S / numLayers;
+		float currentDepthMapValue = 1.0 - texture(heightMap, UVs).r;
+
+		while (currentLayerDepth < currentDepthMapValue){
+			UVs -= deltaUVs;
+			currentDepthMapValue = 1.0 - texture(heightMap, UVs).r;
+			currentLayerDepth += layerDepth;
+		}
+
+		vec2 prevTexCoords = UVs + deltaUVs;
+		float afterDepth = currentDepthMapValue - currentLayerDepth;
+		float beforeDepth = 1.0 - texture(heightMap, prevTexCoords).r + layerDepth - currentLayerDepth;
+		float weight = afterDepth / (afterDepth - beforeDepth);
+		UVs = prevTexCoords * weight + UVs * (1.0 - weight);
+
+		if (UVs.x < 0.0 || UVs.x > 1.0 || UVs.y < 0.0 || UVs.y > 1.0){
+			discard;
+		}
+	}
+
+	// END HEIGTH MAP
+
 	if (hasNormalMap){
-		normals = normalize(TBN * normalize(texture(normalMap, UV).rgb * 2.0 - 1.0));
+		normals = normalize(TBN * normalize(texture(normalMap, UVs).rgb * 2.0 - 1.0));
 	}
 
 	float metallic = 1.0;
 	if (hasMetallicMap){
-		metallic = texture(metallicMap, UV).r;
+		metallic = texture(metallicMap, UVs).r;
 	}
 
-	vec3 albedo = texture(albedoMap, UV).rgb;
+	vec3 albedo = texture(albedoMap, UVs).rgb;
 
 	float shadow = softShadows(dot(lightDir, normals));
 
