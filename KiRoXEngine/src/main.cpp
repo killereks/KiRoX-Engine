@@ -25,7 +25,7 @@ bool error = false;
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void* userParam) {
 	error = true;
 	std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;
-	if (error) __debugbreak();
+	//if (error) __debugbreak();
 }
 
 void SetupImGuiStyle();
@@ -163,8 +163,6 @@ int main(int argc, char* argv[]) {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-
-	std::cin.get();
 }
 
 void SetupImGuiStyle()

@@ -126,6 +126,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;$(SolutionDir)KiRoXEngine\Dependencies\physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +149,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;$(SolutionDir)KiRoXEngine\Dependencies\physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,6 +164,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\CameraFlyComponent.cpp" />
     <ClCompile Include="src\Rendering\RenderTools.cpp" />
     <ClCompile Include="src\Editor\MouseSelecting.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
@@ -322,6 +325,7 @@
     <ClCompile Include="src\Components\Volume.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\CameraFlyComponent.h" />
     <ClInclude Include="Dependencies\image\stb_image_write.h" />
     <ClInclude Include="src\Rendering\RenderTools.h" />
     <ClInclude Include="src\Editor\MouseSelecting.h" />

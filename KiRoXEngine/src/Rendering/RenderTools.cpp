@@ -31,8 +31,6 @@ void RenderTools::Destroy()
 
 void RenderTools::DrawScreenQuad(unsigned int texture, Shader* shader)
 {
-    shader->use();
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
 

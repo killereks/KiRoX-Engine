@@ -162,7 +162,11 @@ void Engine::RenderScene(Shader* shader)
 	GetSceneCamera()->RenderGizmos();
 	GetSceneCamera()->PostRender();
 	if (volume != nullptr) {
-		volume->Apply(GetSceneCamera()->GetRenderTextureID(), GetSceneCamera()->GetScreenWidth(), GetSceneCamera()->GetScreenHeight());
+		volume->Apply(GetSceneCamera()->GetRenderTextureID(),
+			GetSceneCamera()->GetScreenWidth(),
+			GetSceneCamera()->GetScreenHeight(),
+			GetSceneCamera(),
+			dirLight);
 	}
 #endif
 
@@ -188,11 +192,16 @@ void Engine::RenderScene(Shader* shader)
 		gameCamera->PostRender();
 
 		if (volume != nullptr) {
-			volume->Apply(gameCamera->GetRenderTextureID(), gameCamera->GetScreenWidth(), gameCamera->GetScreenHeight());
+			volume->Apply(gameCamera->GetRenderTextureID(),
+							gameCamera->GetScreenWidth(),
+							gameCamera->GetScreenHeight(),
+							gameCamera,
+							dirLight);
 		}
 
 		#ifndef EDITOR
 			Shader* quadShader = assetManager->Get<Shader>("Quad.shader");
+			quadShader->use();
 			RenderTools::DrawScreenQuad(gameCamera->GetRenderTextureID(), quadShader);
 		#endif
 	}

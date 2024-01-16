@@ -99,11 +99,14 @@ public:
 			}
 		}
 
-		double mouseX, mouseY;
-		glfwGetCursorPos(window, &mouseX, &mouseY);
-		glm::vec2 newMousePosition = glm::vec2(mouseX, mouseY);
-		mouseDelta = newMousePosition - mousePosition;
-		mousePosition = newMousePosition;
+		// if window is focused
+		if (glfwGetWindowAttrib(window, GLFW_FOCUSED)) {
+			double mouseX, mouseY;
+			glfwGetCursorPos(window, &mouseX, &mouseY);
+			glm::vec2 newMousePosition = glm::vec2(mouseX, mouseY);
+			mouseDelta = newMousePosition - mousePosition;
+			mousePosition = newMousePosition;
+		}
 	}
 
 	static bool IsControllerConnected() {

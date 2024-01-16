@@ -1,4 +1,6 @@
 #include "Volume.h"
+#include <Rendering/RenderTools.h>
+#include <chrono>
 
 void Volume::SetupFBO(int width, int height)
 {
@@ -31,35 +33,6 @@ void Volume::SetupFBO(int width, int height)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 }
 
-void Volume::SetupQuad()
-{
-	float vertices[] = {
-		// Coords, TexCoords
-		1.0f, -1.0f, 1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f, 0.0f,
-		-1.0f,  1.0f, 0.0f, 1.0f,
-
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f, 0.0f,
-		-1.0f,  1.0f, 0.0f, 1.0f
-	};
-
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
 void Volume::Draw()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -75,8 +48,6 @@ void Volume::Draw()
 Volume::Volume()
 {
 	testProcess = new ObjectPtr();
-
-	SetupQuad();
 }
 
 Volume::~Volume()
@@ -90,25 +61,53 @@ Volume::~Volume()
 	glDeleteBuffers(1, &quadVBO);
 }
 
-void Volume::Apply(unsigned int textureID, int width, int height)
+void Volume::Apply(unsigned int textureID, int width, int height, CameraComponent* camera, DirectionalLight* light)
 {
 	if (!testProcess->HasValue()) return;
 
+	if (camera == nullptr) return;
+	if (light == nullptr) return;
+
+	/*
+	FBO Ping Pong Technique:
+	for each process
+		Bind framebuffer
+		Render a screen quad with the texture
+	
+	*/
+
 	Shader* shader = testProcess->Get<Shader>();
 
-	SetupFBO(width, height);
+	if (shader == nullptr) return;
 
 	shader->use();
 
-	shader->setInt("screenTexture", 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, light->GetShadowMap());
+	shader->setInt("shadowMap", 1);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, camera->GetRenderTextureDepthID());
+	shader->setInt("cameraDepthMap", 2);
 
-	Draw();
+	// lights
+	shader->setMat4("lightSpaceMatrix", light->GetLightSpaceMatrix());
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	// camera
+	shader->setVec3("camPos", camera->GetOwner()->GetTransform().GetWorldPosition());
+	shader->setVec3("camFwd", -camera->GetOwner()->GetTransform().GetForward());
+	shader->setVec3("camUp", camera->GetOwner()->GetTransform().GetUp());
+	shader->setVec3("camRight", camera->GetOwner()->GetTransform().GetRight());
 
-	ImGui::Begin("Volume");
-	ImGui::Image((void*)textureColorBuffer, ImVec2(512, 512));
-	ImGui::End();
+	shader->setFloat("nearPlane", camera->GetNearClipPlane());
+	shader->setFloat("farPlane", camera->GetFarClipPlane());
+
+	shader->setMat4("projection", camera->GetProjectionMatrix());
+	shader->setMat4("view", camera->GetViewMatrix());
+
+	float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000.0f;
+	shader->setFloat("time", time);
+
+	//SetupFBO(width, height);
+
+	RenderTools::DrawScreenQuad(textureID, shader);
 }

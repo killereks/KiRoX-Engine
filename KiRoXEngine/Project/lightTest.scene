@@ -5,6 +5,16 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
+  - Entity: Mesh
+    UUID: a1ddd7c4-3db1-4310-a5b5-912c4aa8f225
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [12.7387838, 19.4721737, 14.2368364]
+      rotation: [0.694430768, -0.0422207415, -0.0740356669, 0.714494228]
+      scale: [0.999997914, 1.00000167, 1.00000107]
+    MeshComponent:
+      mesh: 7d2ffed0-9f76-4ce3-9a48-1ffa828fa275
+      material: ddc9e1bb-5a34-4d81-97fc-a2718972e108
   - Entity: Volume
     UUID: 93fcd658-bb30-44d4-ba84-864ed0127f06
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
@@ -13,7 +23,7 @@ Entities:
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
     Volume:
-      testProcess: 587fc6b9-d113-402b-bdbb-fce3324d0640
+      testProcess: 5d42ddb7-8279-442d-b1ac-10424737facd
   - Entity: Camera
     UUID: bc514ac6-a9d8-4198-b0c8-24e28c8bbbcd
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
@@ -31,13 +41,15 @@ Entities:
       bottom: -10
       orthoNear: 1
       orthoFar: 100
+    CameraFlyComponent:
+      speed: 10
   - Entity: Directional Light
     UUID: 980a99ef-5221-4d69-847a-dd5502752b3c
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
     TransformComponent:
-      position: [3.9436841, 15.2607021, -3.59650278]
-      rotation: [0.123648606, -0.778456867, 0.162140727, 0.593655109]
-      scale: [1.00003755, 0.999999762, 1.00005329]
+      position: [38.1324272, 15.260623, 13.4734745]
+      rotation: [0.123648703, -0.778456509, 0.162140653, 0.593655586]
+      scale: [1.00003588, 0.999999583, 1.00009489]
     DirectionalLight:
       {}
   - Entity: Ground

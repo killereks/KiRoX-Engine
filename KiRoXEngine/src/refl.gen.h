@@ -14,6 +14,7 @@
 #include "Assets/Shader.h"
 #include "Assets/Texture.h"
 #include "Components/CameraComponent.h"
+#include "Components/CameraFlyComponent.h"
 #include "Components/Colliders/BoxCollider.h"
 #include "Components/Colliders/Collider.h"
 #include "Components/Component.h"
@@ -114,6 +115,11 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("orthoFar", &CameraComponent::orthoFar)
 ;
 
+registration::class_<CameraFlyComponent>("CameraFlyComponent")
+.constructor<>()
+.property("speed", &CameraFlyComponent::speed)
+;
+
 registration::class_<BoxCollider>("BoxCollider")
 .constructor<>()
 .property("offset", &BoxCollider::offset)
@@ -174,6 +180,11 @@ namespace Reflection {
 inline CameraComponent* converter_CameraComponent(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<CameraComponent*>(comp);
+}
+
+inline CameraFlyComponent* converter_CameraFlyComponent(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<CameraFlyComponent*>(comp);
 }
 
 inline BoxCollider* converter_BoxCollider(Component* comp, bool& ok){
@@ -237,6 +248,9 @@ return rttr::type::get<Texture*>();
 if (name == "CameraComponent"){
 return rttr::type::get<CameraComponent*>();
 }
+if (name == "CameraFlyComponent"){
+return rttr::type::get<CameraFlyComponent*>();
+}
 if (name == "BoxCollider"){
 return rttr::type::get<BoxCollider*>();
 }
@@ -269,6 +283,9 @@ static Component* CreateComponent(const std::string& name){
 if (name == "CameraComponent"){
 return new CameraComponent();
 }
+if (name == "CameraFlyComponent"){
+return new CameraFlyComponent();
+}
 if (name == "BoxCollider"){
 return new BoxCollider();
 }
@@ -295,6 +312,7 @@ throw std::runtime_error("No type found for " + name);
 
 static void RegisterTypes(){
 rttr::type::get<Component*>().register_converter_func(converter_CameraComponent);
+rttr::type::get<Component*>().register_converter_func(converter_CameraFlyComponent);
 rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
 rttr::type::get<Component*>().register_converter_func(converter_DirectionalLight);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);

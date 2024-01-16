@@ -3,6 +3,9 @@
 #include <Tools/ObjectPtr.h>
 #include "icons/IconsFontAwesome6.h"
 
+#include <Components/CameraComponent.h>
+#include <Components/DirectionalLight.h>
+
 #include <Macros.h>
 
 CLASS()
@@ -22,7 +25,6 @@ class Volume : public Component
 	ObjectPtr* testProcess;
 
 	void SetupFBO(int width, int height);
-	void SetupQuad();
 
 	void Draw();
 
@@ -30,7 +32,7 @@ public:
 	Volume();
 	~Volume();
 
-	void Apply(unsigned int textureID, int width, int height);
+	void Apply(unsigned int textureID, int width, int height, CameraComponent* camera, DirectionalLight* light);
 
 	virtual std::string GetIcon() override {
 		// 

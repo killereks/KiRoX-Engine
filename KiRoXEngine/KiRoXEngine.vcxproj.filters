@@ -162,6 +162,7 @@
     <ClCompile Include="src\Components\Volume.cpp" />
     <ClCompile Include="src\Editor\MouseSelecting.cpp" />
     <ClCompile Include="src\Rendering\RenderTools.cpp" />
+    <ClCompile Include="src\Components\CameraFlyComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -849,6 +850,7 @@
     <ClInclude Include="src\Editor\MouseSelecting.h" />
     <ClInclude Include="Dependencies\image\stb_image_write.h" />
     <ClInclude Include="src\Rendering\RenderTools.h" />
+    <ClInclude Include="src\Components\CameraFlyComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
