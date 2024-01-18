@@ -17,6 +17,8 @@ Physics::Physics()
 
 	world = physicsCommon.createPhysicsWorld(settings);
 
+	world->setEventListener(&events);
+
 	accumulatedTime = 0.0f;
 	running = true;
 

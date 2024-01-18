@@ -11,8 +11,9 @@
 
 #include "refl.gen.h"
 
-#include "Physics.h"
+#include "Physics/Physics.h"
 #include <Editor/MouseSelecting.h>
+#include <Rendering/SceneShadowMapper.h>
 
 enum class SceneState
 {
@@ -48,6 +49,8 @@ public:
 
 	Shader* shader;
 	Shader* gizmosShader;
+
+	SceneShadowMapper* shadowMapper;
 
 	CameraComponent* sceneCamCache = nullptr;
 	inline CameraComponent* GetSceneCamera ()

@@ -6,6 +6,8 @@
 #include "reactphysics3d/engine/PhysicsCommon.h"
 #include "reactphysics3d/engine/PhysicsWorld.h"
 
+#include <Physics/PhysicsEvents.h>
+
 #include <thread>
 #include <atomic>
 
@@ -13,6 +15,8 @@ class Physics
 {
 	reactphysics3d::PhysicsCommon physicsCommon;
 	reactphysics3d::PhysicsWorld* world;
+
+	PhysicsEvents events;
 
 	std::atomic<float> accumulatedTime;
 

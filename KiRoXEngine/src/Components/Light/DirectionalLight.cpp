@@ -29,17 +29,6 @@ std::string DirectionalLight::GetIcon()
 	return ICON_FA_SUN;
 }
 
-void DirectionalLight::Render(std::vector<MeshComponent*>& meshes)
-{
-	shadowMap->Render(meshes, GetLightSpaceMatrix());
-}
-
-void DirectionalLight::BindShadowMap(int slot)
-{
-	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, shadowMap->GetDepthMap());
-}
-
 glm::mat4 DirectionalLight::GetLightSpaceMatrix()
 {
 	float nearPlane = 0.1f;

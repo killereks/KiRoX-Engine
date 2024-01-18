@@ -18,7 +18,9 @@
 #include "Components/Colliders/BoxCollider.h"
 #include "Components/Colliders/Collider.h"
 #include "Components/Component.h"
-#include "Components/DirectionalLight.h"
+#include "Components/Light/DirectionalLight.h"
+#include "Components/Light/Light.h"
+#include "Components/Light/SpotLight.h"
 #include "Components/MeshComponent.h"
 #include "Components/Rigidbody.h"
 #include "Components/TestComponent.h"
@@ -137,6 +139,14 @@ registration::class_<DirectionalLight>("DirectionalLight")
 .constructor<>()
 ;
 
+registration::class_<Light>("Light")
+;
+
+registration::class_<SpotLight>("SpotLight")
+.constructor<>()
+.property("angle", &SpotLight::angle)
+;
+
 registration::class_<MeshComponent>("MeshComponent")
 .constructor<>()
 .property("mesh", &MeshComponent::mesh)
@@ -207,6 +217,16 @@ ok = true;
 return dynamic_cast<DirectionalLight*>(comp);
 }
 
+inline Light* converter_Light(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<Light*>(comp);
+}
+
+inline SpotLight* converter_SpotLight(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<SpotLight*>(comp);
+}
+
 inline MeshComponent* converter_MeshComponent(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<MeshComponent*>(comp);
@@ -257,6 +277,9 @@ return rttr::type::get<BoxCollider*>();
 if (name == "DirectionalLight"){
 return rttr::type::get<DirectionalLight*>();
 }
+if (name == "SpotLight"){
+return rttr::type::get<SpotLight*>();
+}
 if (name == "MeshComponent"){
 return rttr::type::get<MeshComponent*>();
 }
@@ -292,6 +315,9 @@ return new BoxCollider();
 if (name == "DirectionalLight"){
 return new DirectionalLight();
 }
+if (name == "SpotLight"){
+return new SpotLight();
+}
 if (name == "MeshComponent"){
 return new MeshComponent();
 }
@@ -315,6 +341,7 @@ rttr::type::get<Component*>().register_converter_func(converter_CameraComponent)
 rttr::type::get<Component*>().register_converter_func(converter_CameraFlyComponent);
 rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
 rttr::type::get<Component*>().register_converter_func(converter_DirectionalLight);
+rttr::type::get<Component*>().register_converter_func(converter_SpotLight);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
 rttr::type::get<Component*>().register_converter_func(converter_Rigidbody);
 rttr::type::get<Component*>().register_converter_func(converter_TestComponent);
@@ -324,6 +351,21 @@ rttr::type::get<glm::vec2>().register_converter_func(glm_vec2_to_string);
 rttr::type::get<glm::vec3>().register_converter_func(glm_vec3_to_string);
 rttr::type::get<glm::vec4>().register_converter_func(glm_vec4_to_string);
 rttr::type::get<glm::quat>().register_converter_func(glm_quat_to_string);
+}
+
+static std::vector<rttr::type> GetAllNonAbstractComponents(){
+std::vector<rttr::type> types;
+types.push_back(rttr::type::get<CameraComponent>());
+types.push_back(rttr::type::get<CameraFlyComponent>());
+types.push_back(rttr::type::get<BoxCollider>());
+types.push_back(rttr::type::get<DirectionalLight>());
+types.push_back(rttr::type::get<SpotLight>());
+types.push_back(rttr::type::get<MeshComponent>());
+types.push_back(rttr::type::get<Rigidbody>());
+types.push_back(rttr::type::get<TestComponent>());
+types.push_back(rttr::type::get<TransformComponent>());
+types.push_back(rttr::type::get<Volume>());
+return types;
 }
 
 }

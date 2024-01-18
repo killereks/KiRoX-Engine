@@ -4,7 +4,7 @@
 #include "icons/IconsFontAwesome6.h"
 
 #include <Components/CameraComponent.h>
-#include <Components/DirectionalLight.h>
+#include <Components/Light/DirectionalLight.h>
 
 #include <Macros.h>
 

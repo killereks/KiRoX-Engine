@@ -71,26 +71,43 @@ uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D heightMap;
 
-float num(vec4 seed){
+//uniform sampler2DArray shadowMapArray;
+//uniform int numLights;
+//uniform mat4 lightSpaceMatrices[16];
+
+//struct SpotLightData {
+//	vec3 pos;
+//	vec3 dir;
+//	float angle;
+//};
+//uniform SpotLightData spotLightData[16];
+
+//struct ShadowParameters {
+//	mat4 lightSpaceMatrix;
+//	vec4 fragPosLightSpace;
+//	float bias;
+//};
+
+float randomNum(vec4 seed){
 	float dot_product = dot(seed, vec4(12.9898,78.233,45.164,94.673));
 	return fract(sin(dot_product) * 43758.5453);
 }
 
-float shadowCalc(float dotLightNormal, vec2 offset){
+float shadowCalcDirectional(float dotLightNormal, vec2 offset){
 	float bias = max(0.0005 * (1.0 - dotLightNormal), 0.0005);
 	vec3 pos = FragPosLightSpace.xyz / FragPosLightSpace.w;
 	pos = pos * 0.5 + 0.5;
 
 	if (pos.z > 1.0) return 0.0;
 
-	float rand = num(vec4(pos.xy, pos.y, pos.x)) * 0.0005;
+	float rand = randomNum(vec4(pos.xy, pos.y, pos.x)) * 0.0005;
 	float depth = texture(shadowMap, pos.xy + offset + rand).r;
 
 	if (depth + bias < pos.z) return 0.0;
 	return 1.0;
 }
 
-float softShadows(float dotLightNormal){
+float softShadowsDirectional(float dotLightNormal){
 	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
 	float shadow = 0.0;
 
@@ -98,13 +115,43 @@ float softShadows(float dotLightNormal){
 	for(int x = -size; x <= size; ++x){
 		for(int y = -size; y <= size; ++y){
 			vec2 sampleOffset = vec2(x,y) * texelSize;
-			shadow += shadowCalc(dotLightNormal, sampleOffset);
+			shadow += shadowCalcDirectional(dotLightNormal, sampleOffset);
 		}
 	}
 
 	shadow /= (2 * size + 1) * (2 * size + 1);
 	return shadow;
 }
+
+//float spotLightShadowCalc(ShadowParameters params, vec2 offset, int layer){
+//	vec3 projCoords = params.fragPosLightSpace.xyz / params.fragPosLightSpace.w;
+//	projCoords = projCoords * 0.5 + 0.5;
+//
+//	if (projCoords.z > 1.0) return 0.0;
+//
+//	float rand = randomNum(vec4(projCoords.xy, projCoords.y, projCoords.x)) * params.bias;
+//	vec3 shadowUV = vec3(projCoords.x + rand + offset.x, projCoords.y + rand + offset.y, layer);
+//	float depth = texture(shadowMapArray, shadowUV, layer).r;
+//
+//	if (depth + params.bias < projCoords.z) return 0.0;
+//	return 1.0;
+//}
+//
+//float softSpotLightShadows(ShadowParameters params, sampler2DArray shadowMaps, int layer){
+//	vec2 texelSize = 1.0 / textureSize(shadowMaps, 0);
+//	float shadow = 0.0;
+//
+//	int size = 2;
+//	for(int x = -size; x <= size; ++x){
+//		for(int y = -size; y <= size; ++y){
+//			vec2 sampleOffset = vec2(x,y) * texelSize;
+//			shadow += spotLightShadowCalc(params, sampleOffset, layer);
+//		}
+//	}
+//
+//	shadow /= (2 * size + 1) * (2 * size + 1);
+//	return shadow;
+//}
 
 void main(){
 	vec3 normals = Normal;
@@ -158,7 +205,34 @@ void main(){
 
 	vec3 albedo = texture(albedoMap, UVs).rgb;
 
-	float shadow = softShadows(dot(lightDir, normals));
+	///////////////////////////////////////////
+	// SPOT LIGHT SHADOWS
+	vec3 col = vec3(0.0);
+
+	//for (int i = 0; i < numLights; i++){
+	//	SpotLightData lightData = spotLightData[i];
+
+	//	ShadowParameters shadowParams;
+
+	//	shadowParams.lightSpaceMatrix = lightSpaceMatrices[i];
+	//	shadowParams.fragPosLightSpace = lightSpaceMatrices[i] * vec4(FragPos, 1.0);
+	//	shadowParams.bias = 0.00005;
+
+	//	float shadow = softSpotLightShadows(shadowParams, shadowMapArray, i);
+
+	//	vec3 viewDir = normalize(viewPos - FragPos);
+	//	vec3 reflectedDir = reflect(lightDir, normals);
+	//	float specular = pow(max(dot(viewDir, reflectedDir), 0.0), 32) * metallic.r;
+
+	//	//float diffuse = max(dot(normals, lightDir), 0.0);
+
+	//	col += albedo * (metallic * diffuse + metallic * specular) * shadow;
+	//}
+
+	///////////////////////////////////////////
+	// DIRECTIONAL LIGHT SHADOWS
+
+	float shadow = softShadowsDirectional(dot(lightDir, normals));
 
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectedDir = reflect(lightDir, normals);
@@ -166,7 +240,7 @@ void main(){
 
 	float diffuse = max(dot(normals, -lightDir), 0.0);
 
-	vec3 col = albedo * (metallic * diffuse + metallic * specular) * shadow;
+	col += albedo * (metallic * diffuse + metallic * specular) * shadow;
 
 	FragColor = vec4(col, 1.0);
 }

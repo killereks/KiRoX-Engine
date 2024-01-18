@@ -68,7 +68,7 @@
     <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
     <ClCompile Include="src\Assets\ComputeShader.cpp" />
     <ClCompile Include="src\Components\TestComponent.cpp" />
-    <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\Physics\Physics.cpp" />
     <ClCompile Include="src\Components\Rigidbody.cpp" />
     <ClCompile Include="Dependencies\physics\src\body\CollisionBody.cpp" />
     <ClCompile Include="Dependencies\physics\src\body\RigidBody.cpp" />
@@ -155,7 +155,7 @@
     <ClCompile Include="src\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="src\Rendering\ShadowMap.cpp" />
-    <ClCompile Include="src\Components\DirectionalLight.cpp" />
+    <ClCompile Include="src\Components\Light\DirectionalLight.cpp" />
     <ClCompile Include="src\Components\Colliders\Collider.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
     <ClCompile Include="src\Tools\ObjectPtr.cpp" />
@@ -163,6 +163,10 @@
     <ClCompile Include="src\Editor\MouseSelecting.cpp" />
     <ClCompile Include="src\Rendering\RenderTools.cpp" />
     <ClCompile Include="src\Components\CameraFlyComponent.cpp" />
+    <ClCompile Include="src\Components\Light\Light.cpp" />
+    <ClCompile Include="src\Components\Light\SpotLight.cpp" />
+    <ClCompile Include="src\Rendering\SceneShadowMapper.cpp" />
+    <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -443,7 +447,7 @@
     <ClInclude Include="src\Assets\ComputeShader.h" />
     <ClInclude Include="src\Components\TestComponent.h" />
     <ClInclude Include="src\Tools\StringTools.h" />
-    <ClInclude Include="src\Physics.h" />
+    <ClInclude Include="src\Physics\Physics.h" />
     <ClInclude Include="src\Components\Rigidbody.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\body\CollisionBody.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\body\RigidBody.h" />
@@ -841,7 +845,7 @@
     <ClInclude Include="Dependencies\glm\vec4.hpp" />
     <ClInclude Include="Dependencies\glm\vector_relational.hpp" />
     <ClInclude Include="src\Rendering\ShadowMap.h" />
-    <ClInclude Include="src\Components\DirectionalLight.h" />
+    <ClInclude Include="src\Components\Light\DirectionalLight.h" />
     <ClInclude Include="src\Components\Colliders\Collider.h" />
     <ClInclude Include="src\Tools\SavingLoading.h" />
     <ClInclude Include="src\Assets\Material.h" />
@@ -851,6 +855,10 @@
     <ClInclude Include="Dependencies\image\stb_image_write.h" />
     <ClInclude Include="src\Rendering\RenderTools.h" />
     <ClInclude Include="src\Components\CameraFlyComponent.h" />
+    <ClInclude Include="src\Components\Light\Light.h" />
+    <ClInclude Include="src\Components\Light\SpotLight.h" />
+    <ClInclude Include="src\Rendering\SceneShadowMapper.h" />
+    <ClInclude Include="src\Physics\PhysicsEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

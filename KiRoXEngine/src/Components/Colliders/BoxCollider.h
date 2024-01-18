@@ -35,7 +35,6 @@ public:
 
 	virtual void OnDrawGizmos() override;
 
-	virtual bool DrawInspector() override;
 	virtual std::string GetIcon() override {
 		return ICON_FA_BOX;
 	}

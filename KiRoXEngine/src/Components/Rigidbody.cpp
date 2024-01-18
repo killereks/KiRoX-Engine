@@ -5,7 +5,7 @@
 #include "TransformComponent.h"
 #include "Entity.h"
 
-#include <Physics.h>
+#include <Physics/Physics.h>
 
 void Rigidbody::SetBody(reactphysics3d::RigidBody* body)
 {

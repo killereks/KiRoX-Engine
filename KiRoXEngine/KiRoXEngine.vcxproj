@@ -164,13 +164,17 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
+    <ClCompile Include="src\Rendering\SceneShadowMapper.cpp" />
+    <ClCompile Include="src\Components\Light\SpotLight.cpp" />
+    <ClCompile Include="src\Components\Light\Light.cpp" />
     <ClCompile Include="src\Components\CameraFlyComponent.cpp" />
     <ClCompile Include="src\Rendering\RenderTools.cpp" />
     <ClCompile Include="src\Editor\MouseSelecting.cpp" />
     <ClCompile Include="src\Assets\Material.cpp" />
     <ClCompile Include="src\Components\Colliders\Collider.cpp" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
-    <ClCompile Include="src\Components\DirectionalLight.cpp" />
+    <ClCompile Include="src\Components\Light\DirectionalLight.cpp" />
     <ClCompile Include="src\Rendering\ShadowMap.cpp" />
     <ClCompile Include="src\Components\Colliders\BoxCollider.cpp" />
     <ClCompile Include="Dependencies\physics\src\body\CollisionBody.cpp" />
@@ -258,7 +262,7 @@
     <ClCompile Include="src\Assets\ComputeShader.cpp" />
     <ClCompile Include="Dependencies\coroutines\CoroExtensions.cpp" />
     <ClCompile Include="src\Components\Rigidbody.cpp" />
-    <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\Physics\Physics.cpp" />
     <ClCompile Include="src\Reflection\PropertyDrawer.cpp" />
     <ClCompile Include="src\Tools\Bounds.cpp" />
     <ClCompile Include="src\Tools\File.cpp" />
@@ -325,6 +329,10 @@
     <ClCompile Include="src\Components\Volume.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Physics\PhysicsEvents.h" />
+    <ClInclude Include="src\Rendering\SceneShadowMapper.h" />
+    <ClInclude Include="src\Components\Light\SpotLight.h" />
+    <ClInclude Include="src\Components\Light\Light.h" />
     <ClInclude Include="src\Components\CameraFlyComponent.h" />
     <ClInclude Include="Dependencies\image\stb_image_write.h" />
     <ClInclude Include="src\Rendering\RenderTools.h" />
@@ -619,7 +627,7 @@
     <ClInclude Include="Dependencies\glm\vec3.hpp" />
     <ClInclude Include="Dependencies\glm\vec4.hpp" />
     <ClInclude Include="Dependencies\glm\vector_relational.hpp" />
-    <ClInclude Include="src\Components\DirectionalLight.h" />
+    <ClInclude Include="src\Components\Light\DirectionalLight.h" />
     <ClInclude Include="src\Rendering\ShadowMap.h" />
     <ClInclude Include="src\Components\Colliders\BoxCollider.h" />
     <ClInclude Include="Dependencies\physics\include\reactphysics3d\body\CollisionBody.h" />
@@ -827,7 +835,7 @@
     <ClInclude Include="Dependencies\rttr\include\rttr\variant_array_view.h" />
     <ClInclude Include="Dependencies\rttr\include\rttr\wrapper_mapper.h" />
     <ClInclude Include="src\Components\Rigidbody.h" />
-    <ClInclude Include="src\Physics.h" />
+    <ClInclude Include="src\Physics\Physics.h" />
     <ClInclude Include="src\Reflection\PropertyDrawer.h" />
     <ClInclude Include="src\Math\Frustum.h" />
     <ClInclude Include="src\Math\ImGuiExtensions.h" />

@@ -1,0 +1,36 @@
+Entities:
+  - Entity: Root
+    UUID: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Spot Light
+    UUID: 1c855eab-92dc-4244-82d6-c5fe6452da8a
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0.219209552, 4.01919937, -6.93962955]
+      rotation: [0.213635966, -0.278261572, 0.0636282712, 0.934281349]
+      scale: [1.0000478, 1.00007224, 1.00004888]
+    SpotLight:
+      angle: 79.9
+  - Entity: Mesh
+    UUID: 5fb4d659-877f-45b8-b568-d8ae8f0ea232
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0, 1.01768327, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [0.0196000002, 0.0196000002, 0.0196000002]
+    MeshComponent:
+      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
+      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
+  - Entity: Ground
+    UUID: 7f914d46-6770-4f04-8566-1fbbcc190261
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [30, 1, 30]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 22d565ce-9d67-420b-a538-cc901b226a45

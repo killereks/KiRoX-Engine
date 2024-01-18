@@ -21,7 +21,7 @@
 #include "Tools/StringTools.h"
 
 #include <ShObjIdl.h>
-#include <Components/DirectionalLight.h>
+#include <Components/Light/DirectionalLight.h>
 
 #include <Rendering/RenderTools.h>
 
@@ -36,6 +36,8 @@ Engine::~Engine()
 {
 	delete sceneCamera;
 	RenderTools::Destroy();
+
+	delete shadowMapper;
 }
 
 void Engine::OnScenePlay()
@@ -81,6 +83,8 @@ void Engine::Start()
 
 	Gizmos::GetInstance()->Init(gizmosShader);
 
+	shadowMapper = new SceneShadowMapper();
+
 	const std::string scenePath = projectPath + "\\lightTest.scene";
 	LoadScene(scenePath);
 
@@ -98,6 +102,7 @@ void Engine::Update()
 
 #if EDITOR
 	SceneControls();
+	//shadowMapper->DrawDebug();
 #endif
 	RenderScene(shader);
 #if EDITOR
@@ -112,7 +117,7 @@ void Engine::Update()
 		std::vector<Entity*> allEntities = activeScene.get()->GetAllEntities();
 
 		for (Entity* ent : allEntities) {
-			std::vector<Component*> components = ent->GetAllComponents();
+			const std::vector<Component*>& components = ent->GetAllComponents();
 			
 			for (Component* comp : components) {
 				comp->Update(Engine::deltaTime);
@@ -129,18 +134,28 @@ void Engine::Update()
 
 void Engine::RenderScene(Shader* shader)
 {
+	// Meshes
 	std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
+
+	// Lights
 	DirectionalLight* dirLight = activeScene.get()->FindComponentOfType<DirectionalLight>();
+	std::vector<SpotLight*> spotLights = activeScene.get()->FindComponentsOfType<SpotLight>();
+
+	// Post Processing
 	Volume* volume = activeScene.get()->FindComponentOfType<Volume>();
 
 	StatsCounter::GetInstance()->SetCounter("meshEntities", meshComponents.size());
 
 	// SHADOW MAP PASS
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
+	shadowMapper->BeginShadowMapping();
 	if (dirLight != nullptr) {
 		dirLight->Render(meshComponents);
 	}
+
+	for (SpotLight* spotLight : spotLights) {
+		shadowMapper->RenderSpotLight(spotLight, meshComponents);
+	}
+	shadowMapper->EndShadowMapping();
 	// END SHADOW MAP PASS
 
 	shader->use();

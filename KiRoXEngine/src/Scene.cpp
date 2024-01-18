@@ -321,8 +321,8 @@ void Scene::DrawInspector()
 				var.convert(type);
 
 				for (rttr::property prop : type.get_properties()) {
-					std::string name = prop.get_name();
-					if (name == "") continue;
+					std::string propName = prop.get_name();
+					if (propName == "") continue;
 
 					bool _ = PropertyDrawer::DrawProperty(prop, var);
 				}
@@ -363,7 +363,7 @@ void Scene::DrawInspector()
 	if (ImGui::BeginPopup("AddComponentPopup", ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize)) {
 		ImGui::SeparatorText("General");
 
-		auto components = rttr::type::get<Component>().get_derived_classes();
+		auto components = Reflection::GetAllNonAbstractComponents();
 
 		static char searchBuffer[128] = "";
 		ImGui::InputText("##ComponentSearch", searchBuffer, sizeof(searchBuffer));
@@ -377,7 +377,8 @@ void Scene::DrawInspector()
 			if (lowercaseName.find(searchBuffer) != std::string::npos) {
 				std::string compDisplayName = StringTools::FormatComponentName(compName.c_str());
 				if (ImGui::MenuItem(compDisplayName.c_str())) {
-					Component* newCompInstance = Reflection::CreateComponent(comp.get_name());
+					const std::string name = comp.get_name();
+					Component* newCompInstance = Reflection::CreateComponent(name);
 					selectedEntity->AddComponent(newCompInstance);
 				}
 			}
