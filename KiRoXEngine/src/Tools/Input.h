@@ -135,6 +135,25 @@ public:
 		return glm::vec2(0.0f);
 	}
 
+	static glm::vec2 GetMovementAxis() {
+		glm::vec2 out = glm::vec2(0.0f, 0.0f);
+
+		if (GetKey(GLFW_KEY_W)) {
+			out.y += 1.0f;
+		}
+		if (GetKey(GLFW_KEY_S)) {
+			out.y -= 1.0f;
+		}
+		if (GetKey(GLFW_KEY_A)) {
+			out.x -= 1.0f;
+		}
+		if (GetKey(GLFW_KEY_D)) {
+			out.x += 1.0f;
+		}
+
+		return out;
+	}
+
 	static bool GetKey(int key) {
 		return GetInstance()->keys[key];
 	}

@@ -57,6 +57,12 @@ void Physics::RegisterRigidbody(Rigidbody* rb)
 		RegisterCollisionBody(boxCollider, rb);
 	}
 
+	if (owner->HasComponent<CapsuleCollider>()) {
+		CapsuleCollider* capsuleCollider = owner->GetComponent<CapsuleCollider>();
+
+		RegisterCollisionBody(capsuleCollider, rb);
+	}
+
 	//std::cout << "Registered a new body! " << rb->GetOwner()->GetName() << "\n";
 }
 
@@ -72,6 +78,22 @@ void Physics::RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb) {
 	rb->GetBody()->addCollider(boxShape, physicsTransform);
 
 	//std::cout << "Found a box collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
+}
+
+void Physics::RegisterCollisionBody(CapsuleCollider* capsuleCollider, Rigidbody* rb)
+{
+	float radius = capsuleCollider->GetRadius();
+	float height = capsuleCollider->GetHeight();
+
+	reactphysics3d::CapsuleShape* capsuleShape = physicsCommon.createCapsuleShape(radius, height);
+	reactphysics3d::Transform physicsTransform = reactphysics3d::Transform::identity();
+
+	//glm::vec3 offset = capsuleCollider->GetOffset();
+	//physicsTransform.setPosition(reactphysics3d::Vector3(offset.x, offset.y, offset.z));
+
+	rb->GetBody()->addCollider(capsuleShape, physicsTransform);
+
+	//std::cout << "Found a capsule collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
 }
 
 reactphysics3d::Transform Physics::GetTransform(Entity* ent)

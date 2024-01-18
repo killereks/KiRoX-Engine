@@ -15,6 +15,15 @@ class Rigidbody : public Component
 	PROPERTY()
 	bool isStatic;
 
+	PROPERTY()
+	bool freezeRotationX;
+
+	PROPERTY()
+	bool freezeRotationY;
+
+	PROPERTY()
+	bool freezeRotationZ;
+
 	reactphysics3d::RigidBody* body;
 
 	Physics* physics;
@@ -23,10 +32,25 @@ public:
 
 	bool IsStatic() { return isStatic; }
 
+	inline glm::vec3 GetVelocity() {
+		if (body == nullptr) return glm::vec3(0, 0, 0);
+		reactphysics3d::Vector3 velocity = body->getLinearVelocity();
+		return glm::vec3(velocity.x, velocity.y, velocity.z);
+	}
+
 	void SetBody(reactphysics3d::RigidBody* body);
 	inline reactphysics3d::RigidBody* GetBody() { return body; }
 
+	void SetPosition(glm::vec3 position);
+	void SetRotation(glm::quat rotation);
+
 	void SetPhysics(Physics* physics);
+
+	void SetFriction(float friction);
+	void SetBounciness(float bounciness);
+
+	void AddForce(glm::vec3 force);
+	void SetVelocity(glm::vec3 velocity);
 
 	virtual std::string GetIcon() override {
 		return ICON_FA_ATOM;

@@ -64,6 +64,8 @@ uniform bool hasNormalMap;
 uniform bool hasMetallicMap;
 uniform bool hasHeightMap;
 
+uniform vec2 tiling;
+
 uniform sampler2D shadowMap;
 
 uniform sampler2D albedoMap;
@@ -156,6 +158,9 @@ float softShadowsDirectional(float dotLightNormal){
 void main(){
 	vec3 normals = Normal;
 	vec2 UVs = UV;
+	
+	UVs.x *= tiling.x;
+	UVs.y *= tiling.y;
 
 	// HEIGHT MAP
 	if (hasHeightMap){

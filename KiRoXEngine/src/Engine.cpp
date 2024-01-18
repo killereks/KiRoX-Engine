@@ -53,6 +53,16 @@ void Engine::OnScenePlay()
 	for (Rigidbody* rb : rbs) {
 		physics->RegisterRigidbody(rb);
 	}
+
+	// init all components
+	std::vector<Entity*> allEntities = activeScene.get()->GetAllEntities();
+	for (Entity* ent : allEntities) {
+		const std::vector<Component*>& components = ent->GetAllComponents();
+
+		for (Component* comp : components) {
+			comp->Init();
+		}
+	}
 }
 
 void Engine::Start()

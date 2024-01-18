@@ -10,6 +10,7 @@
 
 #include <thread>
 #include <atomic>
+#include <Components/Colliders/CapsuleCollider.h>
 
 class Physics
 {
@@ -36,6 +37,7 @@ public:
 
 	void RegisterRigidbody(Rigidbody* rb);
 	void RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb);
+	void RegisterCollisionBody(CapsuleCollider* capsuleCollider, Rigidbody* rb);
 
 	void Update(float inDeltaTime);
 

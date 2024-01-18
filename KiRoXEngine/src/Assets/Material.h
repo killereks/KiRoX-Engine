@@ -27,6 +27,9 @@ public:
 	PROPERTY()
 	ObjectPtr* heightMap;
 
+	PROPERTY()
+	glm::vec2 tiling;
+
 	Shader* GetShader() const {
 		return shader->Get<Shader>();
 	}

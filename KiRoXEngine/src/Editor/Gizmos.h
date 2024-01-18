@@ -111,5 +111,10 @@ public:
 	static void DrawLine(glm::vec3 startPosition, glm::vec3 endPosition, glm::vec3 color);
 	static void DrawRay(glm::vec3 startPosition, glm::vec3 direction, glm::vec3 color);
 	static void DrawWireSphere(glm::vec3 position, float radius, glm::vec3 color);
+
+	static void DrawWireCircle(glm::vec3 position, glm::vec3 forward, glm::vec3 up, float startAngle, float endAngle, float radius, glm::vec3 color);
+
+	static void DrawCylinder(glm::vec3 position, float radius, float height, glm::quat rotation, glm::vec3 color);
+	static void DrawCapsule(glm::vec3 position, float radius, float height, glm::quat rotation, glm::vec3 color);
 };
 

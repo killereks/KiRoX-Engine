@@ -8,6 +8,8 @@ void Material::Bind()
 
 	Shader* shader = this->shader->Get<Shader>();
 
+	shader->setVec2("tiling", tiling);
+
 	shader->use();
 
 	if (this->mainTexture->HasValue()) {
@@ -62,6 +64,8 @@ Material::Material()
 	normalMap = new ObjectPtr();
 	metallicMap = new ObjectPtr();
 	heightMap = new ObjectPtr();
+
+	tiling = glm::vec2(1.0f, 1.0f);
 }
 
 Material::~Material()

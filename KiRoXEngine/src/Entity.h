@@ -74,6 +74,28 @@ public:
 	void RemoveChild(Entity* child);
 
 	template<typename T>
+	T* GetComponentInChildren() {
+		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+		for (auto component : components) {
+			T* castedComponent = dynamic_cast<T*>(component);
+			if (castedComponent != nullptr)
+			{
+				return castedComponent;
+			}
+		}
+
+		for (auto child : children) {
+			T* castedComponent = child->GetComponentInChildren<T>();
+			if (castedComponent != nullptr)
+			{
+				return castedComponent;
+			}
+		}
+
+		return nullptr;
+	}
+
+	template<typename T>
 	T* AddComponent() {
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
 		auto component = new T();

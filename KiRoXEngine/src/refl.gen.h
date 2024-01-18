@@ -14,10 +14,11 @@
 #include "Assets/Shader.h"
 #include "Assets/Texture.h"
 #include "Components/CameraComponent.h"
-#include "Components/CameraFlyComponent.h"
 #include "Components/Colliders/BoxCollider.h"
+#include "Components/Colliders/CapsuleCollider.h"
 #include "Components/Colliders/Collider.h"
 #include "Components/Component.h"
+#include "Components/FirstPersonController.h"
 #include "Components/Light/DirectionalLight.h"
 #include "Components/Light/Light.h"
 #include "Components/Light/SpotLight.h"
@@ -90,6 +91,7 @@ registration::class_<Material>("Material")
 .property("normalMap", &Material::normalMap)
 .property("metallicMap", &Material::metallicMap)
 .property("heightMap", &Material::heightMap)
+.property("tiling", &Material::tiling)
 ;
 
 registration::class_<MeshFilter>("MeshFilter")
@@ -117,15 +119,16 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("orthoFar", &CameraComponent::orthoFar)
 ;
 
-registration::class_<CameraFlyComponent>("CameraFlyComponent")
-.constructor<>()
-.property("speed", &CameraFlyComponent::speed)
-;
-
 registration::class_<BoxCollider>("BoxCollider")
 .constructor<>()
 .property("offset", &BoxCollider::offset)
 .property("scale", &BoxCollider::scale)
+;
+
+registration::class_<CapsuleCollider>("CapsuleCollider")
+.constructor<>()
+.property("radius", &CapsuleCollider::radius)
+.property("height", &CapsuleCollider::height)
 ;
 
 registration::class_<Collider>("Collider")
@@ -133,6 +136,13 @@ registration::class_<Collider>("Collider")
 ;
 
 registration::class_<Component>("Component")
+;
+
+registration::class_<FirstPersonController>("FirstPersonController")
+.constructor<>()
+.property("speed", &FirstPersonController::speed)
+.property("runningSpeed", &FirstPersonController::runningSpeed)
+.property("sensitivity", &FirstPersonController::sensitivity)
 ;
 
 registration::class_<DirectionalLight>("DirectionalLight")
@@ -156,6 +166,9 @@ registration::class_<MeshComponent>("MeshComponent")
 registration::class_<Rigidbody>("Rigidbody")
 .constructor<>()
 .property("isStatic", &Rigidbody::isStatic)
+.property("freezeRotationX", &Rigidbody::freezeRotationX)
+.property("freezeRotationY", &Rigidbody::freezeRotationY)
+.property("freezeRotationZ", &Rigidbody::freezeRotationZ)
 ;
 
 registration::class_<TestComponent>("TestComponent")
@@ -192,14 +205,14 @@ ok = true;
 return dynamic_cast<CameraComponent*>(comp);
 }
 
-inline CameraFlyComponent* converter_CameraFlyComponent(Component* comp, bool& ok){
-ok = true;
-return dynamic_cast<CameraFlyComponent*>(comp);
-}
-
 inline BoxCollider* converter_BoxCollider(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<BoxCollider*>(comp);
+}
+
+inline CapsuleCollider* converter_CapsuleCollider(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<CapsuleCollider*>(comp);
 }
 
 inline Collider* converter_Collider(Component* comp, bool& ok){
@@ -210,6 +223,11 @@ return dynamic_cast<Collider*>(comp);
 inline Component* converter_Component(Component* comp, bool& ok){
 ok = true;
 return dynamic_cast<Component*>(comp);
+}
+
+inline FirstPersonController* converter_FirstPersonController(Component* comp, bool& ok){
+ok = true;
+return dynamic_cast<FirstPersonController*>(comp);
 }
 
 inline DirectionalLight* converter_DirectionalLight(Component* comp, bool& ok){
@@ -268,11 +286,14 @@ return rttr::type::get<Texture*>();
 if (name == "CameraComponent"){
 return rttr::type::get<CameraComponent*>();
 }
-if (name == "CameraFlyComponent"){
-return rttr::type::get<CameraFlyComponent*>();
-}
 if (name == "BoxCollider"){
 return rttr::type::get<BoxCollider*>();
+}
+if (name == "CapsuleCollider"){
+return rttr::type::get<CapsuleCollider*>();
+}
+if (name == "FirstPersonController"){
+return rttr::type::get<FirstPersonController*>();
 }
 if (name == "DirectionalLight"){
 return rttr::type::get<DirectionalLight*>();
@@ -306,11 +327,14 @@ static Component* CreateComponent(const std::string& name){
 if (name == "CameraComponent"){
 return new CameraComponent();
 }
-if (name == "CameraFlyComponent"){
-return new CameraFlyComponent();
-}
 if (name == "BoxCollider"){
 return new BoxCollider();
+}
+if (name == "CapsuleCollider"){
+return new CapsuleCollider();
+}
+if (name == "FirstPersonController"){
+return new FirstPersonController();
 }
 if (name == "DirectionalLight"){
 return new DirectionalLight();
@@ -338,8 +362,9 @@ throw std::runtime_error("No type found for " + name);
 
 static void RegisterTypes(){
 rttr::type::get<Component*>().register_converter_func(converter_CameraComponent);
-rttr::type::get<Component*>().register_converter_func(converter_CameraFlyComponent);
 rttr::type::get<Component*>().register_converter_func(converter_BoxCollider);
+rttr::type::get<Component*>().register_converter_func(converter_CapsuleCollider);
+rttr::type::get<Component*>().register_converter_func(converter_FirstPersonController);
 rttr::type::get<Component*>().register_converter_func(converter_DirectionalLight);
 rttr::type::get<Component*>().register_converter_func(converter_SpotLight);
 rttr::type::get<Component*>().register_converter_func(converter_MeshComponent);
@@ -356,8 +381,9 @@ rttr::type::get<glm::quat>().register_converter_func(glm_quat_to_string);
 static std::vector<rttr::type> GetAllNonAbstractComponents(){
 std::vector<rttr::type> types;
 types.push_back(rttr::type::get<CameraComponent>());
-types.push_back(rttr::type::get<CameraFlyComponent>());
 types.push_back(rttr::type::get<BoxCollider>());
+types.push_back(rttr::type::get<CapsuleCollider>());
+types.push_back(rttr::type::get<FirstPersonController>());
 types.push_back(rttr::type::get<DirectionalLight>());
 types.push_back(rttr::type::get<SpotLight>());
 types.push_back(rttr::type::get<MeshComponent>());

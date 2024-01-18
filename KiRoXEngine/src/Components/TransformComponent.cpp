@@ -2,6 +2,7 @@
 
 #include "../Entity.h"
 #include "imgui.h"
+#include "Rigidbody.h"
 
 TransformComponent::TransformComponent()
 {
@@ -90,6 +91,10 @@ void TransformComponent::SetWorldPosition(glm::vec3 pos)
 	else {
 		position = pos;
 	}
+
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetPosition(pos);
+	}
 }
 
 void TransformComponent::SetWorldRotation(glm::vec3 euler)
@@ -108,6 +113,10 @@ void TransformComponent::SetWorldRotation(glm::quat quat)
 	else {
 		rotation = glm::normalize(quat);
 	}
+
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+	}
 }
 
 void TransformComponent::SetWorldScale(glm::vec3 scale)
@@ -124,6 +133,10 @@ void TransformComponent::SetWorldScale(glm::vec3 scale)
 void TransformComponent::SetLocalPosition(glm::vec3 pos)
 {
 	this->position = pos;
+
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetPosition(pos);
+	}
 }
 
 void TransformComponent::SetLocalRotation(glm::vec3 euler)
@@ -151,6 +164,10 @@ void TransformComponent::LookAt(glm::vec3 position)
 void TransformComponent::Translate(glm::vec3 deltaPos)
 {
 	position += deltaPos;
+
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetPosition(position);
+	}
 }
 
 glm::vec3 TransformComponent::GetWorldPosition() const {
@@ -193,6 +210,10 @@ void TransformComponent::Rotate(glm::vec3 axis, float angleDegrees)
 {	
 	rotation *= glm::angleAxis(glm::radians(angleDegrees), axis);
 
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+	}
+
 	for (Entity* ent : owner->GetChildren())
 	{
 		ent->GetTransform().Rotate(axis, angleDegrees);
@@ -202,12 +223,20 @@ void TransformComponent::Rotate(glm::vec3 axis, float angleDegrees)
 void TransformComponent::Rotate(glm::quat quat)
 {
 	rotation *= quat;
+
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+	}
 }
 
 void TransformComponent::RotateLocal(glm::vec3 axis, float angleDegrees)
 {
 	glm::quat localRot = glm::angleAxis(glm::radians(angleDegrees), axis);
 	rotation *= localRot;
+
+	if (owner->HasComponent<Rigidbody>()) {
+		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+	}
 }
 
 void TransformComponent::Scale(float scalar)
