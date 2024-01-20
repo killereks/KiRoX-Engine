@@ -12,6 +12,8 @@
 #include "../Math/Plane.h"
 #include "../Math/Frustum.h"
 
+class SkyBox;
+
 enum class CameraType
 {
 	Perspective,
@@ -55,6 +57,8 @@ class CameraComponent : public Component
 
 	RenderTexture* renderTexture = nullptr;
 
+	SkyBox* skybox = nullptr;
+
 public:
 	CameraComponent();
 	~CameraComponent();
@@ -73,6 +77,8 @@ public:
 
 	void Clear();
 	void ClearColor(glm::vec4 color);
+
+	unsigned int GetSkyboxTextureID();
 
 	bool IsOnOrForwardPlane(Plane& plane, Bounds& bounds);
 	bool IsInFrustum(Bounds& bounds);

@@ -6,6 +6,7 @@
 #include "../Editor/Gizmos.h"
 #include "../Assets/AssetManager.h"
 #include <Assets/Material.h>
+#include <Rendering/SkyBox.h>
 
 CameraComponent::CameraComponent()
 {
@@ -24,6 +25,16 @@ CameraComponent::CameraComponent()
 
 	renderTexture = new RenderTexture(640, 480);
 	aspect = (float)640 / (float)480;
+
+	std::vector<Texture*> skyboxTextures;
+	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("px.png"));
+	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("nx.png"));
+	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("py.png"));
+	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("ny.png"));
+	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("pz.png"));
+	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("nz.png"));
+
+	skybox = new SkyBox(skyboxTextures);
 }
 
 CameraComponent::~CameraComponent()
@@ -160,6 +171,10 @@ void CameraComponent::PreRender()
 	glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
 	Clear();
 	glViewport(0, 0, width, height);
+
+	skybox->Bind(11);
+	skybox->Draw(this);
+	skybox->Unbind();
 }
 
 void CameraComponent::PostRender()
@@ -197,6 +212,11 @@ void CameraComponent::ClearColor(glm::vec4 color)
 	{
 		renderTexture->ClearColor(color);
 	}
+}
+
+unsigned int CameraComponent::GetSkyboxTextureID()
+{
+	return skybox->GetTextureID();
 }
 
 bool CameraComponent::IsOnOrForwardPlane(Plane& plane, Bounds& bounds)
@@ -255,6 +275,9 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 
 	shader->setMat4("perspectiveMatrix", projectionMatrix);
 	shader->setMat4("viewMatrix", viewMatrix);
+	
+	skybox->Bind(11);
+	shader->setInt("skybox", 11);
 
 	// render
 	for (MeshComponent* meshComp : meshes)

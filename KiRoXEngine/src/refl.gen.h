@@ -92,6 +92,7 @@ registration::class_<Material>("Material")
 .property("metallicMap", &Material::metallicMap)
 .property("heightMap", &Material::heightMap)
 .property("tiling", &Material::tiling)
+.property("roughness", &Material::roughness)
 ;
 
 registration::class_<MeshFilter>("MeshFilter")

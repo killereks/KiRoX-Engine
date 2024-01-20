@@ -67,6 +67,7 @@ uniform bool hasMetallicMap;
 uniform bool hasHeightMap;
 
 uniform vec2 tiling;
+uniform float roughness;
 
 uniform sampler2D shadowMap;
 
@@ -74,6 +75,8 @@ uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D heightMap;
+
+uniform samplerCube skybox;
 
 //uniform sampler2DArray shadowMapArray;
 //uniform int numLights;
@@ -95,6 +98,21 @@ uniform sampler2D heightMap;
 float randomNum(vec4 seed){
 	float dot_product = dot(seed, vec4(12.9898,78.233,45.164,94.673));
 	return fract(sin(dot_product) * 43758.5453);
+}
+
+vec3 RandomVector(vec3 seed){
+	return vec3(randomNum(vec4(seed, 0.0)),
+				randomNum(vec4(seed, 1.0)),
+				randomNum(vec4(seed, 2.0)));
+}
+
+vec3 RandomVectorOnHemisphere(vec3 seed, vec3 forward){
+	vec3 rand = RandomVector(seed);
+	if (dot(rand, forward) < 0.0){
+		rand *= -1.0;
+	}
+	
+	return rand;
 }
 
 float shadowCalcDirectional(float dotLightNormal, vec2 offset){
@@ -242,7 +260,7 @@ void main(){
 		normals = normalize(TBN * normalize(texture(normalMap, UVs).rgb * 2.0 - 1.0));
 	}
 
-	float metallic = 1.0;
+	float metallic = 0.0;
 	if (hasMetallicMap){
 		metallic = texture(metallicMap, UVs).r;
 	}
@@ -292,6 +310,13 @@ void main(){
 	//col += CalcPBRLighting(normals) * shadow;
 
 	col += CalcPBRLighting(normals) * shadow;
+
+	// calculate skybox reflection
+	vec3 I = normalize(FragPos - viewPos);
+	vec3 R = reflect(I, normals);
+	R = mix(R, RandomVectorOnHemisphere(R, normals), roughness);
+	vec3 skyboxCol = texture(skybox, R).rgb;
+	col = mix(col, skyboxCol, metallic);
 
 	//col += albedo * (metallic * diffuse + metallic * specular) * shadow;
 

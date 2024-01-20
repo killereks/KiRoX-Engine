@@ -8,8 +8,6 @@ void Material::Bind()
 
 	Shader* shader = this->shader->Get<Shader>();
 
-	shader->setVec2("tiling", tiling);
-
 	shader->use();
 
 	if (this->mainTexture->HasValue()) {
@@ -55,6 +53,9 @@ void Material::Bind()
 	else {
 		shader->setBool("hasHeightMap", false);
 	}
+
+	shader->setFloat("roughness", glm::clamp(roughness, 0.0f, 1.0f));
+	shader->setVec2("tiling", tiling);
 }
 
 void Material::CopyPreviewTextureFromID(unsigned int id, unsigned int width, unsigned int height)
@@ -80,6 +81,7 @@ Material::Material()
 	heightMap = new ObjectPtr();
 
 	tiling = glm::vec2(1.0f, 1.0f);
+	roughness = 0.0;
 }
 
 Material::~Material()

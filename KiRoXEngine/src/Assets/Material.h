@@ -32,6 +32,9 @@ public:
 	PROPERTY()
 	glm::vec2 tiling;
 
+	PROPERTY()
+	float roughness;
+
 	Shader* GetShader() const {
 		return shader->Get<Shader>();
 	}
