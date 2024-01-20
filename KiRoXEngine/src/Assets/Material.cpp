@@ -65,7 +65,7 @@ void Material::CopyPreviewTextureFromID(unsigned int id, unsigned int width, uns
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 
 	glCopyImageSubData( id,					GL_TEXTURE_2D, 0, 0, 0, 0,
 						previewTextureID,	GL_TEXTURE_2D, 0, 0, 0, 0,

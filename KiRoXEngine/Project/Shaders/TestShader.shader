@@ -190,7 +190,7 @@ vec3 CalcPBRLighting(vec3 normal){
 
 	vec3 F0 = vec3(0.04);
 
-	vec3 albedo = texture(albedoMap, UV).rgb;
+	vec3 albedo = texture(albedoMap, UV * tiling).rgb;
 
 	// Cook-Torrance microfacet specular reflection
     vec3 halfDir = normalize(viewForward + -lightDir);
@@ -206,8 +206,10 @@ vec3 CalcPBRLighting(vec3 normal){
     float kD = 1.0 - kS;
     vec3 diffuse = (albedo / PI) * (1.0 - kS);
 
+	float lightIntensity = 3.0;
+
     // Final PBR lighting equation
-    vec3 lighting = (kD * diffuse + specular) * max(dot(normal, -lightDir), 0.0);
+    vec3 lighting = lightIntensity * (kD * diffuse + specular) * max(dot(normal, -lightDir), 0.0);
 
     return lighting;
 }
@@ -224,7 +226,7 @@ void main(){
 		vec3 viewDir = normalize(viewPos - FragPos);
 		viewDir *= TBN;
 
-		float heightScale = 0.05;
+		float heightScale = 0.005;
 		const float minLayers = 8.0;
 		const float maxLayers = 64.0;
 
@@ -316,7 +318,7 @@ void main(){
 	vec3 R = reflect(I, normals);
 	R = mix(R, RandomVectorOnHemisphere(R, normals), roughness);
 	vec3 skyboxCol = texture(skybox, R).rgb;
-	col = mix(col, skyboxCol, metallic);
+	col = mix(col, skyboxCol * shadow, metallic);
 
 	//col += albedo * (metallic * diffuse + metallic * specular) * shadow;
 

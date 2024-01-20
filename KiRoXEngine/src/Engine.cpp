@@ -398,6 +398,28 @@ void Engine::RenderSceneWindow()
 			if (scene != nullptr) {
 				LoadScene(scene->filePath);
 			}
+
+			Material* mat = dynamic_cast<Material*>(*(Asset**)payload->Data);
+
+			if (mat != nullptr) {
+				ImVec2 windowSize = ImGui::GetWindowSize();
+				ImVec2 windowPos = ImGui::GetWindowPos();
+
+				mouseSelecting.Resize(windowSize.x, windowSize.y);
+
+				glm::vec2 mousePosRelative = glm::vec2(ImGui::GetMousePos().x - windowPos.x, ImGui::GetMousePos().y - windowPos.y);
+				std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
+
+				glm::vec3 color = mouseSelecting.MouseClicked(meshComponents, GetSceneCamera(), mousePosRelative);
+
+				activeScene.get()->SelectEntityByIndex(color.x);
+				Entity* selectedEntity = activeScene.get()->GetSelectedEntity();
+				if (selectedEntity != nullptr) {
+					if (selectedEntity->HasComponent<MeshComponent>()) {
+						selectedEntity->GetComponent<MeshComponent>()->SetMaterial(mat);
+					}
+				}
+			}
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -414,18 +436,21 @@ void Engine::RenderSceneWindow()
 
 	RenderStatistics();
 
-	if (ImGui::IsItemHovered() && Input::GetMouseButtonDown(0) && !ImGuizmo::IsUsing()) {
-		ImVec2 windowSize = ImGui::GetWindowSize();
-		ImVec2 windowPos = ImGui::GetWindowPos();
+	if (ImGui::IsItemHovered() && !ImGuizmo::IsUsing()) {
+		// click to select
+		if (Input::GetMouseButtonDown(0)) {
+			ImVec2 windowSize = ImGui::GetWindowSize();
+			ImVec2 windowPos = ImGui::GetWindowPos();
 
-		mouseSelecting.Resize(windowSize.x, windowSize.y);
+			mouseSelecting.Resize(windowSize.x, windowSize.y);
 
-		glm::vec2 mousePosRelative = glm::vec2(ImGui::GetMousePos().x - windowPos.x, ImGui::GetMousePos().y - windowPos.y);
-		std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
+			glm::vec2 mousePosRelative = glm::vec2(ImGui::GetMousePos().x - windowPos.x, ImGui::GetMousePos().y - windowPos.y);
+			std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
 
-		glm::vec3 color = mouseSelecting.MouseClicked(meshComponents, GetSceneCamera(), mousePosRelative);
+			glm::vec3 color = mouseSelecting.MouseClicked(meshComponents, GetSceneCamera(), mousePosRelative);
 
-		activeScene.get()->SelectEntityByIndex(color.x);
+			activeScene.get()->SelectEntityByIndex(color.x);
+		}
 	}
 
 	ImGui::End();
@@ -682,7 +707,7 @@ void Engine::DrawMaterialPreviews()
 
 	Entity* lightEnt = tempScene->CreateEntity("Light");
 	DirectionalLight* lightComp = lightEnt->AddComponent<DirectionalLight>();
-	lightComp->GetOwner()->GetTransform().SetWorldPosition(glm::vec3(10.0f, 10.0f, -10.0f));
+	lightComp->GetOwner()->GetTransform().SetWorldPosition(glm::vec3(-10.0f, -10.0f, -10.0f));
 	lightComp->GetOwner()->GetTransform().SetWorldRotation(glm::vec3(45.0f, 45.0f, 0.0f));
 
 	Entity* cameraEnt = tempScene->CreateEntity("Camera");

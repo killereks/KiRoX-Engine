@@ -107,6 +107,10 @@ public:
 			mouseDelta = newMousePosition - mousePosition;
 			mousePosition = newMousePosition;
 		}
+
+		if (Input::GetMouseButtonDown(1)) {
+			mouseDelta = glm::vec2(0.0f);
+		}
 	}
 
 	static bool IsControllerConnected() {

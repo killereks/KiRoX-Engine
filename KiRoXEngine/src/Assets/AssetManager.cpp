@@ -359,6 +359,7 @@ void AssetManager::DrawImportSettings()
 
         if (PropertyDrawer::DrawObject(var)) {
             selectedAsset->SaveMetaFile();
+            std::cout << "Detected change in " << selectedAsset->fileName << "\n";
         }
     }
 
