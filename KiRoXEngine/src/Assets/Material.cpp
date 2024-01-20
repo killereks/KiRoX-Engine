@@ -57,6 +57,20 @@ void Material::Bind()
 	}
 }
 
+void Material::CopyPreviewTextureFromID(unsigned int id, unsigned int width, unsigned int height)
+{
+	glGenTextures(1, &previewTextureID);
+	glBindTexture(GL_TEXTURE_2D, previewTextureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+	glCopyImageSubData( id,					GL_TEXTURE_2D, 0, 0, 0, 0,
+						previewTextureID,	GL_TEXTURE_2D, 0, 0, 0, 0,
+						width, height, 1);
+}
+
 Material::Material()
 {
 	shader = new ObjectPtr();
@@ -75,6 +89,8 @@ Material::~Material()
 	delete normalMap;
 	delete metallicMap;
 	delete heightMap;
+
+	glDeleteTextures(1, &previewTextureID);
 }
 
 co::Coro Material::BeginLoading(){

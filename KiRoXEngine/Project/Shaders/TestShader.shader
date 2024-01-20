@@ -42,6 +42,8 @@ void main(){
 @fs
 #version 460 core
 
+#define PI 3.14159265359
+
 in vec3 FragPos;
 in vec3 Vertex;
 in vec3 Normal;
@@ -125,35 +127,72 @@ float softShadowsDirectional(float dotLightNormal){
 	return shadow;
 }
 
-//float spotLightShadowCalc(ShadowParameters params, vec2 offset, int layer){
-//	vec3 projCoords = params.fragPosLightSpace.xyz / params.fragPosLightSpace.w;
-//	projCoords = projCoords * 0.5 + 0.5;
-//
-//	if (projCoords.z > 1.0) return 0.0;
-//
-//	float rand = randomNum(vec4(projCoords.xy, projCoords.y, projCoords.x)) * params.bias;
-//	vec3 shadowUV = vec3(projCoords.x + rand + offset.x, projCoords.y + rand + offset.y, layer);
-//	float depth = texture(shadowMapArray, shadowUV, layer).r;
-//
-//	if (depth + params.bias < projCoords.z) return 0.0;
-//	return 1.0;
-//}
-//
-//float softSpotLightShadows(ShadowParameters params, sampler2DArray shadowMaps, int layer){
-//	vec2 texelSize = 1.0 / textureSize(shadowMaps, 0);
-//	float shadow = 0.0;
-//
-//	int size = 2;
-//	for(int x = -size; x <= size; ++x){
-//		for(int y = -size; y <= size; ++y){
-//			vec2 sampleOffset = vec2(x,y) * texelSize;
-//			shadow += spotLightShadowCalc(params, sampleOffset, layer);
-//		}
-//	}
-//
-//	shadow /= (2 * size + 1) * (2 * size + 1);
-//	return shadow;
-//}
+/// PBR
+float DistributionGGX(vec3 N, vec3 H, float roughness){
+    float a      = roughness*roughness;
+    float a2     = a*a;
+    float NdotH  = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH*NdotH;
+
+    float nom   = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+
+    return nom / denom;
+}
+
+float GeometrySchlickGGX(float NdotV, float roughness){
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float nom   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+
+    return nom / denom;
+}
+
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness){
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+
+    return ggx1 * ggx2;
+}
+
+vec3 fresnelSchlick(float cosTheta, vec3 F0){
+    return F0 + (1.0 - F0)*pow((1.0 + 0.000001) - cosTheta, 5.0);
+}
+
+vec3 CalcPBRLighting(vec3 normal){
+	float roughness = 0.0;
+	if (hasMetallicMap){
+		roughness = texture(metallicMap, UV).g;
+	}
+
+	vec3 F0 = vec3(0.04);
+
+	vec3 albedo = texture(albedoMap, UV).rgb;
+
+	// Cook-Torrance microfacet specular reflection
+    vec3 halfDir = normalize(viewForward + -lightDir);
+    float D = DistributionGGX(normal, halfDir, roughness);
+    float G = GeometrySmith(normal, viewForward, -lightDir, roughness);
+    vec3 specular = vec3(1.0) * D * G / (4.0 * max(dot(normal, viewForward), 0.001) * max(dot(normal, -lightDir), 0.001));
+
+    // Fresnel-Schlick approximation for the reflection
+    float fresnel = fresnelSchlick(max(dot(halfDir, viewForward), 0.0), F0).x;
+
+    // Lambertian diffuse reflection
+    float kS = fresnel;
+    float kD = 1.0 - kS;
+    vec3 diffuse = (albedo / PI) * (1.0 - kS);
+
+    // Final PBR lighting equation
+    vec3 lighting = (kD * diffuse + specular) * max(dot(normal, -lightDir), 0.0);
+
+    return lighting;
+}
 
 void main(){
 	vec3 normals = Normal;
@@ -245,7 +284,16 @@ void main(){
 
 	float diffuse = max(dot(normals, -lightDir), 0.0);
 
-	col += albedo * (metallic * diffuse + metallic * specular) * shadow;
+	///////////////////////////////////////////
+	// PBR
+
+	//col += albedo * (CalcPBRLighting(normals) + specular) * shadow;
+
+	//col += CalcPBRLighting(normals) * shadow;
+
+	col += CalcPBRLighting(normals) * shadow;
+
+	//col += albedo * (metallic * diffuse + metallic * specular) * shadow;
 
 	FragColor = vec4(col, 1.0);
 }

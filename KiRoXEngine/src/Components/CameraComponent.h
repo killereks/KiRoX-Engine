@@ -72,6 +72,7 @@ public:
 	void Unbind();
 
 	void Clear();
+	void ClearColor(glm::vec4 color);
 
 	bool IsOnOrForwardPlane(Plane& plane, Bounds& bounds);
 	bool IsInFrustum(Bounds& bounds);
@@ -109,6 +110,7 @@ public:
 
 	void Render(std::vector<MeshComponent*>& meshes, Shader* shader);
 	void RenderUsingMaterials(std::vector<MeshComponent*>& meshes);
+	void ForceRenderWithMaterial(MeshComponent* mesh, Material* material);
 
 	void Resize(int width, int height);
 

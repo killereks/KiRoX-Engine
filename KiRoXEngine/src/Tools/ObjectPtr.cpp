@@ -26,7 +26,7 @@ void ObjectPtr::FindAsset() {
 	if (asset != nullptr) {
 		ptr = asset;
 
-		std::cout << "[ObjectPtr] Found asset with uuid: " << uuid << "\n";
+		//std::cout << "[ObjectPtr] Found asset with uuid: " << uuid << "\n";
 	}
 }
 

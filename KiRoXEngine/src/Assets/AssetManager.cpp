@@ -191,7 +191,11 @@ void AssetManager::DrawInspector()
     ////////////////////
     // Drawing Grid
 
-    ImGui::SliderFloat("##FileViewSize", &fileViewSize, 5.0f, 150.0f);
+    int step = 5;
+    // round to nearest 5.0f
+    fileViewSize = (int)(fileViewSize / step) * step;
+    ImGui::SliderFloat("##FileViewSize", &fileViewSize, 5.0f, 250.0f);
+
 
     const float padding = 10.0f;
 
@@ -253,23 +257,45 @@ void AssetManager::DrawInspector()
             }
             else
             {
-                Texture* texture = dynamic_cast<Texture*>(asset);
+                unsigned int texID = 0;
+                bool flipUVs = false;
 
-                if (texture == nullptr) {
+                if (Texture* texture = dynamic_cast<Texture*>(asset)) {
+                    if (texture->IsLoaded()) {
+                        texID = texture->GetTextureID();
+                        flipUVs = true;
+                    }
+                }
+                else if (Material* mat = dynamic_cast<Material*>(asset)) {
+                    texID = mat->GetPreviewTextureID();
+                    flipUVs = true;
+                }
+                else {
                     if (asset != nullptr) {
                         texture = GetEditorIcon(asset->GetTypeName());
+                        texID = texture->GetTextureID();
                     }
                 }
 
-                if (texture && texture->IsLoaded())
+                if (texID != 0)
                 {
                     if (small) {
-                        ImGui::Image((void*)texture->GetTextureID(), ImVec2(16, 16));
+                        if (flipUVs) {
+							ImGui::Image((ImTextureID)texID, size, ImVec2(0, 1), ImVec2(1, 0));
+						}
+                        else {
+							ImGui::Image((ImTextureID)texID, size);
+						}
                         ImGui::SameLine();
                         ImGui::Text(fileName.c_str(), size);
                     }
                     else {
-                        ImGui::Image((void*)texture->GetTextureID(), size);
+                        if (flipUVs) {
+                            ImGui::Image((ImTextureID)texID, size, ImVec2(0, 1), ImVec2(1, 0));
+						}
+                        else {
+							ImGui::Image((ImTextureID)texID, size);
+                        }
                     }
 
                     bool isDragging = ImGui::IsMouseDragging(ImGuiMouseButton_Left);

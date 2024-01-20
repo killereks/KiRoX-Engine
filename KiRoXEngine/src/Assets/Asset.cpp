@@ -18,9 +18,10 @@ void Asset::SaveMetaFile()
 		else {
 			SavingLoading::SaveYAMLFile(filePath + ".meta", var);
 		}
-	} else {
-		std::cout << "No type found for: " << GetTypeName() << "\n";
 	}
+	//else {
+	//	std::cout << "No type found for: " << GetTypeName() << "\n";
+	//}
 }
 
 void Asset::LoadMetaFile()
@@ -43,7 +44,7 @@ void Asset::LoadMetaFile()
 			}
 		}
 	}
-	else {
-		std::cout << "No type found for: " << GetTypeName() << "\n";
-	}
+	//else {
+		//std::cout << "No type found for: " << GetTypeName() << "\n";
+	//}
 }

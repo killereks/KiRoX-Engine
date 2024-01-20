@@ -15,6 +15,11 @@ void Light::Render(std::vector<MeshComponent*>& meshes)
 	shadowMap->Render(meshes, GetLightSpaceMatrix());
 }
 
+void Light::Render(MeshComponent* mesh)
+{
+	shadowMap->Render(mesh, GetLightSpaceMatrix());
+}
+
 void Light::BindShadowMap(int slot)
 {
 	if (shadowMap == nullptr) {

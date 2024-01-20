@@ -76,6 +76,12 @@ void Engine::Start()
 
 	assetManager = std::make_shared<AssetManager>(path);
 
+#if EDITOR
+	assetManager->AddCallback_OnLoaded("Sphere.fbx", [&]() {
+		DrawMaterialPreviews();
+		});
+#endif
+
 	scene = std::make_shared<Scene>();
 	activeScene = std::make_shared<Scene>();
 
@@ -213,6 +219,7 @@ void Engine::RenderScene(Shader* shader)
 		shader->setVec3("viewForward", gameCamera->GetOwner()->GetTransform().GetForward());
 
 		gameCamera->PreRender();
+		// TODO: Resize to screen width and height
 		gameCamera->RenderUsingMaterials(meshComponents);
 		gameCamera->PostRender();
 
@@ -613,6 +620,13 @@ void Engine::RenderToolbar()
 		}
 	}
 
+	ImGui::SameLine();
+	// reload assets button
+	if (ImGui::Button(ICON_FA_ROTATE_RIGHT" Reload Assets"))
+	{
+		DrawMaterialPreviews();
+	}
+
 	ImGui::End();
 }
 
@@ -650,6 +664,74 @@ void Engine::RenderStatistics()
 	ImGui::End();
 
 	counter->Reset();
+}
+
+void Engine::DrawMaterialPreviews()
+{
+	std::vector<Material*> materials = assetManager->GetAssetsOfType<Material>();
+
+	Shader* shader = assetManager->Get<Shader>("TestShader.shader");
+
+	shader->use();
+
+	Scene* tempScene = new Scene();
+
+	Entity* sphereEnt = tempScene->CreateEntity("Sphere");
+	MeshComponent* meshComp = sphereEnt->AddComponent<MeshComponent>();
+	meshComp->SetMesh(assetManager->Get<MeshFilter>("Sphere.fbx"));
+
+	Entity* lightEnt = tempScene->CreateEntity("Light");
+	DirectionalLight* lightComp = lightEnt->AddComponent<DirectionalLight>();
+	lightComp->GetOwner()->GetTransform().SetWorldPosition(glm::vec3(10.0f, 10.0f, -10.0f));
+	lightComp->GetOwner()->GetTransform().SetWorldRotation(glm::vec3(45.0f, 45.0f, 0.0f));
+
+	Entity* cameraEnt = tempScene->CreateEntity("Camera");
+	CameraComponent* cameraComp = cameraEnt->AddComponent<CameraComponent>();
+	cameraComp->SetNearClipPlane(0.1f);
+	cameraComp->SetFarClipPlane(250.0f);
+	cameraComp->GetOwner()->GetTransform().SetWorldPosition(glm::vec3(0.0f, 0.25f, -2.5f));
+	cameraComp->GetOwner()->GetTransform().LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	Entity* quadEnt = tempScene->CreateEntity("Quad");
+	MeshComponent* quadMeshComp = quadEnt->AddComponent<MeshComponent>();
+	quadMeshComp->SetMesh(assetManager->Get<MeshFilter>("quad.fbx"));
+	quadMeshComp->GetOwner()->GetTransform().SetWorldPosition(glm::vec3(0.0f, -1.25f, 0.0f));
+	quadMeshComp->GetOwner()->GetTransform().SetWorldScale(glm::vec3(10.0f, 10.0f, 10.0f));
+	quadMeshComp->GetOwner()->GetTransform().SetWorldRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+
+	int previewWidth = 512;
+	int previewHeight = 512;
+
+	for (Material* mat : materials) {
+		lightComp->Render(meshComp);
+
+		shader->use();
+		shader->setVec3("lightDir", lightComp->GetOwner()->GetTransform().GetForward());
+		shader->setVec3("viewPos", cameraComp->GetOwner()->GetTransform().GetWorldPosition());
+		shader->setVec3("viewForward", cameraComp->GetOwner()->GetTransform().GetForward());
+
+		shader->setInt("shadowMap", 1);
+		lightComp->BindShadowMap(1);
+		shader->setMat4("lightSpaceMatrix", lightComp->GetLightSpaceMatrix());
+
+		meshComp->SetMaterial(mat);
+
+		cameraComp->Resize(previewWidth, previewHeight);
+		cameraComp->PreRender();
+		// #282828 in normalized rgba
+		cameraComp->ClearColor(glm::vec4(0.156f, 0.156f, 0.156f, 1.0f));
+		cameraComp->ForceRenderWithMaterial(meshComp, mat);
+		cameraComp->ForceRenderWithMaterial(quadMeshComp, mat);
+		cameraComp->PostRender();
+
+		unsigned int cameraTexID = cameraComp->GetRenderTextureID();
+
+		mat->CopyPreviewTextureFromID(cameraTexID, previewWidth, previewHeight);
+	}
+
+	tempScene->SaveScene(projectPath + "\\previewScene.scene");
+
+	delete tempScene;
 }
 
 void Engine::EditTransform(Entity* ent)

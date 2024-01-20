@@ -5,25 +5,6 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Spot Light
-    UUID: 1c855eab-92dc-4244-82d6-c5fe6452da8a
-    Parent: 12398894-4ae8-49be-abaa-f65a28089211
-    TransformComponent:
-      position: [0.219209552, 4.01919937, -6.93962955]
-      rotation: [0.213635966, -0.278261572, 0.0636282712, 0.934281349]
-      scale: [1.0000478, 1.00007224, 1.00004888]
-    SpotLight:
-      angle: 79.9
-  - Entity: Mesh
-    UUID: 5fb4d659-877f-45b8-b568-d8ae8f0ea232
-    Parent: 12398894-4ae8-49be-abaa-f65a28089211
-    TransformComponent:
-      position: [0, 1.01768327, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [0.0196000002, 0.0196000002, 0.0196000002]
-    MeshComponent:
-      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
-      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
   - Entity: Ground
     UUID: 7f914d46-6770-4f04-8566-1fbbcc190261
     Parent: 12398894-4ae8-49be-abaa-f65a28089211
@@ -34,3 +15,87 @@ Entities:
     MeshComponent:
       mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
       material: 22d565ce-9d67-420b-a538-cc901b226a45
+    Rigidbody:
+      isStatic: true
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+  - Entity: Spot Light
+    UUID: 1c855eab-92dc-4244-82d6-c5fe6452da8a
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0.219209552, 4.01919937, -6.93962955]
+      rotation: [0.213635966, -0.278261572, 0.0636282712, 0.934281349]
+      scale: [1.0000478, 1.00007224, 1.00004888]
+    SpotLight:
+      angle: 79.9
+  - Entity: Directional Light
+    UUID: f2e434fb-8c70-4b92-a7b1-595f0aa59f4a
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [5.434412, 10.4227753, -0.874744415]
+      rotation: [-0.274144739, 0.677591026, -0.638812184, -0.240070954]
+      scale: [1.0000807, 1.00006652, 1.00001287]
+    DirectionalLight:
+      {}
+  - Entity: Empty
+    UUID: d4986c00-ee22-46dc-bcaf-42faa88df6ec
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0, 10.6039238, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 734f562e-b6c9-4396-a410-61301619f2ef
+    Rigidbody:
+      isStatic: false
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+  - Entity: Empty
+    UUID: 7e7a7ee5-0bf2-4e1c-b46a-8546ee4855a0
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0, 14.6039238, 1.5]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 734f562e-b6c9-4396-a410-61301619f2ef
+    Rigidbody:
+      isStatic: false
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+  - Entity: Empty
+    UUID: f29d736e-a169-45b0-8a2c-0dc479453041
+    Parent: 12398894-4ae8-49be-abaa-f65a28089211
+    TransformComponent:
+      position: [0, 18.1039238, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 734f562e-b6c9-4396-a410-61301619f2ef
+    Rigidbody:
+      isStatic: false
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+    BoxCollider:
+      isTrigger: false
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]

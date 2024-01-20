@@ -77,4 +77,7 @@ void MeshComponent::SimpleDraw(Shader* shader)
 
 		GetMeshFilter()->DrawCall();
 	}
+	else {
+		std::cout << "Cannot draw mesh component without mesh filter\n";
+	}
 }

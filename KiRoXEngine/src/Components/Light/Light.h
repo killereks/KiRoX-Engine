@@ -21,6 +21,7 @@ public:
 	unsigned int GetShadowMap() { return shadowMap->GetDepthMap(); }
 
 	void Render(std::vector<MeshComponent*>& meshes);
+	void Render(MeshComponent* mesh);
 
 	void BindShadowMap(int slot);
 

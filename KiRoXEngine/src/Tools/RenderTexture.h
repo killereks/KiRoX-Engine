@@ -36,6 +36,7 @@ public:
 	void Resize(int width, int height);
 
 	void Clear();
+	void ClearColor(glm::vec4 color);
 
 	~RenderTexture();
 };

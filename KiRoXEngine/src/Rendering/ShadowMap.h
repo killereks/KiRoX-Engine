@@ -24,5 +24,6 @@ public:
 	void Resize(unsigned int width, unsigned int height);
 
 	void Render(std::vector<MeshComponent*>& meshes, glm::mat4 lightMatrix);
+	void Render(MeshComponent* mesh, glm::mat4 lightMatrix);
 };
 

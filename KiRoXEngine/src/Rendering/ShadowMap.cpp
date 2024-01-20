@@ -81,3 +81,19 @@ void ShadowMap::Render(std::vector<MeshComponent*>& meshes, glm::mat4 lightMatri
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
+void ShadowMap::Render(MeshComponent* mesh, glm::mat4 lightMatrix)
+{
+	shader->use();
+
+	glViewport(0, 0, width, height);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	shader->setMat4("lightSpaceMatrix", lightMatrix);
+
+	mesh->SimpleDraw(shader);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}

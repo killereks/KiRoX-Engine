@@ -1,0 +1,53 @@
+Entities:
+  - Entity: Root
+    UUID: acfb82da-3482-4961-a0d1-12c70ba4f0d1
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+  - Entity: Sphere
+    UUID: 48be2289-4501-4dc3-b549-26a686e5e26e
+    Parent: acfb82da-3482-4961-a0d1-12c70ba4f0d1
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: f552840a-bf22-4ceb-be8f-d8e41a40e047
+      material: 734f562e-b6c9-4396-a410-61301619f2ef
+  - Entity: Light
+    UUID: fc2e1f8f-eb51-4b5c-9381-cc1221857be2
+    Parent: acfb82da-3482-4961-a0d1-12c70ba4f0d1
+    TransformComponent:
+      position: [10, 10, -10]
+      rotation: [0.353553414, 0.353553414, -0.14644663, 0.853553355]
+      scale: [1, 1, 1]
+    DirectionalLight:
+      {}
+  - Entity: Camera
+    UUID: 790b65cc-1863-4fe9-bd01-e4d6cfc69bfa
+    Parent: acfb82da-3482-4961-a0d1-12c70ba4f0d1
+    TransformComponent:
+      position: [0, 0.25, -2.5]
+      rotation: [0, 0.998758554, 0.0498137027, -0]
+      scale: [1, 1, 1]
+    CameraComponent:
+      nearClipPlane: 0.1
+      farClipPlane: 250
+      fieldOfView: 60
+      left: -10
+      right: 10
+      top: 10
+      bottom: -10
+      orthoNear: 1
+      orthoFar: 100
+  - Entity: Quad
+    UUID: fa315a88-4ff4-4a1e-aadc-60dcd55df001
+    Parent: acfb82da-3482-4961-a0d1-12c70ba4f0d1
+    TransformComponent:
+      position: [0, -1.25, 0]
+      rotation: [0.707106829, 0, 0, 0.707106829]
+      scale: [10, 10, 10]
+    MeshComponent:
+      mesh: b87de123-86a0-48db-8499-0cc9e38bd6c8
+      material: ""

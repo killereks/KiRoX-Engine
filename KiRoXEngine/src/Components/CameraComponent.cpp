@@ -191,6 +191,14 @@ void CameraComponent::Clear()
 	}
 }
 
+void CameraComponent::ClearColor(glm::vec4 color)
+{
+	if (renderTexture != nullptr)
+	{
+		renderTexture->ClearColor(color);
+	}
+}
+
 bool CameraComponent::IsOnOrForwardPlane(Plane& plane, Bounds& bounds)
 {
 	glm::vec3 extents = bounds.GetSize();
@@ -295,6 +303,31 @@ void CameraComponent::RenderUsingMaterials(std::vector<MeshComponent*>& meshes)
 
 		meshComp->SimpleDraw(shader);
 	}
+}
+
+void CameraComponent::ForceRenderWithMaterial(MeshComponent* mesh, Material* material)
+{
+	glm::mat4 viewMatrix = GetViewMatrix();
+	glm::mat4 projectionMatrix = GetProjectionMatrix();
+
+	if (material == nullptr) {
+		std::cout << "Material is null" << std::endl;
+		return;
+	}
+
+	material->Bind();
+
+	Shader* shader = material->GetShader();
+
+	if (shader == nullptr) {
+		std::cout << "Shader is null" << std::endl;
+		return;
+	}
+
+	shader->setMat4("perspectiveMatrix", projectionMatrix);
+	shader->setMat4("viewMatrix", viewMatrix);
+
+	mesh->SimpleDraw(shader);
 }
 
 void CameraComponent::Resize(int width, int height)

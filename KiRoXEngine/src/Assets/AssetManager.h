@@ -95,6 +95,19 @@ public:
 
     Texture* GetEditorIcon(const std::string& type);
 
+    template<typename T>
+    std::vector<T*> GetAssetsOfType() {
+        std::vector<T*> result;
+
+        for (auto& asset : assets) {
+            if (dynamic_cast<T*>(asset.second) != nullptr) {
+				result.push_back(dynamic_cast<T*>(asset.second));
+			}
+		}
+
+		return result;
+    }
+
 	template <typename T>
 	void Load(const std::string& name, const std::string& filePath)
 	{
@@ -129,7 +142,7 @@ public:
     template <typename T>
     T* Get(const std::string& name) {
         if (assets.find(name) == assets.end()) {
-			std::cout << "Error, no asset found with name: " << name << "\n";
+			//std::cout << "Error, no asset found with name: " << name << "\n";
 			return nullptr;
 		}
         return dynamic_cast<T*>(assets[name]);
@@ -141,7 +154,7 @@ public:
 			return Get<T>(uuidToAssetName[uuid]);
 		}
 
-        std::cout << "Error, no asset found with uuid: " << uuid << "\n";
+        //std::cout << "Error, no asset found with uuid: " << uuid << "\n";
         return nullptr;
     }
 

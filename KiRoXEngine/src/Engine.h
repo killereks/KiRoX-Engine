@@ -120,5 +120,7 @@ public:
 
 	void RenderStatistics();
 
+	void DrawMaterialPreviews();
+
 	void EditTransform(Entity* ent);
 };

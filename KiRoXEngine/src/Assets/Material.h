@@ -11,6 +11,8 @@ CLASS()
 class Material : public Asset {
 	REFLECT(Asset)
 
+	unsigned int previewTextureID;
+
 public:
 	PROPERTY()
 	ObjectPtr* shader;
@@ -35,6 +37,11 @@ public:
 	}
 
 	void Bind();
+
+	unsigned int GetPreviewTextureID() const { return previewTextureID; }
+	void SetPreviewTextureID(unsigned int val) { previewTextureID = val; }
+
+	void CopyPreviewTextureFromID(unsigned int id, unsigned int width, unsigned int height);
 
 	Material();
 	Material(const Material& other) : Asset(other) {}

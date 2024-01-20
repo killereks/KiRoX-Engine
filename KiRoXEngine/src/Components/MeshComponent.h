@@ -48,6 +48,14 @@ class MeshComponent : public Component
 			return material->Get<Material>();
 		}
 
+		void SetMesh(MeshFilter* mesh) {
+			this->mesh->SetUUID(mesh->uuid);
+		}
+
+		void SetMaterial(Material* material) {
+			this->material->SetUUID(material->uuid);
+		}
+
 		const int GetVertexCount() const {
 			if (GetMeshFilter() != nullptr) {
 				return GetMeshFilter()->GetVertices().size();

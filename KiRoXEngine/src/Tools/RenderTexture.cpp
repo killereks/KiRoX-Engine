@@ -9,25 +9,6 @@
 
 #include <fstream>
 
-void CheckOpenGLError(const char* stmt, const char* fname, int line)
-{
-	GLenum err = glGetError();
-	if (err != GL_NO_ERROR)
-	{
-		printf("OpenGL error %08x, at %s:%i - for %s\n", err, fname, line, stmt);
-		abort();
-	}
-}
-
-#ifdef _DEBUG
-#define GL_CHECK(stmt) do { \
-            stmt; \
-            CheckOpenGLError(#stmt, __FILE__, __LINE__); \
-        } while (0)
-#else
-#define GL_CHECK(stmt) stmt
-#endif
-
 RenderTexture::RenderTexture(int width, int height)
 {
 	Resize(width, height);
@@ -76,7 +57,12 @@ void RenderTexture::Resize(int width, int height)
 
 	if (FBO != 0)
 	{
+		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 		glDeleteFramebuffers(1, &FBO);
+
+		glDeleteTextures(1, &depthTexture);
+		glDeleteTextures(1, &colorTexture);
 	}
 
 	glGenFramebuffers(1, &FBO);
@@ -98,7 +84,7 @@ void RenderTexture::Resize(int width, int height)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 	else {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -129,6 +115,16 @@ void RenderTexture::Resize(int width, int height)
 
 void RenderTexture::Clear()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+}
+
+void RenderTexture::ClearColor(glm::vec4 color)
+{
+	glClearColor(color.r, color.g, color.b, color.a);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
