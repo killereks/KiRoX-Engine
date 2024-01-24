@@ -1,4 +1,6 @@
 
+![KiRoXEngine_z7q3jNgQff](https://github.com/killereks/KiRoX-Engine/assets/10748374/f906f6da-7055-460b-9700-28c185483a2a)
+
 ![KiRoXEngine_UyeEgrx9F0](https://github.com/killereks/KiRoX-Engine/assets/10748374/87065ac1-e0cc-4aac-b27e-fd597553a2ee)
 
 # Volumetric lighting and a standalone build system
