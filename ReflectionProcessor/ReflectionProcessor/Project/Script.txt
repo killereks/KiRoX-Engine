@@ -1,0 +1,20 @@
+#include <iostream>
+#include <vector>
+
+CLASS()
+class Class1 {
+public:
+    PROPERTY()
+    int property1;
+
+    PROPERTY()
+    std::string property2;
+
+    Class1() : property1(10), property2("Property 2") {}
+
+    FUNCTION()
+    void print_properties() {
+        std::cout << "Property 1: " << property1 << std::endl;
+        std::cout << "Property 2: " << property2 << std::endl;
+    }
+};

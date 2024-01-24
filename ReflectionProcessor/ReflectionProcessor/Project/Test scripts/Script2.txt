@@ -1,0 +1,20 @@
+CLASS()
+class Class2 {
+public:
+    PROPERTY()
+    std::vector<int> property3;
+    PROPERTY()
+    double property4;
+
+    Class2() : property3({1, 2, 3}), property4(20.5) {}
+
+    FUNCTION()
+    void print_properties() {
+        std::cout << "Property 3: ";
+        for(int i : property3) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "Property 4: " << property4 << std::endl;
+    }
+};

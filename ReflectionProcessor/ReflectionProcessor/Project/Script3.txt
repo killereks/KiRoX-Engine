@@ -1,0 +1,21 @@
+CLASS()
+class Class3 {
+public:
+    PROPERTY()
+    bool property5;
+    
+    PROPERTY()
+    std::vector<std::string> property6;
+
+    Class3() : property5(true), property6({"a", "b", "c"}) {}
+
+    FUNCTION()
+    void print_properties() {
+        std::cout << "Property 5: " << std::boolalpha << property5 << std::endl;
+        std::cout << "Property 6: ";
+        for(const auto& str : property6) {
+            std::cout << str << " ";
+        }
+        std::cout << std::endl;
+    }
+};
