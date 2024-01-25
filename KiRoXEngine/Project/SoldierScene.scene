@@ -5,33 +5,22 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Mesh
-    UUID: 1c8cd0d7-4ec9-4206-a33c-2c0cbcf16726
+  - Entity: Sun
+    UUID: ca86bc1c-8ee4-4127-83f0-48832fabca92
     Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
-      position: [0, 0, 0]
-      rotation: [0.758460164, -0.0626559556, -0.0534069426, 0.646498382]
-      scale: [0.999998927, 1.00000238, 1.00000322]
-    MeshComponent:
-      mesh: a9a9fb91-c82a-4231-82a7-cdc330355de0
-      material: 549e5c09-2cae-4678-a841-a1be17df241e
-  - Entity: Mesh
-    UUID: fc527bca-c22c-48d5-8470-856baaa4a024
-    Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
-    TransformComponent:
-      position: [0, 0.357818186, 0.251596063]
-      rotation: [-0.691131473, 0, 0, 0.722729146]
-      scale: [6.13129902, 6.13180304, 6.13180304]
-    MeshComponent:
-      mesh: b9da1cea-e168-4dc2-a050-a2f3900935db
-      material: 78a20504-2f51-4c9d-a60d-cad2ea897691
+      position: [-8.82007599, 40.0540009, -26.7606277]
+      rotation: [0.401047766, 0.311556131, -0.147209138, 0.848777354]
+      scale: [1.00000036, 0.999999881, 1.00000036]
+    DirectionalLight:
+      {}
   - Entity: Camera
     UUID: b0acd414-60bb-4bb2-a6e1-1408aae4eb3f
     Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
-      position: [5.29467726, -0.000153153756, -19.4584732]
-      rotation: [-0.0225191582, -0.977126777, -0.162238464, 0.135627702]
-      scale: [1.00002956, 1.00000167, 1.00002837]
+      position: [17.4842987, 21.7091885, 26.6966305]
+      rotation: [-0.111668944, 0.226258948, 0.0261204336, 0.967292428]
+      scale: [1.00002778, 1.00000048, 1.00002718]
     CameraComponent:
       nearClipPlane: 0.3
       farClipPlane: 1000
@@ -42,12 +31,23 @@ Entities:
       bottom: -10
       orthoNear: 1
       orthoFar: 100
-  - Entity: Sun
-    UUID: ca86bc1c-8ee4-4127-83f0-48832fabca92
+  - Entity: Ground
+    UUID: fc527bca-c22c-48d5-8470-856baaa4a024
     Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
-      position: [0, -10.6329985, 0]
-      rotation: [0.227955878, 0.33427006, -0.083673276, 0.91065824]
-      scale: [1.00000012, 0.999999881, 1.00000036]
-    DirectionalLight:
-      {}
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [50, 1, 50]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 734f562e-b6c9-4396-a410-61301619f2ef
+  - Entity: Plane
+    UUID: d0dddddd-d0dd-dddd-d0dd-5ddcd0dddddd
+    Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
+    TransformComponent:
+      position: [1.36408329, 10.9893951, -8.85852432]
+      rotation: [-5.52333574e-07, -1, 9.09962012e-07, 1.59789715e-06]
+      scale: [0.030000709, 0.0300000664, 0.0300004277]
+    MeshComponent:
+      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
+      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051

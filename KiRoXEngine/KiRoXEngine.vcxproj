@@ -118,13 +118,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOMINMAX;_CRT_SECURE_NO_WARNINGS;EDITOR</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)KiRoXEngine\Dependencies\GLFW\include;$(SolutionDir)KiRoXEngine\Dependencies\imgui;$(SolutionDir)KiRoXEngine\Dependencies\GLEW\include;$(SolutionDir)KiRoXEngine\Dependencies\glm;$(SolutionDir)KiRoXEngine\Dependencies;$(SolutionDir)KiRoXEngine\Dependencies\yaml\include;$(SolutionDir)KiRoXEngine\Dependencies\rttr\include;$(SolutionDir)KiRoXEngine\src;$(SolutionDir)KiRoXEngine\Dependencies\physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Full</Optimization>
+      <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -335,6 +335,7 @@
     <ClCompile Include="src\Tools\StatsCounter.cpp" />
     <ClCompile Include="src\Components\TestComponent.cpp" />
     <ClCompile Include="src\Components\Volume.cpp" />
+    <ClCompile Include="src\Unit Testing\UnitTester.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Rendering\SkyBox.h" />
@@ -1029,6 +1030,7 @@
     <ClInclude Include="src\Components\TestComponent.h" />
     <ClInclude Include="src\Tools\StringTools.h" />
     <ClInclude Include="src\Components\Volume.h" />
+    <ClInclude Include="src\Unit Testing\UnitTester.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\assimp-vc143-mtd.lib" />

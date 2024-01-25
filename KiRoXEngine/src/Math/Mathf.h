@@ -12,6 +12,9 @@
 class Mathf
 {
 public:
+
+	inline static const float Epsilon = 0.00001f;
+
 	inline static float Lerp(float a, float b, float t)
 	{
 		t = glm::clamp(t, 0.0f, 1.0f);
@@ -30,6 +33,11 @@ public:
 		ss.imbue(std::locale(""));
 		ss << std::fixed << value;
 		return ss.str();
+	}
+
+	inline static bool Approximately(float a, float b)
+	{
+		return fabs(a - b) < Epsilon;
 	}
 
 	inline static void RenderTextWithEllipsis(const std::string& text, float maxWidth) {

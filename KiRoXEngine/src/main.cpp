@@ -17,6 +17,8 @@
 
 #include <rttr/registration>
 
+#include <Unit Testing/UnitTester.h>
+
 #define call(x) x;\
 	if (error) __debugbreak();
 
@@ -71,6 +73,10 @@ int main(int argc, char* argv[]) {
 	glDebugMessageCallback(MessageCallback, 0);
 
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+
+	// ANTI ALIASING
+	glEnable(GL_MULTISAMPLE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
@@ -127,6 +133,10 @@ int main(int argc, char* argv[]) {
 
 	double previousTime = glfwGetTime();
 	double currentTime = 0.0f;
+
+	#if EDITOR
+		UnitTester::RunTests();
+	#endif
 
 	while (!glfwWindowShouldClose(window))
 	{

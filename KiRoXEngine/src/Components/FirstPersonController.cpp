@@ -28,6 +28,11 @@ void FirstPersonController::Update(float dt)
 	if (glm::length(input) > 0.1f) {
 		movementVector.y = 0.0f;
 		movementVector = glm::normalize(movementVector);
+
+		rigidbody->SetFriction(0.0f);
+	}
+	else {
+		rigidbody->SetFriction(1.0f);
 	}
 
 	if (Input::GetKey(GLFW_KEY_LEFT_SHIFT)) {

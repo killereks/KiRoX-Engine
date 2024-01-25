@@ -57,16 +57,6 @@ class MeshFilter : public Asset {
 	std::vector<glm::vec3> tangents;
 	std::vector<glm::vec3> bitangents;
 
-	// BASICS:
-	// Vertices
-	// Indices
-	// Normals
-	// UVs
-
-	// LATER:
-	// tangents
-	// bitangents
-
 	unsigned int VAO; // vertex array object
 
 	unsigned int VBO; // vertices
@@ -308,6 +298,10 @@ public:
 	{
 		vertices.clear();
 		indices.clear();
+		uvs.clear();
+		normals.clear();
+		tangents.clear();
+		bitangents.clear();
 
 		std::string fileExtension = filePath.substr(filePath.rfind("."));
 
@@ -332,75 +326,77 @@ public:
 			return;
 		}
 
-		std::cout << "Found " << scene->mNumMeshes << " meshes in " << fileName << "\n";
-
 		bounds->Clear();
 
-		aiMesh* mesh = scene->mMeshes[0];
+		int numMeshes = 1;
 
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-		{
-			glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		for (int meshIndex = 0; meshIndex < numMeshes; ++meshIndex) {
+			aiMesh* mesh = scene->mMeshes[meshIndex];
 
-			bounds->InsertPoint(vertex);
-			vertices.emplace_back(vertex);
-
-			if (mesh->HasNormals())
+			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
-				normals.emplace_back(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+				glm::vec3 vertex = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+
+				bounds->InsertPoint(vertex);
+				vertices.emplace_back(vertex);
+
+				if (mesh->HasNormals())
+				{
+					normals.emplace_back(glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+				}
+				if (mesh->HasTextureCoords(0))
+				{
+					uvs.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, 1.0 - mesh->mTextureCoords[0][i].y));
+				}
 			}
-			if (mesh->HasTextureCoords(0))
+
+			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 			{
-				uvs.push_back(glm::vec2(mesh->mTextureCoords[0][i].x, 1.0 - mesh->mTextureCoords[0][i].y));
+				aiFace face = mesh->mFaces[i];
+				for (unsigned int j = 0; j < face.mNumIndices; j++)
+				{
+					indices.emplace_back(face.mIndices[j]);
+				}
 			}
-		}
 
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-		{
-			aiFace face = mesh->mFaces[i];
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
+			// work out tangents and bitangents
+			for (unsigned int i = 0; i < indices.size(); i += 3)
 			{
-				indices.emplace_back(face.mIndices[j]);
+				const glm::vec3& v0 = vertices[indices[i]];
+				const glm::vec3& v1 = vertices[indices[i + 1]];
+				const glm::vec3& v2 = vertices[indices[i + 2]];
+
+				const glm::vec2& uv0 = uvs[indices[i]];
+				const glm::vec2& uv1 = uvs[indices[i + 1]];
+				const glm::vec2& uv2 = uvs[indices[i + 2]];
+
+				const glm::vec3 deltaPos1 = v1 - v0;
+				const glm::vec3 deltaPos2 = v2 - v0;
+
+				const glm::vec2 deltaUV1 = uv1 - uv0;
+				const glm::vec2 deltaUV2 = uv2 - uv0;
+
+				const float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+
+				const glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+				const glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+				tangents.push_back(tangent);
+				tangents.push_back(tangent);
+				tangents.push_back(tangent);
+
+				bitangents.push_back(bitangent);
+				bitangents.push_back(bitangent);
+				bitangents.push_back(bitangent);
 			}
+
+			//if (indices.size() / 3 >= 25000) {
+			//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
+			//}
+
+			//if (fileName == "suzanne.fbx") {
+			//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.5f);
+			//}
 		}
-
-		// work out tangents and bitangents
-		for (unsigned int i = 0; i < indices.size(); i += 3)
-		{
-			const glm::vec3& v0 = vertices[indices[i]];
-			const glm::vec3& v1 = vertices[indices[i + 1]];
-			const glm::vec3& v2 = vertices[indices[i + 2]];
-
-			const glm::vec2& uv0 = uvs[indices[i]];
-			const glm::vec2& uv1 = uvs[indices[i + 1]];
-			const glm::vec2& uv2 = uvs[indices[i + 2]];
-
-			const glm::vec3 deltaPos1 = v1 - v0;
-			const glm::vec3 deltaPos2 = v2 - v0;
-
-			const glm::vec2 deltaUV1 = uv1 - uv0;
-			const glm::vec2 deltaUV2 = uv2 - uv0;
-
-			const float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-
-			const glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
-			const glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
-
-			tangents.push_back(tangent);
-			tangents.push_back(tangent);
-			tangents.push_back(tangent);
-
-			bitangents.push_back(bitangent);
-			bitangents.push_back(bitangent);
-			bitangents.push_back(bitangent);
-		}
-
-		//if (indices.size() / 3 >= 25000) {
-		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.75f);
-		//}
-
-		//if (fileName == "suzanne.fbx") {
-		//	MeshSimplifier::SimplifyMesh(vertices, indices, 0.5f);
-		//}
 	}
 };

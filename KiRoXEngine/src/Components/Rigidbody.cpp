@@ -21,8 +21,6 @@ void Rigidbody::SetPosition(glm::vec3 position)
 {
 	if (body == nullptr || physics == nullptr) return;
 
-	std::cout << "Setting position to " << position.x << " " << position.y << " " << position.z << "\n";
-
 	reactphysics3d::Transform transform = body->getTransform();
 	transform.setPosition(reactphysics3d::Vector3(position.x, position.y, position.z));
 	body->setTransform(transform);
@@ -31,8 +29,6 @@ void Rigidbody::SetPosition(glm::vec3 position)
 void Rigidbody::SetRotation(glm::quat rotation)
 {
 	if (body == nullptr || physics == nullptr) return;
-
-	std::cout << "Setting rotation to " << rotation.x << " " << rotation.y << " " << rotation.z << " " << rotation.w << "\n";
 
 	reactphysics3d::Transform transform = body->getTransform();
 	transform.setOrientation(reactphysics3d::Quaternion(rotation.x, rotation.y, rotation.z, rotation.w));

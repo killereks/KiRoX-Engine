@@ -7,7 +7,7 @@
 TransformComponent::TransformComponent()
 {
 	position = glm::vec3(0.0f);
-	rotation = glm::quat();
+	rotation = glm::quat(1.0, 0.0, 0.0, 0.0);
 	scale = glm::vec3(1.0f);
 }
 
@@ -99,7 +99,11 @@ void TransformComponent::SetWorldPosition(glm::vec3 pos)
 
 void TransformComponent::SetWorldRotation(glm::vec3 euler)
 {
-	glm::quat newWorldRotation = glm::quat(euler * glm::pi<float>() / 180.0f);
+	euler.x = glm::mod(euler.x + 180.0f, 360.0f) - 180.0f;
+	euler.y = glm::mod(euler.y + 180.0f, 360.0f) - 180.0f;
+	euler.z = glm::mod(euler.z + 180.0f, 360.0f) - 180.0f;
+
+	glm::quat newWorldRotation = glm::quat(glm::radians(euler));
 	newWorldRotation = glm::normalize(newWorldRotation);
 	SetWorldRotation(newWorldRotation);
 }
@@ -141,7 +145,7 @@ void TransformComponent::SetLocalPosition(glm::vec3 pos)
 
 void TransformComponent::SetLocalRotation(glm::vec3 euler)
 {
-	this->rotation = glm::quat(euler * glm::pi<float>() / 180.0f);
+	SetLocalRotation(glm::quat(glm::radians(euler)));
 }
 
 void TransformComponent::SetLocalRotation(glm::quat quat)

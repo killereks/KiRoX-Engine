@@ -196,12 +196,16 @@ void AssetManager::DrawInspector()
     fileViewSize = (int)(fileViewSize / step) * step;
     ImGui::SliderFloat("##FileViewSize", &fileViewSize, 5.0f, 250.0f);
 
-
     const float padding = 10.0f;
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(padding, padding));
 
     ImVec2 size = ImVec2(fileViewSize, fileViewSize);
+
+    // TODO: Find a better way to do this
+    // For some reason the scaling is always off by 50.0f;
+    size.x = glm::max(0.0f, size.x - 50.0f);
+    size.y = glm::max(0.0f, size.y - 50.0f);
 
     bool small = false;
 
@@ -210,9 +214,8 @@ void AssetManager::DrawInspector()
         small = true;
     }
 
-    float width = ImGui::GetContentRegionAvail().x;
-    int elementsPerRow = (int) (width / (size.x + padding)) - 2;
-    int elementIndex = 0;
+    float maxX = ImGui::GetWindowContentRegionMax().x;
+    float currentX = ImGui::GetCursorPosX() + padding;
 
     for (auto& entry : cachedPaths){
         if (entry.is_directory() && entry.path().filename() == "Editor") {
@@ -328,14 +331,15 @@ void AssetManager::DrawInspector()
         ImGui::PopID();
 
         if (!small) {
-            if ((elementIndex > 0 && (elementIndex % elementsPerRow) == 0)) {
+            currentX += fileViewSize + padding;
+            if (currentX + padding > maxX) {
                 ImGui::NewLine();
+                currentX = ImGui::GetCursorPosX() + padding;
             }
             else {
                 ImGui::SameLine();
             }
         }
-        elementIndex++;
     }
 
     ImGui::PopStyleVar();
