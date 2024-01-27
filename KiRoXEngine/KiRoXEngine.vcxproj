@@ -170,6 +170,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Tools\Color.cpp" />
     <ClCompile Include="src\Rendering\SkyBox.cpp" />
     <ClCompile Include="src\Components\Colliders\CapsuleCollider.cpp" />
     <ClCompile Include="src\Physics\PhysicsEvents.cpp" />
@@ -338,6 +339,7 @@
     <ClCompile Include="src\Unit Testing\UnitTester.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Tools\Color.h" />
     <ClInclude Include="src\Rendering\SkyBox.h" />
     <ClInclude Include="src\Components\Colliders\CapsuleCollider.h" />
     <ClInclude Include="src\Physics\PhysicsEvents.h" />

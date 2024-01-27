@@ -23,6 +23,8 @@ CameraComponent::CameraComponent()
 	orthoNear = 1.0f;
 	orthoFar = 100.0f;
 
+	useFrustumCulling = true;
+
 	renderTexture = new RenderTexture(640, 480);
 	aspect = (float)640 / (float)480;
 
@@ -43,6 +45,8 @@ CameraComponent::~CameraComponent()
 }
 
 bool CameraComponent::DrawInspector() {
+	ImGui::Checkbox("Use Frustum Culling", &useFrustumCulling);
+
 	if (cameraType == CameraType::Perspective) {
 		ImGui::DragFloat("Near Clip Plane", &nearClipPlane);
 		ImGui::DragFloat("Far Clip Plane", &farClipPlane);
@@ -284,10 +288,12 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 	{
 		Material* material = meshComp->GetMaterial();
 
-		Bounds* bounds = meshComp->GetBounds();
-		if (bounds != nullptr && !IsInFrustum(*bounds)) {
-			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
-			continue;
+		if (useFrustumCulling) {
+			Bounds* bounds = meshComp->GetBounds();
+			if (bounds != nullptr && !IsInFrustum(*bounds)) {
+				StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
+				continue;
+			}
 		}
 
 		meshComp->SimpleDraw(shader);
@@ -307,10 +313,12 @@ void CameraComponent::RenderUsingMaterials(std::vector<MeshComponent*>& meshes)
 			continue;
 		}
 
-		Bounds* bounds = meshComp->GetBounds();
-		if (bounds != nullptr && !IsInFrustum(*bounds)) {
-			StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
-			continue;
+		if (useFrustumCulling) {
+			Bounds* bounds = meshComp->GetBounds();
+			if (bounds != nullptr && !IsInFrustum(*bounds)) {
+				StatsCounter::GetInstance()->IncreaseCounter("culledTriangles", meshComp->GetTriangleCount());
+				continue;
+			}
 		}
 
 		material->Bind();

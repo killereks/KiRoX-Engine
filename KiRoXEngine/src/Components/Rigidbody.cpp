@@ -7,6 +7,8 @@
 
 #include <Physics/Physics.h>
 
+#include <Editor/Console.h>
+
 void Rigidbody::SetBody(reactphysics3d::RigidBody* body)
 {
 	this->body = body;
@@ -21,6 +23,10 @@ void Rigidbody::SetPosition(glm::vec3 position)
 {
 	if (body == nullptr || physics == nullptr) return;
 
+	Console::Write("Set rigidbody position to " +	std::to_string(position.x) + ", " + 
+													std::to_string(position.y) + ", " + 
+													std::to_string(position.z));
+
 	reactphysics3d::Transform transform = body->getTransform();
 	transform.setPosition(reactphysics3d::Vector3(position.x, position.y, position.z));
 	body->setTransform(transform);
@@ -29,6 +35,11 @@ void Rigidbody::SetPosition(glm::vec3 position)
 void Rigidbody::SetRotation(glm::quat rotation)
 {
 	if (body == nullptr || physics == nullptr) return;
+
+	glm::vec3 euler = glm::eulerAngles(rotation);
+	Console::Write("Set rigidbody rotation to " +	std::to_string(euler.x) + ", " + 
+													std::to_string(euler.y) + ", " + 
+													std::to_string(euler.z));
 
 	reactphysics3d::Transform transform = body->getTransform();
 	transform.setOrientation(reactphysics3d::Quaternion(rotation.x, rotation.y, rotation.z, rotation.w));
@@ -51,8 +62,8 @@ void Rigidbody::SetFriction(float friction)
 
 void Rigidbody::SetBounciness(float bounciness)
 {
-	int colliders = body->getNbColliders();
-	for (int i = 0; i < colliders; i++) {
+	unsigned int colliders = body->getNbColliders();
+	for (unsigned int i = 0; i < colliders; i++) {
 		reactphysics3d::Collider* collider = body->getCollider(i);
 		collider->getMaterial().setBounciness(bounciness);
 	}
@@ -86,6 +97,7 @@ void Rigidbody::Update(float dt)
 									  physicsTransform.getOrientation().y, 
 									  physicsTransform.getOrientation().z);
 
-	transform.SetLocalPosition(newPosition);
-	transform.SetLocalRotation(newRotation);
+	// prevent setters to avoid infinite loop
+	transform.position = newPosition;
+	transform.rotation = newRotation;
 }

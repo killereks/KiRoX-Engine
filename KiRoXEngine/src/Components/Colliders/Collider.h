@@ -13,5 +13,15 @@ protected:
 	PROPERTY()
 	bool isTrigger;
 
+	PROPERTY()
+	float bounciness;
+
+	PROPERTY()
+	float friction;
+
+public:
+	float GetBounciness() const { return bounciness; }
+	float GetFriction() const { return friction; }
+
 };
 

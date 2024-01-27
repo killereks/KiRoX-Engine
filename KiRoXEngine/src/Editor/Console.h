@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include <sstream>
 #include <iomanip>
+#include <fstream>
 
 class Console
 {
@@ -17,11 +18,20 @@ private:
 
 	bool scrollToBottom;
 
-	int capacity = 500;
+	int capacity = 2000;
+
+	std::string outputPath = "";
 
 	public:
 	Console();
 	~Console();
+
+	static void SetOutputPath(std::string path) {
+		Console* console = GetInstance();
+		console->outputPath = path;
+
+		Write("Console output path set to " + path);
+	}
 
 	static Console* GetInstance() {
 		if (instance == nullptr) {
@@ -49,7 +59,9 @@ private:
 
 		Console* console = GetInstance();
 
-		console->messages.push_back(("[" + time + "] " + message).c_str());
+		std::string formattedMessage = "[" + time + "] " + message;
+
+		console->messages.push_back(formattedMessage.c_str());
 		console->colors.push_back(color);
 
 		if (console->messages.size() > console->capacity)
@@ -57,6 +69,13 @@ private:
 			int overflow = (int)console->messages.size() - console->capacity;
 			console->messages.erase(console->messages.begin(), console->messages.begin() + overflow);
 			console->colors.erase(console->colors.begin(), console->colors.begin() + overflow);
+		}
+
+		if (console->outputPath != "") {
+			std::ofstream file;
+			file.open(console->outputPath.c_str(), std::ios::app);
+			file << formattedMessage << "\n";
+			file.close();
 		}
 	}
 

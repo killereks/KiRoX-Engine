@@ -75,7 +75,9 @@ void Physics::RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb) {
 	glm::vec3 offset = boxCollider->GetOffset();
 	physicsTransform.setPosition(reactphysics3d::Vector3(offset.x, offset.y, offset.z));
 
-	rb->GetBody()->addCollider(boxShape, physicsTransform);
+	reactphysics3d::Collider* collider = rb->GetBody()->addCollider(boxShape, physicsTransform);
+	collider->getMaterial().setBounciness(boxCollider->GetBounciness());
+	collider->getMaterial().setFrictionCoefficient(boxCollider->GetFriction());
 
 	//std::cout << "Found a box collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
 }
@@ -91,7 +93,9 @@ void Physics::RegisterCollisionBody(CapsuleCollider* capsuleCollider, Rigidbody*
 	//glm::vec3 offset = capsuleCollider->GetOffset();
 	//physicsTransform.setPosition(reactphysics3d::Vector3(offset.x, offset.y, offset.z));
 
-	rb->GetBody()->addCollider(capsuleShape, physicsTransform);
+	reactphysics3d::Collider* collider = rb->GetBody()->addCollider(capsuleShape, physicsTransform);
+	collider->getMaterial().setBounciness(capsuleCollider->GetBounciness());
+	collider->getMaterial().setFrictionCoefficient(capsuleCollider->GetFriction());
 
 	//std::cout << "Found a capsule collider. Linking rigidbody to the collider " << rb->GetOwner()->GetName() << "\n";
 }

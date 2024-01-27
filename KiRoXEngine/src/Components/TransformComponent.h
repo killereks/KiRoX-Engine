@@ -8,10 +8,13 @@
 #include "icons/IconsFontAwesome6.h"
 
 class Entity;
+class Rigidbody;
 
 CLASS()
 class TransformComponent : public Component
 {
+	friend class Rigidbody;
+
 	REFLECT(Component)
 
 	PROPERTY()

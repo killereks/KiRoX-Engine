@@ -6,6 +6,7 @@
 #include "Texture.h"
 
 #include <Tools/ObjectPtr.h>
+#include <Tools/Color.h>
 
 CLASS()
 class Material : public Asset {
@@ -16,6 +17,9 @@ class Material : public Asset {
 public:
 	PROPERTY()
 	ObjectPtr* shader;
+
+	PROPERTY()
+	Color albedoColor;
 
 	PROPERTY()
 	ObjectPtr* mainTexture;

@@ -10,6 +10,8 @@ void Material::Bind()
 
 	shader->use();
 
+	shader->setVec3("albedoColor", albedoColor.GetAsVector());
+
 	if (this->mainTexture->HasValue()) {
 		Texture* texture = this->mainTexture->Get<Texture>();
 

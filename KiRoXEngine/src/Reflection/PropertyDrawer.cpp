@@ -11,6 +11,7 @@
 #include <refl.gen.h>
 
 #include <Tools/ObjectPtr.h>
+#include <Tools/Color.h>
 
 bool PropertyDrawer::DrawProperty(rttr::property& prop, rttr::variant& objInstance)
 {
@@ -116,6 +117,18 @@ bool PropertyDrawer::DrawSingleProperty(rttr::property& prop, rttr::variant& obj
 		ObjectPtr* objectPtr = prop.get_value(objInstance).get_value<ObjectPtr*>();
 
 		return DrawObjectPtrDragDrop(prop.get_name(), *objectPtr);
+	}
+	else if (prop.get_type() == rttr::type::get<Color>()) {
+		Color value = prop.get_value(objInstance).get_value<Color>();
+		
+		glm::vec3 colorVec3 = value.GetAsVector();
+		if (ImGui::ColorEdit3(prop.get_name().c_str(), &colorVec3[0])) {
+			//value.SetFromVector(colorVec3);
+			prop.set_value(objInstance, Color(colorVec3));
+			return true;
+		}
+
+		return false;
 	}
 	// ASSETS (Asset*)
 	/*else if (prop.get_type() == rttr::type::get<Shader*>()) {

@@ -50,6 +50,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	glfwMakeContextCurrent(window);
+	Input::GetInstance()->SetWindow(window);
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -78,6 +79,7 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_MULTISAMPLE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
+	std::cout << "GLFW Version: " << glfwGetVersionString() << "\n";
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
 	IMGUI_CHECKVERSION();
@@ -126,10 +128,8 @@ int main(int argc, char* argv[]) {
 	glCullFace(GL_BACK);
 
 	// VSYNC
-	//glfwSwapInterval(0);
-	glfwSwapInterval(1);
-
-	Input::GetInstance()->SetWindow(window);
+	glfwSwapInterval(0);
+	//glfwSwapInterval(1);
 
 	double previousTime = glfwGetTime();
 	double currentTime = 0.0f;
@@ -144,6 +144,8 @@ int main(int argc, char* argv[]) {
 		double frameDiff = currentTime - previousTime;
 		Engine::deltaTime = (float)frameDiff;
 		previousTime = currentTime;
+
+		glfwSetWindowTitle(window, ("KiRoX Engine - " + std::to_string(1.0f / Engine::deltaTime)).c_str());
 
 		// poll events
 		glfwPollEvents();

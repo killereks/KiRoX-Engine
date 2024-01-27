@@ -93,16 +93,12 @@ void TransformComponent::SetWorldPosition(glm::vec3 pos)
 	}
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetPosition(pos);
+		owner->GetComponent<Rigidbody>()->SetPosition(GetWorldPosition());
 	}
 }
 
 void TransformComponent::SetWorldRotation(glm::vec3 euler)
 {
-	euler.x = glm::mod(euler.x + 180.0f, 360.0f) - 180.0f;
-	euler.y = glm::mod(euler.y + 180.0f, 360.0f) - 180.0f;
-	euler.z = glm::mod(euler.z + 180.0f, 360.0f) - 180.0f;
-
 	glm::quat newWorldRotation = glm::quat(glm::radians(euler));
 	newWorldRotation = glm::normalize(newWorldRotation);
 	SetWorldRotation(newWorldRotation);
@@ -119,7 +115,7 @@ void TransformComponent::SetWorldRotation(glm::quat quat)
 	}
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+		owner->GetComponent<Rigidbody>()->SetRotation(GetWorldRotation());
 	}
 }
 
@@ -139,7 +135,7 @@ void TransformComponent::SetLocalPosition(glm::vec3 pos)
 	this->position = pos;
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetPosition(pos);
+		owner->GetComponent<Rigidbody>()->SetPosition(GetWorldPosition());
 	}
 }
 
@@ -170,7 +166,7 @@ void TransformComponent::Translate(glm::vec3 deltaPos)
 	position += deltaPos;
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetPosition(position);
+		owner->GetComponent<Rigidbody>()->SetPosition(GetWorldPosition());
 	}
 }
 
@@ -215,7 +211,7 @@ void TransformComponent::Rotate(glm::vec3 axis, float angleDegrees)
 	rotation *= glm::angleAxis(glm::radians(angleDegrees), axis);
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+		owner->GetComponent<Rigidbody>()->SetRotation(GetWorldRotation());
 	}
 
 	for (Entity* ent : owner->GetChildren())
@@ -229,7 +225,7 @@ void TransformComponent::Rotate(glm::quat quat)
 	rotation *= quat;
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+		owner->GetComponent<Rigidbody>()->SetRotation(GetWorldRotation());
 	}
 }
 
@@ -239,7 +235,7 @@ void TransformComponent::RotateLocal(glm::vec3 axis, float angleDegrees)
 	rotation *= localRot;
 
 	if (owner->HasComponent<Rigidbody>()) {
-		owner->GetComponent<Rigidbody>()->SetRotation(rotation);
+		owner->GetComponent<Rigidbody>()->SetRotation(GetWorldRotation());
 	}
 }
 

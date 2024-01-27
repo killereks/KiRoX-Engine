@@ -8,6 +8,7 @@
 #include "../Macros.h"
 
 class Entity;
+class TransformComponent;
 
 CLASS()
 class Component {
@@ -24,6 +25,8 @@ public:
 
 	void SetOwner(Entity* owner);
 	Entity* GetOwner() { return owner; }
+
+	TransformComponent& GetTransform();
 
 	virtual void OnDrawGizmos() {}
 

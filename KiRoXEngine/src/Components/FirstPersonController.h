@@ -20,6 +20,9 @@ class FirstPersonController : public Component
 	PROPERTY()
 	float sensitivity;
 
+	PROPERTY()
+	float jumpHeight;
+
 	float pitch;
 	
 	float cameraFOV;

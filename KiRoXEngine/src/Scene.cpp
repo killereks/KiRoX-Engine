@@ -18,6 +18,7 @@
 #include "Tools/StringTools.h"
 #include "Macros.h"
 #include "Assets/AssetManager.h"
+#include <Tools/Color.h>
 
 Scene::Scene()
 {
@@ -575,6 +576,10 @@ void Scene::SerializeEntity(YAML::Emitter& out, Entity* ent)
 				std::string value = prop.get_value(comp).get_value<ObjectPtr*>()->GetUUID();
 				out << YAML::Value << value;
 			}
+			else if (prop.get_value(comp).get_type() == rttr::type::get<Color>()) {
+				Color value = prop.get_value(comp).get_value<Color>();
+				out << YAML::Value << value.GetAsVector();
+			}
 			else {
 				out << YAML::Value << prop.get_value(comp).to_string();
 			}
@@ -745,6 +750,14 @@ void Scene::LoadScene(std::string path)
 					std::string uuid = propData.as<std::string>();
 					ObjectPtr* ptr = currentProperty.get_value(var).get_value<ObjectPtr*>();
 					ptr->SetUUID(uuid);
+				}
+				else if (propType == rttr::type::get<Color>()) {
+					glm::vec3 color = propData.as<glm::vec3>();
+					Color colorObj = Color(color);
+					currentProperty.set_value(var, colorObj);
+				}
+				else {
+					std::cout << "Error, could not load property " << name << " of type " << propType.get_name().c_str() << "\n";
 				}
 			}
 

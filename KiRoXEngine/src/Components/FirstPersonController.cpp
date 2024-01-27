@@ -9,7 +9,7 @@ void FirstPersonController::Init()
 	rigidbody = owner->GetComponent<Rigidbody>();
 	camera = owner->GetComponentInChildren<CameraComponent>();
 
-	rigidbody->SetBounciness(0.0f);
+	Input::SetMouseVisibility(false);
 
 	cameraFOV = 60;
 }
@@ -45,6 +45,10 @@ void FirstPersonController::Update(float dt)
 	}
 
 	glm::vec3 velocity = rigidbody->GetVelocity();
+
+	if (Input::GetKeyDown(GLFW_KEY_SPACE)) {
+		velocity.y = std::sqrt(std::abs(2.0f * jumpHeight * -9.81f));
+	}
 
 	rigidbody->SetVelocity(movementVector + glm::vec3(0.0f, 1.0f, 0.0f) * velocity.y);
 

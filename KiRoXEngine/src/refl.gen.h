@@ -27,6 +27,7 @@
 #include "Components/TestComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/Volume.h"
+#include "Tools/Color.h"
 #include "Tools/ObjectPtr.h"
 using namespace rttr;
 
@@ -87,6 +88,7 @@ registration::class_<Asset>("Asset")
 registration::class_<Material>("Material")
 .constructor<>()
 .property("shader", &Material::shader)
+.property("albedoColor", &Material::albedoColor)
 .property("mainTexture", &Material::mainTexture)
 .property("normalMap", &Material::normalMap)
 .property("metallicMap", &Material::metallicMap)
@@ -118,6 +120,7 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("bottom", &CameraComponent::bottom)
 .property("orthoNear", &CameraComponent::orthoNear)
 .property("orthoFar", &CameraComponent::orthoFar)
+.property("useFrustumCulling", &CameraComponent::useFrustumCulling)
 ;
 
 registration::class_<BoxCollider>("BoxCollider")
@@ -134,6 +137,8 @@ registration::class_<CapsuleCollider>("CapsuleCollider")
 
 registration::class_<Collider>("Collider")
 .property("isTrigger", &Collider::isTrigger)
+.property("bounciness", &Collider::bounciness)
+.property("friction", &Collider::friction)
 ;
 
 registration::class_<Component>("Component")
@@ -144,6 +149,7 @@ registration::class_<FirstPersonController>("FirstPersonController")
 .property("speed", &FirstPersonController::speed)
 .property("runningSpeed", &FirstPersonController::runningSpeed)
 .property("sensitivity", &FirstPersonController::sensitivity)
+.property("jumpHeight", &FirstPersonController::jumpHeight)
 ;
 
 registration::class_<DirectionalLight>("DirectionalLight")
@@ -190,6 +196,13 @@ registration::class_<TransformComponent>("TransformComponent")
 registration::class_<Volume>("Volume")
 .constructor<>()
 .property("testProcess", &Volume::testProcess)
+;
+
+registration::class_<Color>("Color")
+.constructor<>()
+.property("r", &Color::r)
+.property("g", &Color::g)
+.property("b", &Color::b)
 ;
 
 registration::class_<ObjectPtr>("ObjectPtr")
@@ -316,6 +329,9 @@ return rttr::type::get<TransformComponent*>();
 }
 if (name == "Volume"){
 return rttr::type::get<Volume*>();
+}
+if (name == "Color"){
+return rttr::type::get<Color*>();
 }
 if (name == "ObjectPtr"){
 return rttr::type::get<ObjectPtr*>();

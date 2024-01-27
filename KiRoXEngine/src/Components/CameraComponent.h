@@ -47,6 +47,9 @@ class CameraComponent : public Component
 	PROPERTY()
 	float orthoFar;
 
+	PROPERTY()
+	bool useFrustumCulling;
+
 	float aspect;
 	int width;
 	int height;

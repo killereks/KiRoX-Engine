@@ -158,7 +158,7 @@ vec3 Saturation(vec3 color){
 void main(){
     vec3 col = texture(screenTexture, texCoords).rgb;
 
-    col = VolumetricLighting(col, texCoords, texCoords * 2.0 - 1.0);
+    //col = VolumetricLighting(col, texCoords, texCoords * 2.0 - 1.0);
 
     col = Saturation(col);
     col = ACES(col);

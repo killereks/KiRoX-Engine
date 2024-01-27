@@ -48,7 +48,7 @@ public:
 			glfwSetInputMode(GetInstance()->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 		else {
-			glfwSetInputMode(GetInstance()->window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			glfwSetInputMode(GetInstance()->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 	}
 

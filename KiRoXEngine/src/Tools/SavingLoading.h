@@ -11,6 +11,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include "Color.h"
 
 namespace SavingLoading {
 
@@ -50,6 +51,11 @@ namespace SavingLoading {
 			else if (prop.get_value(var).get_type() == rttr::type::get<ObjectPtr*>()) {
 				std::string value = prop.get_value(var).get_value<ObjectPtr*>()->GetUUID();
 				out << YAML::Value << value;
+			}
+			else if (prop.get_value(var).get_type() == rttr::type::get<Color>()) {
+				Color value = prop.get_value(var).get_value<Color>();
+
+				out << YAML::Value << value.GetAsVector();
 			}
 			else {
 				out << YAML::Value << prop.get_value(var).to_string();
@@ -108,6 +114,14 @@ namespace SavingLoading {
 				ObjectPtr* value = prop.get_value(obj).get_value<ObjectPtr*>();
 				std::string uuid = data[name].as<std::string>();
 				value->SetUUID(uuid);
+			}
+			else if (prop.get_value(obj).get_type() == rttr::type::get<Color>()) {
+				glm::vec3 value = data[name].as<glm::vec3>();
+				Color color = Color(value.x, value.y, value.z);
+				prop.set_value(obj, color);
+			}
+			else {
+				std::cout << "Could not load property: " << name << "on object: " << type.get_name().c_str() << "\n";
 			}
 		}
 	}

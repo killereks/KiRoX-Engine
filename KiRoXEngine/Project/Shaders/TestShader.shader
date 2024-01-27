@@ -68,6 +68,7 @@ uniform bool hasHeightMap;
 
 uniform vec2 tiling;
 uniform float roughness;
+uniform vec3 albedoColor;
 
 uniform sampler2D shadowMap;
 
@@ -190,7 +191,7 @@ vec3 CalcPBRLighting(vec3 normal){
 
 	vec3 F0 = vec3(0.04);
 
-	vec3 albedo = texture(albedoMap, UV * tiling).rgb;
+	vec3 albedo = texture(albedoMap, UV * tiling).rgb * albedoColor;
 
 	// Cook-Torrance microfacet specular reflection
     vec3 halfDir = normalize(viewForward + -lightDir);
@@ -267,7 +268,7 @@ void main(){
 		metallic = texture(metallicMap, UVs).r;
 	}
 
-	vec3 albedo = texture(albedoMap, UVs).rgb;
+	vec3 albedo = texture(albedoMap, UVs).rgb * albedoColor;
 
 	///////////////////////////////////////////
 	// SPOT LIGHT SHADOWS
@@ -296,7 +297,7 @@ void main(){
 	///////////////////////////////////////////
 	// DIRECTIONAL LIGHT SHADOWS
 
-	float shadow = softShadowsDirectional(dot(lightDir, normals));
+	float shadow = max(0.2, softShadowsDirectional(dot(lightDir, normals)));
 
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectedDir = reflect(lightDir, normals);

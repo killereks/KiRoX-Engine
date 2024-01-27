@@ -70,9 +70,14 @@ void Engine::Start()
 	Reflection::RegisterTypes();
 
 	std::filesystem::path path = std::filesystem::current_path();
+#if EDITOR
+	Console::SetOutputPath(path.string() + "\\editor.log");
+#endif
+
 	path /= "Project";
 
 	projectPath = path.string();
+
 
 	assetManager = std::make_shared<AssetManager>(path);
 
@@ -139,6 +144,12 @@ void Engine::Update()
 				comp->Update(Engine::deltaTime);
 			}
 		}
+
+		#if EDITOR
+		if (Input::GetKey(GLFW_KEY_ESCAPE)) {
+			Input::SetMouseVisibility(true);
+		}
+		#endif
 	}
 
 #if EDITOR
@@ -460,7 +471,7 @@ void Engine::RenderGameWindow()
 {
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 
-	ImGui::Begin(ICON_FA_GAMEPAD " Game");
+	ImGui::Begin("Game");
 	ImVec2 size = ImGui::GetContentRegionAvail();
 	if (gameCamera == nullptr)
 	{
