@@ -128,8 +128,8 @@ int main(int argc, char* argv[]) {
 	glCullFace(GL_BACK);
 
 	// VSYNC
-	glfwSwapInterval(0);
-	//glfwSwapInterval(1);
+	//glfwSwapInterval(0);
+	glfwSwapInterval(1);
 
 	double previousTime = glfwGetTime();
 	double currentTime = 0.0f;

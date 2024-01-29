@@ -23,7 +23,7 @@ void FirstPersonController::Update(float dt)
 	glm::vec3 movementVector = owner->GetTransform().GetForward() * -input.y +
 							   owner->GetTransform().GetRight() * input.x;
 
-	pitch -= mouseDelta.y * sensitivity * dt;
+	pitch -= mouseDelta.y * sensitivity;
 	pitch = glm::clamp(pitch, -89.0f, 89.0f);
 
 	if (glm::length(input) > 0.1f) {
@@ -53,7 +53,7 @@ void FirstPersonController::Update(float dt)
 
 	rigidbody->SetVelocity(movementVector + glm::vec3(0.0f, 1.0f, 0.0f) * velocity.y);
 
-	GetOwner()->GetTransform().Rotate(glm::vec3(0.0f, 1.0f, 0.0f), -mouseDelta.x * sensitivity * dt);
+	GetOwner()->GetTransform().Rotate(glm::vec3(0.0f, 1.0f, 0.0f), -mouseDelta.x * sensitivity);
 	camera->GetOwner()->GetTransform().SetLocalRotation(glm::vec3(pitch, 0.0f, 0.0f));
 
 	cameraFOV = Mathf::Lerp(camera->GetFieldOfView(), cameraFOV, dt * 5.0f);

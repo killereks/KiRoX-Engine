@@ -240,6 +240,48 @@ bool CameraComponent::IsInFrustum(Bounds& bounds)
 			IsOnOrForwardPlane(frustumCache.bottomFace, bounds);
 }
 
+std::vector<glm::vec3> CameraComponent::GetFrustumCorners()
+{
+	std::vector<glm::vec3> corners;
+
+	glm::vec3 worldPos = GetTransform().GetWorldPosition();
+	glm::vec3 forward = -GetTransform().GetForward();
+
+	glm::vec3 nearCenter = worldPos + forward * nearClipPlane;
+	glm::vec3 farCenter = worldPos + forward * farClipPlane;
+
+	float nearHeight = 2.0f * tan(glm::radians(fieldOfView) * 0.5f) * nearClipPlane;
+	float nearWidth = nearHeight * aspect;
+
+	float farHeight = 2.0f * tan(glm::radians(fieldOfView) * 0.5f) * farClipPlane;
+	float farWidth = farHeight * aspect;
+
+	glm::vec3 right = -GetTransform().GetRight();
+	glm::vec3 up = -GetTransform().GetUp();
+
+	glm::vec3 nearTopLeft = nearCenter + up * nearHeight * 0.5f - right * nearWidth * 0.5f;
+	glm::vec3 nearTopRight = nearCenter + up * nearHeight * 0.5f + right * nearWidth * 0.5f;
+	glm::vec3 nearBottomLeft = nearCenter - up * nearHeight * 0.5f - right * nearWidth * 0.5f;
+	glm::vec3 nearBottomRight = nearCenter - up * nearHeight * 0.5f + right * nearWidth * 0.5f;
+
+	glm::vec3 farTopLeft = farCenter + up * farHeight * 0.5f - right * farWidth * 0.5f;
+	glm::vec3 farTopRight = farCenter + up * farHeight * 0.5f + right * farWidth * 0.5f;
+	glm::vec3 farBottomLeft = farCenter - up * farHeight * 0.5f - right * farWidth * 0.5f;
+	glm::vec3 farBottomRight = farCenter - up * farHeight * 0.5f + right * farWidth * 0.5f;
+
+	corners.push_back(nearTopLeft);
+	corners.push_back(nearTopRight);
+	corners.push_back(nearBottomLeft);
+	corners.push_back(nearBottomRight);
+	
+	corners.push_back(farTopLeft);
+	corners.push_back(farTopRight);
+	corners.push_back(farBottomLeft);
+	corners.push_back(farBottomRight);
+
+	return corners;
+}
+
 void CameraComponent::UpdateFrustumCache()
 {
 	TransformComponent& transform = owner->GetTransform();

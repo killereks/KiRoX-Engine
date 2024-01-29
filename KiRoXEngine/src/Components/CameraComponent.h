@@ -83,6 +83,8 @@ public:
 	bool IsOnOrForwardPlane(Plane& plane, Bounds& bounds);
 	bool IsInFrustum(Bounds& bounds);
 
+	std::vector<glm::vec3> GetFrustumCorners();
+
 	void UpdateFrustumCache();
 
 	std::string GetIcon() override

@@ -16,6 +16,9 @@ public:
 	virtual std::string GetIcon() override;
 
 	virtual glm::mat4 GetLightSpaceMatrix() override;
+	glm::mat4 GetTightLightSpaceMatrix(CameraComponent* camera);
+
+	void RenderTightCamera(std::vector<MeshComponent*>& meshes, CameraComponent* camera);
 
 	DirectionalLight();
 	~DirectionalLight();

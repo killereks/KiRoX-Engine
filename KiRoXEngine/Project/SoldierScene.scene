@@ -5,32 +5,16 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Sun
-    UUID: ca86bc1c-8ee4-4127-83f0-48832fabca92
+  - Entity: Plane
+    UUID: d0dddddd-d0dd-dddd-d0dd-5ddcd0dddddd
     Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
-      position: [-8.82007599, 40.0540009, -26.7606277]
-      rotation: [0.401047766, 0.311556131, -0.147209138, 0.848777354]
-      scale: [1.00000036, 0.999999881, 1.00000036]
-    DirectionalLight:
-      {}
-  - Entity: Camera
-    UUID: b0acd414-60bb-4bb2-a6e1-1408aae4eb3f
-    Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
-    TransformComponent:
-      position: [17.4842987, 21.7091885, 26.6966305]
-      rotation: [-0.111668944, 0.226258948, 0.0261204336, 0.967292428]
-      scale: [1.00002778, 1.00000048, 1.00002718]
-    CameraComponent:
-      nearClipPlane: 0.3
-      farClipPlane: 1000
-      fieldOfView: 60
-      left: -10
-      right: 10
-      top: 10
-      bottom: -10
-      orthoNear: 1
-      orthoFar: 100
+      position: [1.36408329, 1.34174633, -8.85852432]
+      rotation: [-9.09961443e-07, -1, 9.09961443e-07, 1.59789749e-06]
+      scale: [0.030000709, 0.0300000664, 0.0300004277]
+    MeshComponent:
+      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
+      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
   - Entity: Ground
     UUID: fc527bca-c22c-48d5-8470-856baaa4a024
     Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
@@ -41,13 +25,29 @@ Entities:
     MeshComponent:
       mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
       material: 734f562e-b6c9-4396-a410-61301619f2ef
-  - Entity: Plane
-    UUID: d0dddddd-d0dd-dddd-d0dd-5ddcd0dddddd
+  - Entity: Camera
+    UUID: b0acd414-60bb-4bb2-a6e1-1408aae4eb3f
     Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
     TransformComponent:
-      position: [1.36408329, 10.9893951, -8.85852432]
-      rotation: [-5.52333574e-07, -1, 9.09962012e-07, 1.59789715e-06]
-      scale: [0.030000709, 0.0300000664, 0.0300004277]
-    MeshComponent:
-      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
-      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
+      position: [5.62611771, 21.7092991, 19.7882938]
+      rotation: [-0.112933792, 0.172972247, 0.0199686605, 0.9782269]
+      scale: [1.00004125, 0.999998808, 1.00004327]
+    CameraComponent:
+      nearClipPlane: 0.3
+      farClipPlane: 100
+      fieldOfView: 60
+      left: -10
+      right: 10
+      top: 10
+      bottom: -10
+      orthoNear: 1
+      orthoFar: 100
+  - Entity: Sun
+    UUID: ca86bc1c-8ee4-4127-83f0-48832fabca92
+    Parent: 9c5194ad-bf52-4ab4-8700-a61c20fdb2a3
+    TransformComponent:
+      position: [-8.82007599, 40.0540009, -26.7606277]
+      rotation: [0.401047766, 0.311556131, -0.147209138, 0.848777354]
+      scale: [1.00000036, 0.999999881, 1.00000036]
+    DirectionalLight:
+      {}

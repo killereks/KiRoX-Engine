@@ -3,6 +3,7 @@
 #include <Macros.h>
 
 #include <Rendering/ShadowMap.h>
+#include <Components/CameraComponent.h>
 
 CLASS()
 class Light : public Component

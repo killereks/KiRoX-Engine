@@ -173,23 +173,25 @@ void Engine::RenderScene(Shader* shader)
 
 	StatsCounter::GetInstance()->SetCounter("meshEntities", meshComponents.size());
 
+	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
+
 	// SHADOW MAP PASS
-	shadowMapper->BeginShadowMapping();
-	if (dirLight != nullptr) {
-		dirLight->Render(meshComponents);
+	//shadowMapper->BeginShadowMapping();
+	if (dirLight != nullptr && gameCamera != nullptr) {
+		dirLight->RenderTightCamera(meshComponents, gameCamera);
 	}
 
-	for (SpotLight* spotLight : spotLights) {
-		shadowMapper->RenderSpotLight(spotLight, meshComponents);
-	}
-	shadowMapper->EndShadowMapping();
+	//for (SpotLight* spotLight : spotLights) {
+	//	shadowMapper->RenderSpotLight(spotLight, meshComponents);
+	//}
+	//shadowMapper->EndShadowMapping();
 	// END SHADOW MAP PASS
 
 	shader->use();
 	shader->setInt("shadowMap", 1);
-	if (dirLight != nullptr) {
+	if (dirLight != nullptr && gameCamera != nullptr) {
 		dirLight->BindShadowMap(1);
-		shader->setMat4("lightSpaceMatrix", dirLight->GetLightSpaceMatrix());
+		shader->setMat4("lightSpaceMatrix", dirLight->GetTightLightSpaceMatrix(gameCamera));
 		shader->setVec3("lightDir", dirLight->GetOwner()->GetTransform().GetForward());
 	}
 	shader->setVec3("viewPos", sceneCamera->GetTransform().GetWorldPosition());
@@ -211,8 +213,6 @@ void Engine::RenderScene(Shader* shader)
 			dirLight);
 	}
 #endif
-
-	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 	if (gameCamera != nullptr)
 	{
 		#ifndef EDITOR
@@ -223,7 +223,7 @@ void Engine::RenderScene(Shader* shader)
 		shader->setInt("shadowMap", 1);
 		if (dirLight != nullptr) {
 			dirLight->BindShadowMap(1);
-			shader->setMat4("lightSpaceMatrix", dirLight->GetLightSpaceMatrix());
+			shader->setMat4("lightSpaceMatrix", dirLight->GetTightLightSpaceMatrix(gameCamera));
 			shader->setVec3("lightDir", dirLight->GetOwner()->GetTransform().GetForward());
 		}
 		shader->setVec3("viewPos", gameCamera->GetOwner()->GetTransform().GetWorldPosition());
