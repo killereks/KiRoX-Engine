@@ -1,3 +1,21 @@
+Features:
+1. **Multithreaded Asset Loading System:**
+   - Robust multithreaded asset loading system for efficient resource management.
+
+2. **Automatic Reflection System:**
+   - Automatic reflection system that seamlessly saves all assets and scenes automatically.
+
+3. **Seamless Play and Editor Mode Transition:**
+   - Seamless transition between play and editor modes, with entering play mode being near instant.
+
+4. **Game Building System:**
+   - Game building system that automates the removal of unnecessary code and copies dependencies into the build folder.
+
+5. **Post Processing Stack with Volumetric Lighting, PBR Shaders:**
+   - Advanced post-processing stack featuring volumetric lighting and physically based rendering (PBR) shaders.
+
+6. **Shadow Mapping with Poisson Disc Sampling:**
+   - Shadow mapping using poisson disc sampling, making the shadows super soft.
 
 ![KiRoXEngine_z7q3jNgQff](https://github.com/killereks/KiRoX-Engine/assets/10748374/f906f6da-7055-460b-9700-28c185483a2a)
 
