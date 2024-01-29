@@ -120,7 +120,6 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("bottom", &CameraComponent::bottom)
 .property("orthoNear", &CameraComponent::orthoNear)
 .property("orthoFar", &CameraComponent::orthoFar)
-.property("useFrustumCulling", &CameraComponent::useFrustumCulling)
 ;
 
 registration::class_<BoxCollider>("BoxCollider")

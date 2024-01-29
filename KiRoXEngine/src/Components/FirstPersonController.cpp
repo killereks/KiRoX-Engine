@@ -3,6 +3,7 @@
 #include <Entity.h>
 
 #include <Math/Mathf.h>
+#include <Editor/Gizmos.h>
 
 void FirstPersonController::Init()
 {

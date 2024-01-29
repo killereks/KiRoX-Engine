@@ -200,11 +200,11 @@ glm::quat TransformComponent::GetLocalRotation() const { return glm::normalize(r
 
 glm::vec3 TransformComponent::GetLocalScale() const { return scale; }
 
-glm::vec3 TransformComponent::GetForward() const {	return glm::normalize(rotation * glm::vec3(0.0f, 0.0f, 1.0f));}
+glm::vec3 TransformComponent::GetForward() const {	return glm::normalize(GetWorldRotation() * glm::vec3(0.0f, 0.0f, 1.0f));}
 
-glm::vec3 TransformComponent::GetUp() const {	return glm::normalize(rotation * glm::vec3(0.0f, 1.0f, 0.0f));}
+glm::vec3 TransformComponent::GetUp() const {	return glm::normalize(GetWorldRotation() * glm::vec3(0.0f, 1.0f, 0.0f));}
 
-glm::vec3 TransformComponent::GetRight() const {	return glm::normalize(rotation * glm::vec3(1.0f, 0.0f, 0.0f));}
+glm::vec3 TransformComponent::GetRight() const {	return glm::normalize(GetWorldRotation() * glm::vec3(1.0f, 0.0f, 0.0f));}
 
 void TransformComponent::Rotate(glm::vec3 axis, float angleDegrees)
 {	

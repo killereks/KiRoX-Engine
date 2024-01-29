@@ -1,13 +1,13 @@
 Entities:
   - Entity: Root
-    UUID: efadd4d2-1141-4d2b-8e5b-b71b82f7c67f
+    UUID: d25204d3-34da-427d-9e38-97735e7c95fa
     TransformComponent:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
   - Entity: Sphere
-    UUID: cc261aaf-d3aa-413d-a02a-7a24287f9847
-    Parent: efadd4d2-1141-4d2b-8e5b-b71b82f7c67f
+    UUID: 0e98de72-b326-448d-8de6-05a8bef80436
+    Parent: d25204d3-34da-427d-9e38-97735e7c95fa
     TransformComponent:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
@@ -16,8 +16,8 @@ Entities:
       mesh: f552840a-bf22-4ceb-be8f-d8e41a40e047
       material: 734f562e-b6c9-4396-a410-61301619f2ef
   - Entity: Light
-    UUID: 299e032e-22da-4004-a7dc-55c31908f672
-    Parent: efadd4d2-1141-4d2b-8e5b-b71b82f7c67f
+    UUID: 12f5ec62-90b1-466c-b204-3d7a1376c40c
+    Parent: d25204d3-34da-427d-9e38-97735e7c95fa
     TransformComponent:
       position: [-10, -10, -10]
       rotation: [0.353553414, 0.353553414, -0.14644663, 0.853553355]
@@ -25,8 +25,8 @@ Entities:
     DirectionalLight:
       {}
   - Entity: Camera
-    UUID: 479a0301-e0c6-45fb-b02f-235f54c25f17
-    Parent: efadd4d2-1141-4d2b-8e5b-b71b82f7c67f
+    UUID: b63f21a0-5011-4ae3-90d9-72931233f9a8
+    Parent: d25204d3-34da-427d-9e38-97735e7c95fa
     TransformComponent:
       position: [0, 0.25, -2.5]
       rotation: [0, 0.998758554, 0.0498137027, -0]
@@ -41,10 +41,9 @@ Entities:
       bottom: -10
       orthoNear: 1
       orthoFar: 100
-      useFrustumCulling: true
   - Entity: Quad
-    UUID: 29a89518-4439-4b5b-87ab-2f2eb2a0a098
-    Parent: efadd4d2-1141-4d2b-8e5b-b71b82f7c67f
+    UUID: b8de5557-f1d9-4095-beb8-7194d754ca84
+    Parent: d25204d3-34da-427d-9e38-97735e7c95fa
     TransformComponent:
       position: [0, -1.25, 0]
       rotation: [0.707106829, 0, 0, 0.707106829]

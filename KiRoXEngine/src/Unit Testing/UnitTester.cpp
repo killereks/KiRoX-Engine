@@ -119,10 +119,10 @@ void Test_TransformsSettersGetters() {
 
 	// Test SetWorldRotation with euler angles
 	transform.SetWorldRotation(glm::vec3(-180.0f, 270.0f, 360.0f));
-	UnitTester::AreEqual<glm::quat>(transform.GetWorldRotation(), glm::quat(glm::vec3(-180.0f, 270.0f, 360.0f)), "SetWorldRotation with out-of-range Euler angles");
+	UnitTester::AreEqual<glm::quat>(transform.GetWorldRotation(), glm::quat(glm::radians(glm::vec3(-180.0f, 270.0f, 360.0f))), "SetWorldRotation with out-of-range Euler angles");
 
 	transform.SetWorldRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-	UnitTester::AreEqual<glm::quat>(transform.GetWorldRotation(), glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)), "SetWorldRotation with zero Euler angles");
+	UnitTester::AreEqual<glm::quat>(transform.GetWorldRotation(), glm::quat(glm::radians(glm::vec3(0.0f, 0.0f, 0.0f))), "SetWorldRotation with zero Euler angles");
 
 	// Test SetWorldRotation with quaternion
 	glm::quat quaternionRotation = glm::angleAxis(glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -159,10 +159,10 @@ void Test_TransformsSettersGetters() {
 
 	// Test SetLocalRotation with euler angles
 	transform.SetLocalRotation(glm::vec3(45.0f, 90.0f, 180.0f));
-	UnitTester::AreEqual<glm::quat>(transform.GetLocalRotation(), glm::quat(glm::vec3(45.0f, 90.0f, 180.0f)), "SetLocalRotation (Euler angles)");
+	UnitTester::AreEqual<glm::quat>(transform.GetLocalRotation(), glm::quat(glm::radians(glm::vec3(45.0f, 90.0f, 180.0f))), "SetLocalRotation (Euler angles)");
 
 	transform.SetLocalRotation(glm::vec3(-180.0f, 270.0f, 360.0f));
-	UnitTester::AreEqual<glm::quat>(transform.GetLocalRotation(), glm::quat(glm::vec3(-180.0f, 270.0f, 0.0f)), "SetLocalRotation with out-of-range Euler angles");
+	UnitTester::AreEqual<glm::quat>(transform.GetLocalRotation(), glm::quat(glm::radians(glm::vec3(-180.0f, 270.0f, 0.0f))), "SetLocalRotation with out-of-range Euler angles");
 
 	transform.SetLocalRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	UnitTester::AreEqual<glm::quat>(transform.GetLocalRotation(), glm::quat(glm::vec3(0.0f, 0.0f, 0.0f)), "SetLocalRotation with zero Euler angles");
