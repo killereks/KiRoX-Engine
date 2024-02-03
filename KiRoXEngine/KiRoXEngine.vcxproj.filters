@@ -870,6 +870,7 @@
     <ClInclude Include="src\Unit Testing\UnitTester.h" />
     <ClInclude Include="src\Tools\Color.h" />
     <ClInclude Include="src\Tools\Profiling\Profiler.h" />
+    <ClInclude Include="src\Math\Ray.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />
@@ -880,6 +881,7 @@
     <Library Include="Dependencies\GLFW\glfw3.lib" />
     <Library Include="Dependencies\GLFW\glfw3_mt.lib" />
     <Library Include="Dependencies\GLFW\glfw3dll.lib" />
+    <Library Include="Dependencies\physics\reactphysics3d_d.lib" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="KiRoXEngine.rc" />

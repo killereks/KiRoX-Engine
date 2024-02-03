@@ -4,6 +4,7 @@
 
 #include <Math/Mathf.h>
 #include <Editor/Gizmos.h>
+#include <physics/Physics.h>
 
 void FirstPersonController::Init()
 {
@@ -58,4 +59,18 @@ void FirstPersonController::Update(float dt)
 
 	cameraFOV = Mathf::Lerp(camera->GetFieldOfView(), cameraFOV, dt * 5.0f);
 	camera->SetFieldOfView(cameraFOV);
+
+	Ray ray = camera->ViewportPointToRay(glm::vec2(0.5f, 0.5f));
+	RaycastEvent hitInfo;
+	if (rigidbody->GetPhysics()->Raycast(ray.origin, ray.direction, 25.0f, hitInfo)) {
+		Gizmos::DrawWireSphere(hitInfo.GetWorldPoint(), 0.25f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
+		Gizmos::DrawLine(ray.origin, hitInfo.GetWorldPoint(), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+		Gizmos::DrawRay(hitInfo.GetWorldPoint(), hitInfo.GetWorldNormal(), glm::vec3(0.0f, 1.0f, 1.0f));
+	}
+	else {
+		Gizmos::DrawRay(ray.origin, ray.direction * 25.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+
+	std::cout << hitInfo.HasHit() << "\n";
 }

@@ -31,7 +31,6 @@
 #include <reactphysics3d/utils/Profiler.h>
 #include <string>
 #include <reactphysics3d/memory/MemoryManager.h>
-#include "Profiler.h"
 
 using namespace reactphysics3d;
 

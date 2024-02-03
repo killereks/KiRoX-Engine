@@ -323,6 +323,62 @@ void CameraComponent::UpdateFrustumCache()
 	frustumCache.bottomFace = { transform.GetWorldPosition(), glm::cross(frontMultFar + transform.GetUp() * halfVside, transform.GetRight()) };
 }
 
+glm::vec3 CameraComponent::ScreenToWorldPoint(glm::vec2 screenPoint)
+{
+	glm::mat4 viewProjectionMatrix = GetProjectionMatrix() * GetViewMatrix();
+	glm::mat4 worldToClipMatrix = glm::inverse(viewProjectionMatrix);
+
+	glm::vec4 ndc = glm::vec4((2.0f * screenPoint.x) / width - 1.0f,
+		1.0f - (2.0f * screenPoint.y) / height,
+		0.0f, 1.0f);
+
+	glm::vec4 worldPoint = worldToClipMatrix * ndc;
+
+	worldPoint /= worldPoint.w;
+
+	return glm::vec3(worldPoint);
+}
+
+glm::vec2 CameraComponent::WorldToScreenPoint(glm::vec3 worldPoint)
+{
+	glm::mat4 viewProjectionMatrix = GetProjectionMatrix() * GetViewMatrix();
+
+	glm::vec4 clipCoords = viewProjectionMatrix * glm::vec4(worldPoint, 1.0f);
+
+	clipCoords /= clipCoords.w;
+
+	glm::vec2 screenPoint = glm::vec2(	(clipCoords.x + 1.0f) * 0.5f * width,
+										(1.0f - clipCoords.y) * 0.5f * height);
+
+	return screenPoint;
+}
+
+Ray CameraComponent::ScreenPointToRay(glm::vec2 screenPoint)
+{
+	glm::mat4 viewProjectionMatrix = GetProjectionMatrix() * GetViewMatrix();
+
+	glm::mat4 worldToClipMatrix = glm::inverse(viewProjectionMatrix);
+
+	glm::vec4 ndc = glm::vec4((2.0f * screenPoint.x) / width - 1.0f,
+		1.0f - (2.0f * screenPoint.y) / height,
+		0.0f, 1.0f);
+
+	glm::vec4 rayStart = worldToClipMatrix * ndc;
+
+	rayStart /= rayStart.w;
+
+	glm::vec3 worldPos = GetTransform().GetWorldPosition();
+
+	glm::vec3 rayDirection = glm::normalize(glm::vec3(rayStart) - worldPos);
+
+	return Ray(worldPos, rayDirection);
+}
+
+Ray CameraComponent::ViewportPointToRay(glm::vec2 viewportPoint)
+{
+	return ScreenPointToRay(glm::vec2(viewportPoint.x * width, viewportPoint.y * height));
+}
+
 void CameraComponent::CreateRenderTexture(int width, int height)
 {
 	if (renderTexture != nullptr)

@@ -7,6 +7,7 @@
 #include <Tools/Stopwatch.h>
 
 #include <iostream>
+#include <Editor/Gizmos.h>
 
 Physics::Physics()
 {
@@ -22,15 +23,15 @@ Physics::Physics()
 	accumulatedTime = 0.0f;
 	running = true;
 
-	physicsThread = std::thread(&Physics::RunPhysicsThread, this);
+	//physicsThread = std::thread(&Physics::RunPhysicsThread, this);
 }
 
 Physics::~Physics()
 {
 	running = false;
 
-	physicsThread.join();
-	physicsCommon.destroyPhysicsWorld(world);
+	//physicsThread.join();
+	//physicsCommon.destroyPhysicsWorld(world);
 }
 
 void Physics::RegisterRigidbody(Rigidbody* rb)
@@ -114,9 +115,39 @@ reactphysics3d::Transform Physics::GetTransform(Entity* ent)
 	return transform;
 }
 
+bool Physics::Raycast(glm::vec3 origin, glm::vec3 direction, float distance, RaycastEvent& hitInfo)
+{
+	reactphysics3d::Vector3 startPoint = reactphysics3d::Vector3(origin.x, origin.y, origin.z);
+	reactphysics3d::Vector3 endPoint = reactphysics3d::Vector3(
+											origin.x + direction.x * distance,
+											origin.y + direction.y * distance,
+											origin.z + direction.z * distance
+											);
+
+	reactphysics3d::Ray ray(startPoint, endPoint);
+
+	world->raycast(ray, &hitInfo);
+
+	return hitInfo.HasHit();
+}
+
 void Physics::Update(float inDeltaTime)
 {
+	PROFILE_FUNCTION()
 	accumulatedTime += inDeltaTime;
+	while (accumulatedTime >= fixedTimeStep) {
+		world->update(fixedTimeStep);
+		accumulatedTime -= fixedTimeStep;
+	}
+
+	reactphysics3d::Vector3 startPoint = reactphysics3d::Vector3(0, 10, 0);
+	reactphysics3d::Vector3 endPoint = reactphysics3d::Vector3(20, 0, 0);
+	reactphysics3d::Ray ray(startPoint, endPoint);
+
+	RaycastEvent raycastEvent;
+	world->raycast(ray, &raycastEvent);
+
+	Gizmos::DrawLine(glm::vec3(startPoint.x, startPoint.y, startPoint.z), raycastEvent.GetWorldPoint(), glm::vec4(1, 0, 0, 1));
 }
 
 void Physics::RunPhysicsThread()

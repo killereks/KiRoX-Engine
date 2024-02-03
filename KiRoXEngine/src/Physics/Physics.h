@@ -30,10 +30,14 @@ public:
 	Physics();
 	~Physics();
 
+	reactphysics3d::PhysicsWorld* GetWorld() { return world; }
+
 	float GetFixedTimeStep() { return fixedTimeStep; }
 	float GetAccumulatedTime() { return accumulatedTime; }
 
 	reactphysics3d::Transform GetTransform(Entity* ent);
+
+	bool Raycast(glm::vec3 origin, glm::vec3 direction, float distance, RaycastEvent& hitInfo);
 
 	void RegisterRigidbody(Rigidbody* rb);
 	void RegisterCollisionBody(BoxCollider* boxCollider, Rigidbody* rb);

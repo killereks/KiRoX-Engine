@@ -14,16 +14,16 @@ for (int i = 0; i < number; i++) {
 		bool isTrigger2 = contactPair.getCollider2()->getIsTrigger();
 
 		if (contactPair.getEventType() == reactphysics3d::CollisionCallback::ContactPair::EventType::ContactStart) {
-			std::cout << "Contact Start" << std::endl;
+			//std::cout << "Contact Start" << std::endl;
 		}
 		else if (contactPair.getEventType() == reactphysics3d::CollisionCallback::ContactPair::EventType::ContactStay) {
-			std::cout << "Contact Stay" << std::endl;
+			//std::cout << "Contact Stay" << std::endl;
 		}
 		else if (contactPair.getEventType() == reactphysics3d::CollisionCallback::ContactPair::EventType::ContactExit) {
-			std::cout << "Contact End" << std::endl;
+			//std::cout << "Contact End" << std::endl;
 		}
 		else {
-			std::cout << "Unknown" << std::endl;
+			//std::cout << "Unknown" << std::endl;
 		}
 	}
 }
@@ -42,16 +42,28 @@ void PhysicsEvents::onTrigger(const reactphysics3d::OverlapCallback::CallbackDat
 		bool isTrigger2 = overlapPair.getCollider2()->getIsTrigger();
 
 		if (overlapPair.getEventType() == reactphysics3d::OverlapCallback::OverlapPair::EventType::OverlapStart) {
-			std::cout << "Overlap Start" << std::endl;
+			//std::cout << "Overlap Start" << std::endl;
 		}
 		else if (overlapPair.getEventType() == reactphysics3d::OverlapCallback::OverlapPair::EventType::OverlapStay) {
-			std::cout << "Overlap Stay" << std::endl;
+			//std::cout << "Overlap Stay" << std::endl;
 		}
 		else if (overlapPair.getEventType() == reactphysics3d::OverlapCallback::OverlapPair::EventType::OverlapExit) {
-			std::cout << "Overlap End" << std::endl;
+			//std::cout << "Overlap End" << std::endl;
 		}
 		else {
-			std::cout << "Unknown" << std::endl;
+			//std::cout << "Unknown" << std::endl;
 		}
 	}
+}
+
+reactphysics3d::decimal RaycastEvent::notifyRaycastHit(const reactphysics3d::RaycastInfo& raycastInfo)
+{
+	worldPoint = glm::vec3(raycastInfo.worldPoint.x, raycastInfo.worldPoint.y, raycastInfo.worldPoint.z);
+	worldNormal = glm::vec3(raycastInfo.worldNormal.x, raycastInfo.worldNormal.y, raycastInfo.worldNormal.z);
+
+	hit = raycastInfo.hitFraction < 1.0f;
+
+	distance = raycastInfo.hitFraction;
+
+	return raycastInfo.hitFraction;
 }

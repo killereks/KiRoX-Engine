@@ -47,6 +47,10 @@ public:
 		return glm::vec3(velocity.x, velocity.y, velocity.z);
 	}
 
+	inline Physics* GetPhysics() {
+		return physics;
+	}
+
 	void SetBody(reactphysics3d::RigidBody* body);
 	inline reactphysics3d::RigidBody* GetBody() { return body; }
 

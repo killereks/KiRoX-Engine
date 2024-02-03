@@ -9,8 +9,9 @@
 #include "../Assets/Shader.h"
 #include <vector>
 #include "../Tools/RenderTexture.h"
-#include "../Math/Plane.h"
-#include "../Math/Frustum.h"
+#include <Math/Plane.h>
+#include <Math/Frustum.h>
+#include <Math/Ray.h>
 
 class SkyBox;
 
@@ -107,6 +108,11 @@ public:
 	const float GetNearClipPlane() const { return nearClipPlane; }
 	const float GetFarClipPlane() const { return farClipPlane; }
 	const float GetFieldOfView() const { return fieldOfView; }
+
+	glm::vec3 ScreenToWorldPoint(glm::vec2 screenPoint);
+	glm::vec2 WorldToScreenPoint(glm::vec3 worldPoint);
+	Ray ScreenPointToRay(glm::vec2 screenPoint);
+	Ray ViewportPointToRay(glm::vec2 viewportPoint);
 
 	void CreateRenderTexture(int width, int height);
 
