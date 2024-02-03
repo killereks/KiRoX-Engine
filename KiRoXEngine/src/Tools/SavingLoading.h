@@ -24,7 +24,7 @@ namespace SavingLoading {
 		for (auto prop : type.get_properties()) {
 			std::string name = prop.get_name();
 
-			std::cout << "Found property: " << name << "on object: " << type.get_name().c_str() << "\n";
+			std::cout << "Found property: " << name << " on object: " << type.get_name().c_str() << "\n";
 
 			out << YAML::Key << name;
 
@@ -117,7 +117,7 @@ namespace SavingLoading {
 			}
 			else if (prop.get_value(obj).get_type() == rttr::type::get<Color>()) {
 				glm::vec4 value = data[name].as<glm::vec4>();
-				Color color = Color(value.x, value.y, value.z);
+				Color color = Color(value.x, value.y, value.z, value.w);
 				prop.set_value(obj, color);
 			}
 			else {

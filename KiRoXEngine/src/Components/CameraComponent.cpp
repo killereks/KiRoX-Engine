@@ -42,7 +42,7 @@ CameraComponent::CameraComponent()
 CameraComponent::~CameraComponent()
 {
 	delete renderTexture;
-	delete skybox;
+	//delete skybox;
 }
 
 bool CameraComponent::DrawInspector() {

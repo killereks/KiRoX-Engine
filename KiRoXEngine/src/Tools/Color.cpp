@@ -18,6 +18,10 @@ Color::Color(glm::vec4 v)
 
 Color::Color(float r, float g, float b, float a)
 {
+	this->r = r;
+	this->g = g;
+	this->b = b;
+	this->a = a;
 }
 
 Color::Color()
@@ -25,4 +29,5 @@ Color::Color()
 	this->r = 1.0f;
 	this->g = 1.0f;
 	this->b = 1.0f;
+	this->a = 1.0f;
 }

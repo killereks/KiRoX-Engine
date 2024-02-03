@@ -103,6 +103,8 @@ void AssetManager::ForceClickAsset(Asset* asset)
 {
     selectedAsset = asset;
 
+    // TODO: Make the Assets window focus
+
     if (selectedAsset != nullptr) {
         std::string relativePath = selectedAsset->filePath.substr(projectPath.size() + 1);
 
@@ -407,7 +409,6 @@ void AssetManager::DrawImportSettings()
 
         if (PropertyDrawer::DrawObject(var)) {
             selectedAsset->SaveMetaFile();
-            std::cout << "Detected change in " << selectedAsset->fileName << "\n";
         }
     }
 
