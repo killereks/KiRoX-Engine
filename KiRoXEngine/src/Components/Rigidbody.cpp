@@ -17,15 +17,16 @@ void Rigidbody::SetBody(reactphysics3d::RigidBody* body)
 									1 - freezeRotationX, 
 									1 - freezeRotationY, 
 									1 - freezeRotationZ));
+
+	body->setLinearLockAxisFactor(reactphysics3d::Vector3(
+									1 - freezePositionX, 
+									1 - freezePositionY, 
+									1 - freezePositionZ));
 }
 
 void Rigidbody::SetPosition(glm::vec3 position)
 {
 	if (body == nullptr || physics == nullptr) return;
-
-	Console::Write("Set rigidbody position to " +	std::to_string(position.x) + ", " + 
-													std::to_string(position.y) + ", " + 
-													std::to_string(position.z));
 
 	reactphysics3d::Transform transform = body->getTransform();
 	transform.setPosition(reactphysics3d::Vector3(position.x, position.y, position.z));
@@ -37,9 +38,6 @@ void Rigidbody::SetRotation(glm::quat rotation)
 	if (body == nullptr || physics == nullptr) return;
 
 	glm::vec3 euler = glm::eulerAngles(rotation);
-	Console::Write("Set rigidbody rotation to " +	std::to_string(euler.x) + ", " + 
-													std::to_string(euler.y) + ", " + 
-													std::to_string(euler.z));
 
 	reactphysics3d::Transform transform = body->getTransform();
 	transform.setOrientation(reactphysics3d::Quaternion(rotation.x, rotation.y, rotation.z, rotation.w));

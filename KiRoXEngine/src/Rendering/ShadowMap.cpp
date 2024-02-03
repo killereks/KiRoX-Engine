@@ -65,6 +65,7 @@ void ShadowMap::Resize(unsigned int width, unsigned int height)
 
 void ShadowMap::Render(std::vector<MeshComponent*>& meshes, glm::mat4 lightMatrix)
 {
+	PROFILE_FUNCTION()
 	shader->use();
 
 	glViewport(0, 0, width, height);
@@ -84,6 +85,7 @@ void ShadowMap::Render(std::vector<MeshComponent*>& meshes, glm::mat4 lightMatri
 
 void ShadowMap::Render(MeshComponent* mesh, glm::mat4 lightMatrix)
 {
+	PROFILE_FUNCTION()
 	shader->use();
 
 	glViewport(0, 0, width, height);

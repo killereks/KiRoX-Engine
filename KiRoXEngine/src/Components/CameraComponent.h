@@ -47,6 +47,12 @@ class CameraComponent : public Component
 	PROPERTY()
 	float orthoFar;
 
+	PROPERTY()
+	bool useSkybox;
+
+	PROPERTY()
+	Color clearColor;
+
 	float aspect;
 	int width;
 	int height;
@@ -77,6 +83,8 @@ public:
 
 	void Clear();
 	void ClearColor(glm::vec4 color);
+
+	void ForceUseSkybox(bool useSkybox);
 
 	unsigned int GetSkyboxTextureID();
 

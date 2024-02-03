@@ -26,6 +26,8 @@ CameraComponent::CameraComponent()
 	renderTexture = new RenderTexture(640, 480);
 	aspect = (float)640 / (float)480;
 
+	Resize(640, 480);
+
 	std::vector<Texture*> skyboxTextures;
 	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("px.png"));
 	skyboxTextures.push_back(AssetManager::GetInstance()->Get<Texture>("nx.png"));
@@ -40,6 +42,7 @@ CameraComponent::CameraComponent()
 CameraComponent::~CameraComponent()
 {
 	delete renderTexture;
+	delete skybox;
 }
 
 bool CameraComponent::DrawInspector() {
@@ -68,11 +71,20 @@ bool CameraComponent::DrawInspector() {
 		}
 	}
 
+	ImGui::Checkbox("Use Skybox", &useSkybox);
+	if (!useSkybox) {
+		glm::vec4 color = clearColor.GetAsVector();
+		if (ImGui::ColorEdit4("Clear Color", &color[0])) {
+			clearColor = Color(color);
+		}
+	}
+
 	return true;
 }
 
 void CameraComponent::OnDrawGizmos()
 {
+	PROFILE_FUNCTION()
 	if (cameraType == CameraType::Perspective) {
 		// draw the frustum
 		float halfFOV = glm::radians(fieldOfView) * 0.5f;
@@ -168,13 +180,17 @@ void CameraComponent::RenderGizmos()
 void CameraComponent::PreRender()
 {
 	Bind();
-	glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-	Clear();
 	glViewport(0, 0, width, height);
-
-	skybox->Bind(11);
-	skybox->Draw(this);
-	skybox->Unbind();
+	if (useSkybox) {
+		Clear();
+		skybox->Bind(11);
+		skybox->Draw(this);
+		skybox->Unbind();
+	}
+	else {
+		ClearColor(clearColor.GetAsVector());
+	}
+	
 }
 
 void CameraComponent::PostRender()
@@ -214,6 +230,11 @@ void CameraComponent::ClearColor(glm::vec4 color)
 	}
 }
 
+void CameraComponent::ForceUseSkybox(bool useSkybox)
+{
+	this->useSkybox = useSkybox;
+}
+
 unsigned int CameraComponent::GetSkyboxTextureID()
 {
 	return skybox->GetTextureID();
@@ -221,6 +242,7 @@ unsigned int CameraComponent::GetSkyboxTextureID()
 
 bool CameraComponent::IsOnOrForwardPlane(Plane& plane, Bounds& bounds)
 {
+	PROFILE_FUNCTION()
 	glm::vec3 extents = bounds.GetSize();
 
 	const float r = extents.x * std::abs(plane.normal.x) + extents.y * std::abs(plane.normal.y) + extents.z * std::abs(plane.normal.z);
@@ -230,6 +252,7 @@ bool CameraComponent::IsOnOrForwardPlane(Plane& plane, Bounds& bounds)
 
 bool CameraComponent::IsInFrustum(Bounds& bounds)
 {
+	PROFILE_FUNCTION()
 	UpdateFrustumCache();
 	
 	return  IsOnOrForwardPlane(frustumCache.leftFace,	bounds)	&&
@@ -312,6 +335,7 @@ void CameraComponent::CreateRenderTexture(int width, int height)
 
 void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader)
 {
+	PROFILE_FUNCTION()
 	glm::mat4 viewMatrix = GetViewMatrix();
 	glm::mat4 projectionMatrix = GetProjectionMatrix();
 
@@ -338,6 +362,7 @@ void CameraComponent::Render(std::vector<MeshComponent*>& meshes, Shader* shader
 
 void CameraComponent::RenderUsingMaterials(std::vector<MeshComponent*>& meshes)
 {
+	PROFILE_FUNCTION()
 	glm::mat4 viewMatrix = GetViewMatrix();
 	glm::mat4 projectionMatrix = GetProjectionMatrix();
 
@@ -372,6 +397,7 @@ void CameraComponent::RenderUsingMaterials(std::vector<MeshComponent*>& meshes)
 
 void CameraComponent::ForceRenderWithMaterial(MeshComponent* mesh, Material* material)
 {
+	PROFILE_FUNCTION()
 	glm::mat4 viewMatrix = GetViewMatrix();
 	glm::mat4 projectionMatrix = GetProjectionMatrix();
 

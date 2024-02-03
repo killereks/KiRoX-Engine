@@ -5,13 +5,19 @@ Color::Color(glm::vec3 v)
 	this->r = v.x;
 	this->g = v.y;
 	this->b = v.z;
+	this->a = 1.0f;
 }
 
-Color::Color(float r, float g, float b)
+Color::Color(glm::vec4 v)
 {
-	this->r = r;
-	this->g = g;
-	this->b = b;
+	this->r = v.x;
+	this->g = v.y;
+	this->b = v.z;
+	this->a = v.w;
+}
+
+Color::Color(float r, float g, float b, float a)
+{
 }
 
 Color::Color()

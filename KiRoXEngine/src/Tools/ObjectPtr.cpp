@@ -19,7 +19,7 @@ void ObjectPtr::FindAsset() {
 		return;
 	}
 
-	assert(AssetManager::GetInstance() != nullptr, "AssetManager is null");
+	assert(AssetManager::GetInstance() != nullptr);
 
 	Asset* asset = AssetManager::GetInstance()->GetByUUID<Asset>(uuid);
 

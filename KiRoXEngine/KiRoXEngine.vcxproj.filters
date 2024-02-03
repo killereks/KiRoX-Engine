@@ -171,6 +171,8 @@
     <ClCompile Include="src\Rendering\SkyBox.cpp" />
     <ClCompile Include="src\Unit Testing\UnitTester.cpp" />
     <ClCompile Include="src\Tools\Color.cpp" />
+    <ClCompile Include="src\Tools\Profiling\Profiler.cpp" />
+    <ClCompile Include="src\Tools\Profiling\ProfileScope.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\gizmos\ImGuizmo.h" />
@@ -867,6 +869,7 @@
     <ClInclude Include="src\Rendering\SkyBox.h" />
     <ClInclude Include="src\Unit Testing\UnitTester.h" />
     <ClInclude Include="src\Tools\Color.h" />
+    <ClInclude Include="src\Tools\Profiling\Profiler.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\yaml\yaml-cppd.lib" />

@@ -16,19 +16,30 @@ class Color {
 	PROPERTY()
 	float b;
 
+	PROPERTY()
+	float a;
+
 public:
 	Color(glm::vec3 v);
-	Color(float r, float g, float b);
+	Color(glm::vec4 v);
+	Color(float r, float g, float b, float a = 1.0f);
 	Color();
 
-	inline glm::vec3 GetAsVector() {
-		return glm::vec3(r, g, b);
+	inline glm::vec4 GetAsVector() {
+		return glm::vec4(r, g, b, a);
 	}
 
 	inline void SetFromVector(glm::vec3 v) {
 		r = v.x;
 		g = v.y;
 		b = v.z;
+	}
+
+	inline void SetFromVector(glm::vec4 v) {
+		r = v.x;
+		g = v.y;
+		b = v.z;
+		a = v.w;
 	}
 
 };

@@ -65,6 +65,7 @@ public:
 
 	void Draw(CameraComponent* cameraComponent)
 	{
+		PROFILE_FUNCTION()
 		if (vertices.size() == 0) return;
 
 		if (colors.size() != vertices.size())

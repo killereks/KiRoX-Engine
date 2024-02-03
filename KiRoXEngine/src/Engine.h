@@ -8,6 +8,7 @@
 #include "Tools/FolderWatcher.h"
 
 #include "gizmos/ImGuizmo.h"
+#include <imgui/notifications/ImGuiNotify.hpp>
 
 #include "refl.gen.h"
 
@@ -65,7 +66,6 @@ public:
 
 	void SetSceneState(SceneState newSceneState)
 	{
-
 		switch (newSceneState)
 		{
 		case SceneState::Editor:
@@ -78,14 +78,22 @@ public:
 			ImGui::SetWindowFocus("Scene");
 			break;
 		case SceneState::Playing:
+		{
 			// Copy current scene and play it
 			// we are going to play mode, so we need to save this scene
+			std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+
 			activeScene.get()->SaveScene(activeScene.get()->filePath);
 			scene.get()->CopyFrom(activeScene.get());
 
 			OnScenePlay();
 
 			ImGui::SetWindowFocus("Game");
+
+			std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> elapsed = end - now;
+			ImGui::InsertNotification({ ImGuiToastType::Info, 1000, "Entering play mode took %.2fs", elapsed.count() });
+		}
 			break;
 		case SceneState::Paused:
 			// Set delta time to 0
@@ -98,6 +106,9 @@ public:
 		}
 		currentSceneState = newSceneState;
 	}
+
+	void BeginFrame();
+	void EndFrame();
 
 	void OnScenePlay();
 

@@ -55,6 +55,7 @@ AssetManager::AssetManager(std::filesystem::path path)
 
 void AssetManager::LoadAllMetaFiles()
 {
+    PROFILE_FUNCTION()
     // go over every meta file in the project
     for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
         std::string extension = entry.path().extension().string();
@@ -66,6 +67,7 @@ void AssetManager::LoadAllMetaFiles()
             if (!std::filesystem::exists(assetFilePath) || std::filesystem::is_directory(assetFilePath)) {
                 std::filesystem::remove(entry.path());
                 std::cout << "Removed meta file: " << entry.path().string() << std::endl;
+                ImGui::InsertNotification({ ImGuiToastType::Warning, 3000, "Removed meta file: %s", entry.path().filename().string().c_str()});
             }
         }
     }
@@ -77,10 +79,12 @@ void AssetManager::LoadAllMetaFiles()
 
 void AssetManager::LoadOrCreateMetaFile(Asset& asset)
 {
+    PROFILE_FUNCTION()
     std::string path = asset.filePath + ".meta";
 
     if (!std::filesystem::exists(path)) {
         asset.SaveMetaFile();
+        ImGui::InsertNotification({ ImGuiToastType::Info, 3000, "Created meta file: %s", asset.name.c_str()});
     }
 
     asset.LoadMetaFile();
@@ -92,6 +96,32 @@ AssetManager::~AssetManager()
 {
     for (auto& asset : assets) {
         delete asset.second;
+    }
+}
+
+void AssetManager::ForceClickAsset(Asset* asset)
+{
+    selectedAsset = asset;
+
+    if (selectedAsset != nullptr) {
+        std::string relativePath = selectedAsset->filePath.substr(projectPath.size() + 1);
+
+        this->relativePath.clear();
+        cachedPaths.clear();
+
+        std::vector<std::string> folders;
+        std::string folder = "";
+        for (char c : relativePath) {
+            if (c == '.') break;
+
+            if (c == '\\') {
+                this->relativePath.push_back(folder);
+				folder = "";
+			}
+            else {
+				folder += c;
+			}
+        }
     }
 }
 
@@ -129,6 +159,7 @@ void AssetManager::OnFileChanged(std::wstring_view filename, FolderWatcher::Acti
 
 void AssetManager::Update()
 {
+    PROFILE_FUNCTION()
 //#if EDITOR
     folderWatcher.update();
 //#endif
@@ -249,6 +280,8 @@ void AssetManager::DrawInspector()
         else {
             Asset* asset = Get<Asset>(fileName);
 
+            ImVec2 pos = ImGui::GetCursorScreenPos();
+
             if (asset && !asset->IsLoaded())
             {
                 if (asset->HasLoadingProgress()) {
@@ -319,6 +352,16 @@ void AssetManager::DrawInspector()
                     ImGui::EndDragDropSource();
                 }
             }
+
+            if (asset == selectedAsset) {
+                float padding = 3.0f;
+                pos.x -= padding;
+                pos.y -= padding;
+                ImGui::GetWindowDrawList()->AddRect(pos, 
+                        ImVec2( pos.x + size.x + padding * 2.0f, 
+                                pos.y + size.y + padding * 2.0f), 
+                        IM_COL32(255, 255, 0, 255));
+            }
         }
 
         Mathf::RenderTextWithEllipsis(fileName, size.x);
@@ -349,6 +392,7 @@ void AssetManager::DrawInspector()
 
 void AssetManager::DrawImportSettings()
 {
+    PROFILE_FUNCTION()
     ImGui::Begin(ICON_FA_GEARS" Import Settings");
 
     if (selectedAsset == nullptr) {
@@ -400,6 +444,7 @@ void AssetManager::InvokeLoadedCallbacks(std::string& assetName)
 
 void AssetManager::AsyncUpdate()
 {
+    PROFILE_FUNCTION()
     for (size_t i = 0; i < loadingCoroutines.size(); ++i)
     {
         loadingCoroutines[i].resume();
@@ -424,7 +469,7 @@ void AssetManager::LoadAllAssets()
 {
     PROFILE_FUNCTION()
 
-        Console::Write("Loading all assets at: " + projectPath);
+    Console::Write("Loading all assets at: " + projectPath);
 
     for (const auto& entry : std::filesystem::recursive_directory_iterator(projectPath)) {
         const auto& path = entry.path();
@@ -435,6 +480,8 @@ void AssetManager::LoadAllAssets()
 }
 
 void AssetManager::LoadAsset(std::string& fullPath){
+    PROFILE_FUNCTION()
+
     std::string extension = fullPath.substr(fullPath.find_last_of(".") + 1);
     std::string fileName = fullPath.substr(fullPath.find_last_of("\\") + 1);
 

@@ -959,6 +959,8 @@ CODE
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
 
+#include <Macros.h>
+
 #include "imgui.h"
 #ifndef IMGUI_DISABLE
 #include "imgui_internal.h"
@@ -5391,6 +5393,7 @@ void ImGui::EndFrame()
 // it is the role of the ImGui_ImplXXXX_RenderDrawData() function provided by the renderer backend)
 void ImGui::Render()
 {
+    PROFILE_FUNCTION()
     ImGuiContext& g = *GImGui;
     IM_ASSERT(g.Initialized);
 

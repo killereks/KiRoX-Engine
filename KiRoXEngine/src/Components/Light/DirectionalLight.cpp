@@ -48,6 +48,7 @@ glm::mat4 DirectionalLight::GetLightSpaceMatrix()
 
 glm::mat4 DirectionalLight::GetTightLightSpaceMatrix(CameraComponent* camera)
 {
+	PROFILE_FUNCTION()
 	// Step 1. Calculate the 8 corners of the view frustum in world space
 	std::vector<glm::vec3> frustumCorners = camera->GetFrustumCorners();
 
@@ -76,21 +77,24 @@ glm::mat4 DirectionalLight::GetTightLightSpaceMatrix(CameraComponent* camera)
 		maxZ = std::max(maxZ, corner.z);
 	}
 
-	maxZ += 10.0f;
-	minZ -= 10.0f;
+	minZ -= camera->GetNearClipPlane();
+	maxZ += camera->GetFarClipPlane();
 
+	//maxZ += 100.0f;
+	//minZ -= 100.0f;
+
+	// Step 3. Create an orthographic projection matrix
 	glm::mat4 lightProjection = glm::ortho(minX, maxX, minY, maxY, -maxZ, -minZ);
 
 	glm::vec3 min = glm::vec3(minX, minY, minZ);
 	glm::vec3 max = glm::vec3(maxX, maxY, maxZ);
-
-	Gizmos::DrawWireCube((max + min) / 2.0f, max - min, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
 	return lightProjection * lightView;
 }
 
 void DirectionalLight::RenderTightCamera(std::vector<MeshComponent*>& meshes, CameraComponent* camera)
 {
+	PROFILE_FUNCTION()
 	shadowMap->Render(meshes, GetTightLightSpaceMatrix(camera));
 }
 

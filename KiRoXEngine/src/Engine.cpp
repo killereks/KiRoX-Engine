@@ -10,6 +10,7 @@
 #include "Editor/Gizmos.h"
 
 #include "imgui_internal.h"
+#include <imgui/notifications/ImGuiNotify.hpp>
 
 #include "gizmos/ImGuizmo.h"
 #include "glm/gtc/type_ptr.hpp"
@@ -38,6 +39,20 @@ Engine::~Engine()
 	RenderTools::Destroy();
 
 	delete shadowMapper;
+}
+
+void Engine::BeginFrame()
+{
+#if EDITOR
+	Profiler::GetInstance()->BeginFrame();
+#endif
+}
+
+void Engine::EndFrame()
+{
+#if EDITOR
+	Profiler::GetInstance()->EndFrame();
+#endif
 }
 
 void Engine::OnScenePlay()
@@ -78,6 +93,9 @@ void Engine::Start()
 
 	projectPath = path.string();
 
+	if (!std::filesystem::exists(projectPath)) {
+		std::cout << "Project folder not found. Expected at " << projectPath << std::endl;
+	}
 
 	assetManager = std::make_shared<AssetManager>(path);
 
@@ -94,6 +112,7 @@ void Engine::Start()
 	CameraComponent* cameraComp = sceneCamera->AddComponent<CameraComponent>();
 	cameraComp->SetNearClipPlane(0.1f);
 	cameraComp->SetFarClipPlane(2500.0f);
+	cameraComp->ForceUseSkybox(true);
 
 	sceneCamera->GetTransform().SetLocalPosition(glm::vec3(0.0f, 5.0f, -5.0f));
 	yaw = 180.0f;
@@ -116,7 +135,7 @@ void Engine::Start()
 
 void Engine::Update()
 {
-	//PROFILE_FUNCTION()
+	PROFILE_FUNCTION()
 	assetManager->Update();
 
 	shader = assetManager->Get<Shader>("TestShader.shader");
@@ -161,6 +180,7 @@ void Engine::Update()
 
 void Engine::RenderScene(Shader* shader)
 {
+	PROFILE_FUNCTION()
 	// Meshes
 	std::vector<MeshComponent*> meshComponents = activeScene.get()->FindComponentsOfType<MeshComponent>();
 
@@ -254,6 +274,7 @@ void Engine::RenderScene(Shader* shader)
 
 void Engine::TryRenderSelectedEntity()
 {
+	PROFILE_FUNCTION()
 	Entity* selectedEntity = activeScene.get()->GetSelectedEntity();
 
 	if (selectedEntity == nullptr) return;
@@ -280,6 +301,8 @@ void Engine::TryRenderSelectedEntity()
 
 void Engine::RenderEditorUI()
 {
+	PROFILE_FUNCTION()
+
 	assetManager.get()->DrawInspector();
 	assetManager.get()->DrawImportSettings();
 
@@ -296,14 +319,18 @@ void Engine::RenderEditorUI()
 
 void Engine::LoadScene(const std::string& path)
 {
+	PROFILE_FUNCTION()
 	scene = std::make_shared<Scene>();
 	scene.get()->LoadScene(path);
 	activeScene = std::make_shared<Scene>();
 	activeScene.get()->CopyFrom(scene.get());
+
+	ImGui::InsertNotification({ImGuiToastType::Info, 3000, "Scene %s loaded successfully!", scene->fileName.c_str()});
 }
 
 void Engine::SceneControls()
 {
+	PROFILE_FUNCTION()
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.WantTextInput) return;
 
@@ -396,6 +423,7 @@ void Engine::SceneControls()
 
 void Engine::RenderSceneWindow()
 {
+	PROFILE_FUNCTION()
 	unsigned int texID = GetSceneCamera()->GetRenderTextureID();
 
 	ImGui::Begin("Scene");
@@ -469,6 +497,7 @@ void Engine::RenderSceneWindow()
 
 void Engine::RenderGameWindow()
 {
+	PROFILE_FUNCTION()
 	CameraComponent* gameCamera = activeScene->FindComponentOfType<CameraComponent>();
 
 	ImGui::Begin("Game");
@@ -493,6 +522,7 @@ void Engine::RenderGameWindow()
 
 void Engine::RenderToolbar()
 {
+	PROFILE_FUNCTION()
 	ImGuiWindowFlags window_flags = 0
 		//| ImGuiWindowFlags_NoDocking
 		| ImGuiWindowFlags_NoTitleBar
@@ -668,6 +698,7 @@ void Engine::RenderToolbar()
 
 void Engine::RenderStatistics()
 {
+	PROFILE_FUNCTION()
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration |
 		ImGuiWindowFlags_NoDocking |
 		ImGuiWindowFlags_AlwaysAutoResize |
@@ -704,6 +735,7 @@ void Engine::RenderStatistics()
 
 void Engine::DrawMaterialPreviews()
 {
+	PROFILE_FUNCTION()
 	std::vector<Material*> materials = assetManager->GetAssetsOfType<Material>();
 
 	Shader* shader = assetManager->Get<Shader>("TestShader.shader");
@@ -772,6 +804,7 @@ void Engine::DrawMaterialPreviews()
 
 void Engine::EditTransform(Entity* ent)
 {
+	PROFILE_FUNCTION()
 	bool useSnap = false;
 	glm::vec3 snap;
 

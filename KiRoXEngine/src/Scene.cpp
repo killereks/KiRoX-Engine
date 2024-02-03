@@ -20,28 +20,11 @@
 #include "Assets/AssetManager.h"
 #include <Tools/Color.h>
 
+#include <Tools/Profiling/Profiler.h>
+#include <Tools/Profiling/ProfileScope.h>
+
 Scene::Scene()
 {
-	//rootEntity = new Entity("Root");
-	//entities.push_back(rootEntity);
-	//
-	//// create some default entities
-	//Entity* ent1 = CreateEntity("Entity 1");
-	//Entity* ent2 = CreateEntity("Entity 2");
-	//Entity* ent3 = CreateEntity("Entity 3");
-	//
-	//Entity* groundQuad = CreateEntity("Ground");
-	//MeshComponent* groundMeshComponent = groundQuad->AddComponent<MeshComponent>();
-	//groundQuad->GetTransform().SetLocalRotation(glm::vec3(90, 0, 0));
-	//groundQuad->GetTransform().SetLocalScale(glm::vec3(30));
-	//
-	//Entity* cameraEntity = CreateEntity("Camera");
-	//cameraEntity->AddComponent<CameraComponent>();
-	//cameraEntity->GetTransform().SetLocalPosition(glm::vec3(0, 5, -10));
-	//cameraEntity->GetTransform().LookAt(glm::vec3(0.0));
-	//
-	//ent2->SetParent(ent1);
-
 	rootEntity = new Entity("Root");
 	entities.push_back(rootEntity);
 }
@@ -752,7 +735,7 @@ void Scene::LoadScene(std::string path)
 					ptr->SetUUID(uuid);
 				}
 				else if (propType == rttr::type::get<Color>()) {
-					glm::vec3 color = propData.as<glm::vec3>();
+					glm::vec4 color = propData.as<glm::vec4>();
 					Color colorObj = Color(color);
 					currentProperty.set_value(var, colorObj);
 				}

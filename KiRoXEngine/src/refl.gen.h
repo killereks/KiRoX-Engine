@@ -120,6 +120,8 @@ registration::class_<CameraComponent>("CameraComponent")
 .property("bottom", &CameraComponent::bottom)
 .property("orthoNear", &CameraComponent::orthoNear)
 .property("orthoFar", &CameraComponent::orthoFar)
+.property("useSkybox", &CameraComponent::useSkybox)
+.property("clearColor", &CameraComponent::clearColor)
 ;
 
 registration::class_<BoxCollider>("BoxCollider")
@@ -175,6 +177,9 @@ registration::class_<Rigidbody>("Rigidbody")
 .property("freezeRotationX", &Rigidbody::freezeRotationX)
 .property("freezeRotationY", &Rigidbody::freezeRotationY)
 .property("freezeRotationZ", &Rigidbody::freezeRotationZ)
+.property("freezePositionX", &Rigidbody::freezePositionX)
+.property("freezePositionY", &Rigidbody::freezePositionY)
+.property("freezePositionZ", &Rigidbody::freezePositionZ)
 ;
 
 registration::class_<TestComponent>("TestComponent")
@@ -202,6 +207,7 @@ registration::class_<Color>("Color")
 .property("r", &Color::r)
 .property("g", &Color::g)
 .property("b", &Color::b)
+.property("a", &Color::a)
 ;
 
 registration::class_<ObjectPtr>("ObjectPtr")

@@ -24,6 +24,15 @@ class Rigidbody : public Component
 	PROPERTY()
 	bool freezeRotationZ;
 
+	PROPERTY()
+	bool freezePositionX;
+
+	PROPERTY()
+	bool freezePositionY;
+
+	PROPERTY()
+	bool freezePositionZ;
+
 	reactphysics3d::RigidBody* body;
 
 	Physics* physics;

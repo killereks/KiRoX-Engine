@@ -84,6 +84,8 @@ public:
 
     ~AssetManager();
 
+    void ForceClickAsset(Asset* asset);
+
     void OnFileChanged(std::wstring_view filename, FolderWatcher::Action action);
 
     void Update();

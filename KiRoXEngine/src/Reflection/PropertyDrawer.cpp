@@ -121,10 +121,10 @@ bool PropertyDrawer::DrawSingleProperty(rttr::property& prop, rttr::variant& obj
 	else if (prop.get_type() == rttr::type::get<Color>()) {
 		Color value = prop.get_value(objInstance).get_value<Color>();
 		
-		glm::vec3 colorVec3 = value.GetAsVector();
-		if (ImGui::ColorEdit3(prop.get_name().c_str(), &colorVec3[0])) {
+		glm::vec4 colorVec4 = value.GetAsVector();
+		if (ImGui::ColorEdit4(prop.get_name().c_str(), &colorVec4[0])) {
 			//value.SetFromVector(colorVec3);
-			prop.set_value(objInstance, Color(colorVec3));
+			prop.set_value(objInstance, Color(colorVec4));
 			return true;
 		}
 
@@ -190,7 +190,11 @@ bool PropertyDrawer::DrawObjectPtrDragDrop(std::string label, ObjectPtr& objectP
 
 		Texture* tex = AssetManager::GetInstance()->GetEditorIcon(type);
 
-		if (tex != nullptr) {
+		if (Material* mat = dynamic_cast<Material*>(asset)) {
+			ImGui::Image((void*)mat->GetPreviewTextureID(), ImVec2(20, 20), ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::SameLine();
+		}
+		else if (tex != nullptr) {
 			ImGui::Image((void*)tex->GetTextureID(), ImVec2(20, 20));
 			ImGui::SameLine();
 		}
@@ -200,6 +204,10 @@ bool PropertyDrawer::DrawObjectPtrDragDrop(std::string label, ObjectPtr& objectP
 			ImGui::SameLine();
 		}
 		ImGui::Text(objectPtr.Get<Asset>()->fileName.c_str());
+
+		if (ImGui::IsItemClicked()) {
+			AssetManager::GetInstance()->ForceClickAsset(asset);
+		}
 	}
 	else {
 		std::string display = "("+label+") Drag & Drop Asset Here";

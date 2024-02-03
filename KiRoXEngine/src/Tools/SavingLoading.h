@@ -116,7 +116,7 @@ namespace SavingLoading {
 				value->SetUUID(uuid);
 			}
 			else if (prop.get_value(obj).get_type() == rttr::type::get<Color>()) {
-				glm::vec3 value = data[name].as<glm::vec3>();
+				glm::vec4 value = data[name].as<glm::vec4>();
 				Color color = Color(value.x, value.y, value.z);
 				prop.set_value(obj, color);
 			}

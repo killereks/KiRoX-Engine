@@ -19,6 +19,8 @@
 
 #include <Unit Testing/UnitTester.h>
 
+#include <imgui/notifications/ImGuiNotify.hpp>
+
 #define call(x) x;\
 	if (error) __debugbreak();
 
@@ -31,6 +33,14 @@ void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum se
 }
 
 void SetupImGuiStyle();
+
+void RenderNotifications() {
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
+	ImGui::RenderNotifications();
+	ImGui::PopStyleVar(1);
+	ImGui::PopStyleColor(1);
+}
 
 int main(int argc, char* argv[]) {
 	// create glfw window
@@ -131,8 +141,8 @@ int main(int argc, char* argv[]) {
 	//glfwSwapInterval(0);
 	glfwSwapInterval(1);
 
-	double previousTime = glfwGetTime();
-	double currentTime = 0.0f;
+	std::chrono::time_point previousTime = std::chrono::high_resolution_clock::now();
+	std::chrono::time_point currentTime = std::chrono::high_resolution_clock::now();
 
 	#if EDITOR
 		UnitTester::RunTests();
@@ -140,13 +150,14 @@ int main(int argc, char* argv[]) {
 
 	while (!glfwWindowShouldClose(window))
 	{
-		currentTime = glfwGetTime();
-		double frameDiff = currentTime - previousTime;
+		currentTime = std::chrono::high_resolution_clock::now();
+		double frameDiff = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime).count() / 1000000.0;
 		Engine::deltaTime = (float)frameDiff;
 		previousTime = currentTime;
 
 		glfwSetWindowTitle(window, ("KiRoX Engine - " + std::to_string(1.0f / Engine::deltaTime)).c_str());
 
+		engine.BeginFrame();
 		// poll events
 		glfwPollEvents();
 		Input::GetInstance()->Update();
@@ -163,6 +174,11 @@ int main(int argc, char* argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		engine.Update();
+		engine.EndFrame();
+
+#if EDITOR
+		RenderNotifications();
+#endif
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -175,6 +191,8 @@ int main(int argc, char* argv[]) {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+
+	return 0;
 }
 
 void SetupImGuiStyle()

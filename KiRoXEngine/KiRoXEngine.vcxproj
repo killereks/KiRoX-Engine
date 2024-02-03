@@ -170,6 +170,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Tools\Profiling\Profiler.cpp" />
     <ClCompile Include="src\Tools\Color.cpp" />
     <ClCompile Include="src\Rendering\SkyBox.cpp" />
     <ClCompile Include="src\Components\Colliders\CapsuleCollider.cpp" />
@@ -311,6 +312,7 @@
     <ClCompile Include="src\Assets\AssetManager.cpp" />
     <ClCompile Include="src\Tools\MeshSimplifier.cpp" />
     <ClCompile Include="src\Tools\ObjectPtr.cpp" />
+    <ClCompile Include="src\Tools\Profiling\ProfileScope.h" />
     <ClCompile Include="src\Tools\RenderTexture.cpp" />
     <ClCompile Include="src\Editor\Gizmos.cpp" />
     <ClCompile Include="src\Tools\Input.cpp" />
@@ -339,6 +341,7 @@
     <ClCompile Include="src\Unit Testing\UnitTester.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Tools\Profiling\Profiler.h" />
     <ClInclude Include="src\Tools\Color.h" />
     <ClInclude Include="src\Rendering\SkyBox.h" />
     <ClInclude Include="src\Components\Colliders\CapsuleCollider.h" />
