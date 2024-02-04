@@ -31,14 +31,15 @@ uniform float farPlane;
 uniform mat4 projection;
 uniform mat4 view;
 
+uniform vec3 lightDir;
 uniform mat4 lightSpaceMatrix;
 
 uniform float time;
 
 out vec4 FragColor;
 
-#define VL_STEP_COUNT 500.0
-#define VL_DISTANCE 100.0
+#define VL_STEP_COUNT 100.0
+#define VL_ATTENUATION_FACTOR 0.1
 
 #define SATURATION 0.5
 
@@ -88,40 +89,48 @@ float worldToShadow(vec3 worldPos){
     return shadow;
 }
 
+#define G_SCATTERING 0.76
+#define PI 3.141592653589793
+
+// Mie scaterring, approximated with Henyey-Greenstein phase function
+float ComputeScattering(float lightDotView){
+    float result = 1.0 - G_SCATTERING * G_SCATTERING;
+    result /= (4.0 * PI * pow(1.0 + G_SCATTERING * G_SCATTERING - (2.0 * G_SCATTERING) * lightDotView, 1.5));
+    return result;
+}
+
 // UV = [0,1]
 // screenPos = [-1,1]
 vec3 VolumetricLighting(vec3 color, vec2 uv, vec2 screenPos){    
     float lum = 0.0;
 
     float camDepth = lineariseDepth(texture(cameraDepthMap, uv).r);
-    
-    vec3 disp = normalize(camFwd + camUp * screenPos.y + camRight * screenPos.x);
-    float stepSize = 1.0 / VL_STEP_COUNT;
-    float sampleDepth = random(uv + time * 0.01) * stepSize * VL_DISTANCE;
 
-    float iters = 0;
+    vec3 worldPos = getWorldPosition(uv);
+    
+    vec3 rayDir = normalize(worldPos - camPos);
+    float vl_distance = length(worldPos - camPos);
+
+    float stepSize = 1.0 / VL_STEP_COUNT;
+    float sampleDepth = random(uv + time * 0.01) * stepSize * vl_distance;
 
     for (int i = 0; i < VL_STEP_COUNT; i++){
-        vec3 pos = camPos + disp * sampleDepth;
+        vec3 pos = camPos + rayDir * sampleDepth;
 
         float shadow = worldToShadow(pos);
 
         if (sampleDepth >= camDepth) break;
 
-        lum += shadow * stepSize;
-        //lum += shadow;
+        float attenuation = exp(-VL_ATTENUATION_FACTOR * sampleDepth);
+        lum += ComputeScattering(dot(rayDir, lightDir)) * shadow * attenuation;
 
-        sampleDepth += stepSize * VL_DISTANCE;
+        float rand = random(uv + time * 0.01) * 0.1 + 0.95;
 
-        //iters++;
+        sampleDepth += stepSize * vl_distance * rand;
     }
 
-    if (sampleDepth >= VL_DISTANCE) lum = 0.0;
-
-    //lum = lum / iters;
-
     // clamp lum
-    lum = clamp(lum, 0.0, 0.4);
+    lum = clamp(lum, 0.0, 0.2);
     
     return color + lum;
 }
@@ -160,12 +169,9 @@ void main(){
 
     col = VolumetricLighting(col, texCoords, texCoords * 2.0 - 1.0);
 
-    col = Saturation(col);
-    col = ACES(col);
-    col = Vignette(col, texCoords);
-
-    //float shadow = worldToShadow(camPos);
-    //col.x = shadow;
+    //col = Saturation(col);
+    //col = ACES(col);
+    //col = Vignette(col, texCoords);
     
     //col = getWorldPosition(texCoords);
 

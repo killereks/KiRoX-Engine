@@ -68,6 +68,8 @@ void Volume::Apply(unsigned int textureID, int width, int height, CameraComponen
 	if (camera == nullptr) return;
 	if (light == nullptr) return;
 
+	PROFILE_FUNCTION()
+
 	/*
 	FBO Ping Pong Technique:
 	for each process
@@ -91,6 +93,7 @@ void Volume::Apply(unsigned int textureID, int width, int height, CameraComponen
 
 	// lights
 	shader->setMat4("lightSpaceMatrix", light->GetTightLightSpaceMatrix(camera));
+	shader->setVec3("lightDir", light->GetTransform().GetForward());
 
 	// camera
 	shader->setVec3("camPos", camera->GetTransform().GetWorldPosition());

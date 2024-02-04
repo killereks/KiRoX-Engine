@@ -212,7 +212,7 @@ void Engine::RenderScene(Shader* shader)
 	if (dirLight != nullptr && gameCamera != nullptr) {
 		dirLight->BindShadowMap(1);
 		shader->setMat4("lightSpaceMatrix", dirLight->GetTightLightSpaceMatrix(gameCamera));
-		shader->setVec3("lightDir", dirLight->GetOwner()->GetTransform().GetForward());
+		shader->setVec3("lightDir", dirLight->GetTransform().GetForward());
 	}
 	shader->setVec3("viewPos", sceneCamera->GetTransform().GetWorldPosition());
 	shader->setVec3("viewForward", sceneCamera->GetTransform().GetForward());

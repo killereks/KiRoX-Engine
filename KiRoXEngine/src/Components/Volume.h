@@ -34,6 +34,8 @@ public:
 
 	void Apply(unsigned int textureID, int width, int height, CameraComponent* camera, DirectionalLight* light);
 
+	unsigned int GetTextureID() const { return textureColorBuffer; }
+
 	virtual std::string GetIcon() override {
 		// 
 		return ICON_FA_DISPLAY;

@@ -155,7 +155,7 @@ int main(int argc, char* argv[]) {
 		Engine::deltaTime = (float)frameDiff;
 		previousTime = currentTime;
 
-		glfwSetWindowTitle(window, ("KiRoX Engine - " + std::to_string(1.0f / Engine::deltaTime)).c_str());
+		//glfwSetWindowTitle(window, ("KiRoX Engine - " + std::to_string(1.0f / Engine::deltaTime)).c_str());
 
 		engine.BeginFrame();
 		// poll events
