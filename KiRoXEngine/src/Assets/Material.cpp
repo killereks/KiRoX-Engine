@@ -17,6 +17,7 @@ void Material::Bind()
 
 		texture->Bind(2);
 		shader->setInt("albedoMap", 2);
+		shader->setBool("useAlpha", useAlpha);
 	}
 	else {
 		Texture* defaultTex = AssetManager::GetInstance()->GetWhiteTexture();

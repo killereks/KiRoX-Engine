@@ -94,6 +94,7 @@ registration::class_<Material>("Material")
 .property("metallicMap", &Material::metallicMap)
 .property("heightMap", &Material::heightMap)
 .property("tiling", &Material::tiling)
+.property("useAlpha", &Material::useAlpha)
 .property("roughness", &Material::roughness)
 ;
 

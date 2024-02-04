@@ -66,6 +66,8 @@ uniform bool hasNormalMap;
 uniform bool hasMetallicMap;
 uniform bool hasHeightMap;
 
+uniform bool useAlpha;
+
 uniform vec2 tiling;
 uniform float roughness;
 uniform vec3 albedoColor;
@@ -192,6 +194,13 @@ vec3 CalcPBRLighting(vec3 normal){
 	vec3 F0 = vec3(0.04);
 
 	vec3 albedo = texture(albedoMap, UV * tiling).rgb * albedoColor;
+
+	if (useAlpha){
+		float alpha = texture(albedoMap, UV * tiling).a;
+		if (alpha < 0.1){
+			discard;
+		}
+	}
 
 	// Cook-Torrance microfacet specular reflection
     vec3 halfDir = normalize(viewForward + -lightDir);

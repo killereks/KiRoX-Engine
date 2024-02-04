@@ -71,6 +71,4 @@ void FirstPersonController::Update(float dt)
 	else {
 		Gizmos::DrawRay(ray.origin, ray.direction * 25.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	}
-
-	std::cout << hitInfo.HasHit() << "\n";
 }

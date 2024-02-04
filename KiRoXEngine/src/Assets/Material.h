@@ -37,6 +37,9 @@ public:
 	glm::vec2 tiling;
 
 	PROPERTY()
+	bool useAlpha;
+
+	PROPERTY()
 	float roughness;
 
 	Shader* GetShader() const {

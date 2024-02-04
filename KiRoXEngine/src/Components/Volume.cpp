@@ -90,13 +90,13 @@ void Volume::Apply(unsigned int textureID, int width, int height, CameraComponen
 	shader->setInt("cameraDepthMap", 2);
 
 	// lights
-	shader->setMat4("lightSpaceMatrix", light->GetLightSpaceMatrix());
+	shader->setMat4("lightSpaceMatrix", light->GetTightLightSpaceMatrix(camera));
 
 	// camera
-	shader->setVec3("camPos", camera->GetOwner()->GetTransform().GetWorldPosition());
-	shader->setVec3("camFwd", -camera->GetOwner()->GetTransform().GetForward());
-	shader->setVec3("camUp", camera->GetOwner()->GetTransform().GetUp());
-	shader->setVec3("camRight", camera->GetOwner()->GetTransform().GetRight());
+	shader->setVec3("camPos", camera->GetTransform().GetWorldPosition());
+	shader->setVec3("camFwd", -camera->GetTransform().GetForward());
+	shader->setVec3("camUp", camera->GetTransform().GetUp());
+	shader->setVec3("camRight", camera->GetTransform().GetRight());
 
 	shader->setFloat("nearPlane", camera->GetNearClipPlane());
 	shader->setFloat("farPlane", camera->GetFarClipPlane());

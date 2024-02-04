@@ -150,6 +150,10 @@ void AssetManager::OnFileChanged(std::wstring_view filename, FolderWatcher::Acti
             else if (extension == ".computeshader") {
                 Get<ComputeShader>(fileAssetName)->Recompile();
             }
+            else {
+                UnloadAsset(fileAssetName);
+                LoadAsset(filenameStr);
+            }
         }
     }
     else if (action == FolderWatcher::Action::Created) {
@@ -389,6 +393,23 @@ void AssetManager::DrawInspector()
 
     ImGui::PopStyleVar();
 
+    if (ImGui::IsMouseReleased(1)) {
+        if (ImGui::IsWindowHovered()) {
+            ImGui::OpenPopup("CreateAssetPopup");
+        }
+    }
+
+    // RIGHT CLICKING
+    if (ImGui::BeginPopup("CreateAssetPopup")) {
+        if (ImGui::MenuItem("Create Material")) {
+            std::ofstream file(currentPath + "\\NewMaterial.mat");
+
+            file.close();
+        }
+
+        ImGui::EndPopup();
+    }
+
     ImGui::End();
 }
 
@@ -422,6 +443,7 @@ void AssetManager::UnloadAsset(const std::string& name)
         delete assets[name];
         assets.erase(name);
         loadedAssets--;
+        totalAssets--;
     }
 }
 

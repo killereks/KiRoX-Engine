@@ -37,7 +37,7 @@ uniform float time;
 
 out vec4 FragColor;
 
-#define VL_STEP_COUNT 128.0
+#define VL_STEP_COUNT 500.0
 #define VL_DISTANCE 100.0
 
 #define SATURATION 0.5
@@ -121,7 +121,7 @@ vec3 VolumetricLighting(vec3 color, vec2 uv, vec2 screenPos){
     //lum = lum / iters;
 
     // clamp lum
-    lum = clamp(lum, 0.0, 0.5);
+    lum = clamp(lum, 0.0, 0.4);
     
     return color + lum;
 }
@@ -158,11 +158,14 @@ vec3 Saturation(vec3 color){
 void main(){
     vec3 col = texture(screenTexture, texCoords).rgb;
 
-    //col = VolumetricLighting(col, texCoords, texCoords * 2.0 - 1.0);
+    col = VolumetricLighting(col, texCoords, texCoords * 2.0 - 1.0);
 
     col = Saturation(col);
     col = ACES(col);
     col = Vignette(col, texCoords);
+
+    //float shadow = worldToShadow(camPos);
+    //col.x = shadow;
     
     //col = getWorldPosition(texCoords);
 

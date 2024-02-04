@@ -48,6 +48,11 @@ glm::mat4 DirectionalLight::GetLightSpaceMatrix()
 
 glm::mat4 DirectionalLight::GetTightLightSpaceMatrix(CameraComponent* camera)
 {
+	/*
+	gather the objects in the volume defined by (minX, maxX, minY, maxY, -minZ, 0.0f) * lightView, 
+	and use the min Z of their bounding volumes in light-space instead of your -minZ in the ortho() call
+	*/
+
 	PROFILE_FUNCTION()
 	// Step 1. Calculate the 8 corners of the view frustum in world space
 	std::vector<glm::vec3> frustumCorners = camera->GetFrustumCorners();

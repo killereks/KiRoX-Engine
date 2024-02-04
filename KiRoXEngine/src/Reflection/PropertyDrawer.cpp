@@ -230,6 +230,7 @@ bool PropertyDrawer::DrawObjectPtrDragDrop(std::string label, ObjectPtr& objectP
 		ImGui::PushID(label.c_str());
 		if (ImGui::Button(ICON_FA_DELETE_LEFT)) {
 			objectPtr.Clear();
+			changed = true;
 		}
 		ImGui::PopID();
 	}

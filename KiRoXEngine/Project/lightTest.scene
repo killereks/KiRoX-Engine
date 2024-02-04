@@ -5,11 +5,71 @@ Entities:
       position: [0, 0, 0]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
-  - Entity: Crate
-    UUID: 568e851f-8192-4f24-84a1-3eb5dafa1ef3
+  - Entity: Tree
+    UUID: b787da42-85c5-4c4f-9d01-8566b545cc5c
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
     TransformComponent:
-      position: [-2.70670605, 11.0530663, 1.85116482]
+      position: [-22.9667377, 0.610780239, -36.3495483]
+      rotation: [0, -0.115824692, 0, 0.993269682]
+      scale: [0.999998868, 1, 0.999998868]
+    MeshComponent:
+      mesh: e7927add-10a5-488c-87c9-9829ef86183b
+      material: c4b8c826-be18-4144-ac83-59f30007084e
+  - Entity: Leaves
+    UUID: 9f982d94-1030-4023-bbea-0aaf6324f08e
+    Parent: b787da42-85c5-4c4f-9d01-8566b545cc5c
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 09d389fb-1230-498a-96de-c6b893c616ec
+      material: dfca2369-0ae2-46b9-97b2-8e33d3ceae45
+  - Entity: Tree
+    UUID: a31ffe8c-47a0-4a8c-bd07-5939dfb1f6bd
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [-6.96673775, 0.610780239, -28.8495502]
+      rotation: [0, -0.115824692, 0, 0.993269682]
+      scale: [0.999998868, 1, 0.999998868]
+    MeshComponent:
+      mesh: e7927add-10a5-488c-87c9-9829ef86183b
+      material: c4b8c826-be18-4144-ac83-59f30007084e
+  - Entity: Leaves
+    UUID: 71a85642-4c52-4ac8-b9d5-ec415716ec05
+    Parent: a31ffe8c-47a0-4a8c-bd07-5939dfb1f6bd
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 09d389fb-1230-498a-96de-c6b893c616ec
+      material: dfca2369-0ae2-46b9-97b2-8e33d3ceae45
+  - Entity: Tree
+    UUID: ad5e397b-02b8-4452-8c15-d175857c5b43
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [18.0332623, 0.610780239, -28.8495502]
+      rotation: [0, -0.115824692, 0, 0.993269682]
+      scale: [0.999999404, 1, 0.999999404]
+    MeshComponent:
+      mesh: e7927add-10a5-488c-87c9-9829ef86183b
+      material: c4b8c826-be18-4144-ac83-59f30007084e
+  - Entity: Leaves
+    UUID: 10640a9b-aacb-4969-a6b6-0a503b5f101d
+    Parent: ad5e397b-02b8-4452-8c15-d175857c5b43
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 09d389fb-1230-498a-96de-c6b893c616ec
+      material: dfca2369-0ae2-46b9-97b2-8e33d3ceae45
+  - Entity: Crate
+    UUID: 12f8664f-da2a-4a97-9809-3fedc4ef6e24
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [-3.70670605, 13.5530663, 1.85116482]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
     BoxCollider:
@@ -23,6 +83,130 @@ Entities:
       material: e72da0a5-2c49-47c9-92f0-9d707291cab0
     Rigidbody:
       isStatic: false
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+      freezePositionX: false
+      freezePositionY: false
+      freezePositionZ: false
+  - Entity: Crate
+    UUID: 88bf1946-042e-4258-b6e7-35882dc571c9
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [-5.20670605, 11.0530663, 1.85116482]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    BoxCollider:
+      isTrigger: false
+      bounciness: 0.2
+      friction: 0.9
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: e72da0a5-2c49-47c9-92f0-9d707291cab0
+    Rigidbody:
+      isStatic: false
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+      freezePositionX: false
+      freezePositionY: false
+      freezePositionZ: false
+  - Entity: Wall
+    UUID: df671034-e26f-434c-a2c8-6251e2b12c9f
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [10.196579, 4.64499855, -8.46743202]
+      rotation: [0, 0, 0, 1]
+      scale: [1.00001895, 4.00017071, 7.00011206]
+    BoxCollider:
+      isTrigger: false
+      bounciness: 0
+      friction: 0
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 734f562e-b6c9-4396-a410-61301619f2ef
+    Rigidbody:
+      isStatic: true
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+      freezePositionX: false
+      freezePositionY: false
+      freezePositionZ: false
+  - Entity: Mesh
+    UUID: a1ddd7c4-3db1-4310-a5b5-912c4aa8f225
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [12.7387838, 19.4721737, 14.2368364]
+      rotation: [0.699900329, 0.0552524775, -0.1846935, 0.687731862]
+      scale: [0.999999642, 1.00001085, 1.00001788]
+    MeshComponent:
+      mesh: 7d2ffed0-9f76-4ce3-9a48-1ffa828fa275
+      material: ddc9e1bb-5a34-4d81-97fc-a2718972e108
+  - Entity: Volume
+    UUID: 93fcd658-bb30-44d4-ba84-864ed0127f06
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [1, 1, 1]
+    Volume:
+      testProcess: 5d42ddb7-8279-442d-b1ac-10424737facd
+  - Entity: Directional Light
+    UUID: 980a99ef-5221-4d69-847a-dd5502752b3c
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [31.8819523, 37.4354668, -16.0251579]
+      rotation: [0.146866396, -0.440396249, 0.0732758492, 0.882673264]
+      scale: [1.0000757, 1, 1.00012195]
+    DirectionalLight:
+      {}
+  - Entity: Ground
+    UUID: c54343b2-4ad0-4f0d-8350-63a72e1d18d6
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [0, 0, 0]
+      rotation: [0, 0, 0, 1]
+      scale: [50, 1, 50]
+    BoxCollider:
+      isTrigger: false
+      bounciness: 0
+      friction: 0.5
+      offset: [0, 0, 0]
+      scale: [1, 1, 1]
+    MeshComponent:
+      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
+      material: 1d3b9384-6100-4456-ae2a-ec1fd48b0f85
+    Rigidbody:
+      isStatic: true
+      freezeRotationX: false
+      freezeRotationY: false
+      freezeRotationZ: false
+      freezePositionX: false
+      freezePositionY: false
+      freezePositionZ: false
+  - Entity: Car
+    UUID: 1266242a-6109-418c-ac17-1013fb00a239
+    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
+    TransformComponent:
+      position: [-9.82105827, 0.876892209, -9.79379272]
+      rotation: [0, 0, 0, 1]
+      scale: [0.0243009627, 0.0243000127, 0.0243009627]
+    BoxCollider:
+      isTrigger: false
+      bounciness: 0
+      friction: 0
+      offset: [0, 2, 0]
+      scale: [120, 70, 250]
+    MeshComponent:
+      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
+      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
+    Rigidbody:
+      isStatic: true
       freezeRotationX: false
       freezeRotationY: false
       freezeRotationZ: false
@@ -74,135 +258,11 @@ Entities:
       orthoFar: 100
       useSkybox: true
       clearColor: [1, 1, 1, 0]
-  - Entity: Car
-    UUID: 1266242a-6109-418c-ac17-1013fb00a239
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [-9.82105827, 0.876892209, -9.79379272]
-      rotation: [0, 0, 0, 1]
-      scale: [0.0243009627, 0.0243000127, 0.0243009627]
-    BoxCollider:
-      isTrigger: false
-      bounciness: 0
-      friction: 0
-      offset: [0, 2, 0]
-      scale: [120, 70, 250]
-    MeshComponent:
-      mesh: 8b512311-68ab-48f1-b07e-f371e41c546f
-      material: b2dd81ad-b123-4b6b-95ee-f7a45f2b9051
-    Rigidbody:
-      isStatic: true
-      freezeRotationX: false
-      freezeRotationY: false
-      freezeRotationZ: false
-      freezePositionX: false
-      freezePositionY: false
-      freezePositionZ: false
-  - Entity: Ground
-    UUID: c54343b2-4ad0-4f0d-8350-63a72e1d18d6
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [0, 0, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [50, 1, 50]
-    BoxCollider:
-      isTrigger: false
-      bounciness: 0
-      friction: 0.5
-      offset: [0, 0, 0]
-      scale: [1, 1, 1]
-    MeshComponent:
-      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
-      material: 734f562e-b6c9-4396-a410-61301619f2ef
-    Rigidbody:
-      isStatic: true
-      freezeRotationX: false
-      freezeRotationY: false
-      freezeRotationZ: false
-      freezePositionX: false
-      freezePositionY: false
-      freezePositionZ: false
-  - Entity: Directional Light
-    UUID: 980a99ef-5221-4d69-847a-dd5502752b3c
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [31.8819523, 37.4354668, -16.0251579]
-      rotation: [0.39322409, -0.401022583, 0.196185321, 0.80378294]
-      scale: [1.00007188, 1, 1.00012183]
-    DirectionalLight:
-      {}
-  - Entity: Volume
-    UUID: 93fcd658-bb30-44d4-ba84-864ed0127f06
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [0, 0, 0]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
-    Volume:
-      testProcess: 5d42ddb7-8279-442d-b1ac-10424737facd
-  - Entity: Mesh
-    UUID: a1ddd7c4-3db1-4310-a5b5-912c4aa8f225
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [12.7387838, 19.4721737, 14.2368364]
-      rotation: [0.699900329, 0.0552524775, -0.1846935, 0.687731862]
-      scale: [0.999999642, 1.00001085, 1.00001788]
-    MeshComponent:
-      mesh: 7d2ffed0-9f76-4ce3-9a48-1ffa828fa275
-      material: ddc9e1bb-5a34-4d81-97fc-a2718972e108
-  - Entity: Wall
-    UUID: df671034-e26f-434c-a2c8-6251e2b12c9f
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [10.196579, 4.64499855, -8.46743202]
-      rotation: [0, 0, 0, 1]
-      scale: [1.00001895, 4.00017071, 7.00011206]
-    BoxCollider:
-      isTrigger: false
-      bounciness: 0
-      friction: 0
-      offset: [0, 0, 0]
-      scale: [1, 1, 1]
-    MeshComponent:
-      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
-      material: 734f562e-b6c9-4396-a410-61301619f2ef
-    Rigidbody:
-      isStatic: true
-      freezeRotationX: false
-      freezeRotationY: false
-      freezeRotationZ: false
-      freezePositionX: false
-      freezePositionY: false
-      freezePositionZ: false
   - Entity: Crate
-    UUID: 88bf1946-042e-4258-b6e7-35882dc571c9
+    UUID: 568e851f-8192-4f24-84a1-3eb5dafa1ef3
     Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
     TransformComponent:
-      position: [-5.20670605, 11.0530663, 1.85116482]
-      rotation: [0, 0, 0, 1]
-      scale: [1, 1, 1]
-    BoxCollider:
-      isTrigger: false
-      bounciness: 0.2
-      friction: 0.9
-      offset: [0, 0, 0]
-      scale: [1, 1, 1]
-    MeshComponent:
-      mesh: 2af8c2af-d1ae-445e-a853-797ec3dcd7c0
-      material: e72da0a5-2c49-47c9-92f0-9d707291cab0
-    Rigidbody:
-      isStatic: false
-      freezeRotationX: false
-      freezeRotationY: false
-      freezeRotationZ: false
-      freezePositionX: false
-      freezePositionY: false
-      freezePositionZ: false
-  - Entity: Crate
-    UUID: 12f8664f-da2a-4a97-9809-3fedc4ef6e24
-    Parent: 27623caa-fb28-4876-a067-d9d661e36dc8
-    TransformComponent:
-      position: [-3.70670605, 13.5530663, 1.85116482]
+      position: [-2.70670605, 11.0530663, 1.85116482]
       rotation: [0, 0, 0, 1]
       scale: [1, 1, 1]
     BoxCollider:
